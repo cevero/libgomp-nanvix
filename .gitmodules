@@ -4,3 +4,6 @@
 [submodule "build"]
 	path = build
 	url = https://github.com/nanvix/build.git
+[submodule "contrib/ulibc"]
+	path = contrib/ulibc
+	url = https://github.com/nanvix/ulibc.git
