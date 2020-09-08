@@ -23,7 +23,7 @@
  */
 
 #include <nanvix/ulib.h>
-
+#include "../libgomp/parallel.c"
 /**
  * @brief Test Server
  */
@@ -33,7 +33,7 @@ int __main2(int argc, const char *argv[])
 	((void) argv);
 
 	#pragma omp parallel
-	uprintf("parallel region");
+	uprintf("parallel region\n");
 
 	return (0);
 }

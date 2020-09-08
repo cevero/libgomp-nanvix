@@ -29,7 +29,7 @@ include $(BUILDDIR)/makefile.config
 #===============================================================================
 
 # Binary
-EXEC = libmpi-test.$(OBJ_SUFFIX)
+EXEC = libgomp-tests.$(OBJ_SUFFIX)
 
 # C Source Files
 SRC = $(wildcard *.c)
