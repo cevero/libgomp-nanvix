@@ -32,8 +32,13 @@ int __main2(int argc, const char *argv[])
 	((void) argc);
 	((void) argv);
 
+    int * a = umalloc(9*sizeof(int));
+    for(int i=0;i<9;i++)
+        a[i]=i;
 	#pragma omp parallel
-	uprintf("parallel region\n");
+	uprintf("parallel region %d %d\n",a[2],a[8]);
+
+    ufree(a);
 
 	return (0);
 }
