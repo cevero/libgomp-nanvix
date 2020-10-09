@@ -36,7 +36,7 @@ int __main2(int argc, const char *argv[])
     for(int i=0;i<9;i++)
         a[i]=i;
 	#pragma omp parallel
-	uprintf("parallel region %d %d\n",a[2],a[8]);
+	uprintf("parallel region %d %d\n",a[2],(int)sizeof(int));
 
     ufree(a);
 
