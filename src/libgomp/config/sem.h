@@ -44,8 +44,14 @@
 # pragma GCC visibility pop
 #endif
 
+typedef int pthread_mutex_t;
+typedef int pthread_cond_t;
+
+#include "semaphore.h"
+
 #ifdef HAVE_BROKEN_POSIX_SEMAPHORES
 #include <nanvix/sys/mutex.h>
+
 
 struct gomp_sem
 {

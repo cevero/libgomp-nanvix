@@ -31,7 +31,9 @@
 
 #include <nanvix/sys/mutex.h>
 
-typedef pthread_mutex_t gomp_mutex_t;
+//typedef void* nanvix_mutex_t;
+
+typedef nanvix_mutex_t gomp_mutex_t;
 
 #define GOMP_MUTEX_INIT_0 0
 
@@ -50,9 +52,9 @@ static inline void gomp_mutex_unlock (gomp_mutex_t *mutex)
    nanvix_mutex_unlock (mutex);
 }
 
-//static inline void gomp_mutex_destroy (gomp_mutex_t *mutex)
-//{
-//  nanvix_mutex_destroy (mutex);
-//}
-//
+static inline void gomp_mutex_destroy (gomp_mutex_t *mutex)
+{
+  nanvix_mutex_destroy (mutex);
+}
+
 #endif /* GOMP_MUTEX_H */
