@@ -34,7 +34,7 @@
 #include "../libgomp.h"
 
 #ifdef HAVE_BROKEN_POSIX_SEMAPHORES
-#include <stdlib.h>
+//#include <stdlib.h>
 
 void gomp_sem_init (gomp_sem_t *sem, int value)
 {

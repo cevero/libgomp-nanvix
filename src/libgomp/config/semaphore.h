@@ -16,9 +16,9 @@
    License along with the GNU C Library; if not, see
    <https://www.gnu.org/licenses/>.  */
 
-//#ifndef _SEMAPHORE_H
+#ifndef SEMAPHORE_H
 //# error "Never use <bits/semaphore.h> directly; include <semaphore.h> instead."
-//#endif
+#define SEMAPHORE_H
 
 //#include <bits/wordsize.h>
 #define __WORDSIZE  32
@@ -39,3 +39,5 @@ typedef union
   char __size[__SIZEOF_SEM_T];
   long int __align;
 } sem_t;
+
+#endif

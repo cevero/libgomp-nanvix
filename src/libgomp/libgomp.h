@@ -22,57 +22,58 @@
 #endif
 
 
-
+#include "config/workaround.h"
 #include "config/sem.h"
-#include "config/sem.c"
 #include "config/mutex.h"
+#include <nanvix/sys/semaphore.h>
+#include <nanvix/sys/mutex.h>
+#include <nanvix/ulib.h>
 
 
+struct gomp_team_state
+{
+  /* This is the team of which the thread is currently a member.  */
+  struct gomp_team *team;
 
-//struct gomp_team_state
-//{
-//  /* This is the team of which the thread is currently a member.  */
-//  struct gomp_team *team;
-//
-//  /* This is the work share construct which this thread is currently
-//     processing.  Recall that with NOWAIT, not all threads may be 
-//     processing the same construct.  */
-//  struct gomp_work_share *work_share;
-//
-//  /* This is the previous work share construct or NULL if there wasn't any.
-//     When all threads are done with the current work sharing construct,
-//     the previous one can be freed.  The current one can't, as its
-//     next_ws field is used.  */
-//  struct gomp_work_share *last_work_share;
-//
-//  /* This is the ID of this thread within the team.  This value is
-//     guaranteed to be between 0 and N-1, where N is the number of
-//     threads in the team.  */
-//  unsigned team_id;
-//
-//  /* Nesting level.  */
-//  unsigned level;
-//
-//  /* Active nesting level.  Only active parallel regions are counted.  */
-//  unsigned active_level;
-//
-//  /* Place-partition-var, offset and length into gomp_places_list array.  */
-//  unsigned place_partition_off;
-//  unsigned place_partition_len;
-//
-//#ifdef HAVE_SYNC_BUILTINS
-//  /* Number of single stmts encountered.  */
-//  unsigned long single_count;
-//#endif
-//
-//  /* For GFS_RUNTIME loops that resolved to GFS_STATIC, this is the
-//     trip number through the loop.  So first time a particular loop
-//     is encountered this number is 0, the second time through the loop
-//     is 1, etc.  This is unused when the compiler knows in advance that
-//     the loop is statically scheduled.  */
-//  unsigned long static_trip;
-//};
-//
+  /* This is the work share construct which this thread is currently
+     processing.  Recall that with NOWAIT, not all threads may be 
+     processing the same construct.  */
+  struct gomp_work_share *work_share;
+
+  /* This is the previous work share construct or NULL if there wasn't any.
+     When all threads are done with the current work sharing construct,
+     the previous one can be freed.  The current one can't, as its
+     next_ws field is used.  */
+  struct gomp_work_share *last_work_share;
+
+  /* This is the ID of this thread within the team.  This value is
+     guaranteed to be between 0 and N-1, where N is the number of
+     threads in the team.  */
+  unsigned team_id;
+
+  /* Nesting level.  */
+  unsigned level;
+
+  /* Active nesting level.  Only active parallel regions are counted.  */
+  unsigned active_level;
+
+  /* Place-partition-var, offset and length into gomp_places_list array.  */
+  unsigned place_partition_off;
+  unsigned place_partition_len;
+
+#ifdef HAVE_SYNC_BUILTINS
+  /* Number of single stmts encountered.  */
+  unsigned long single_count;
+#endif
+
+  /* For GFS_RUNTIME loops that resolved to GFS_STATIC, this is the
+     trip number through the loop.  So first time a particular loop
+     is encountered this number is 0, the second time through the loop
+     is 1, etc.  This is unused when the compiler knows in advance that
+     the loop is statically scheduled.  */
+  unsigned long static_trip;
+};
+
 
 
 
@@ -198,7 +199,45 @@ struct gomp_thread
 };
 
 
+static inline struct gomp_task_icv *gomp_icv (bool write)
+{
+  struct gomp_task *task = gomp_thread ()->task;
+  if (task)
+    return &task->icv;
+  else if (write)
+    return gomp_new_icv ();
+  else
+    return &gomp_global_icv;
+}
 
+#ifdef LIBGOMP_USE_PTHREADS
+/* The attributes to be used during thread creation.  */
+extern pthread_attr_t gomp_thread_attr;
+
+extern pthread_key_t gomp_thread_destructor;
+#endif
+
+#if defined __nvptx__
+extern struct gomp_thread *nvptx_thrs __attribute__((shared));
+static inline struct gomp_thread *gomp_thread (void)
+{
+  int tid;
+  asm ("mov.u32 %0, %%tid.y;" : "=r" (tid));
+  return nvptx_thrs + tid;
+}
+#elif defined HAVE_TLS || defined USE_EMUTLS
+extern __thread struct gomp_thread gomp_tls_data;
+static inline struct gomp_thread *gomp_thread (void)
+{
+  return &gomp_tls_data;
+}
+#else
+extern pthread_key_t gomp_tls_key;
+static inline struct gomp_thread *gomp_thread (void)
+{
+  return pthread_getspecific (gomp_tls_key);
+}
+#endif
 
 
 

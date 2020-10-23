@@ -1,8 +1,11 @@
 #include "semaphore.h"
+#include <nanvix/ulib.h>
+#include "mutex.h"
 
-void  nanvix_mutex_destroy (gomp_mutex_t *mutex)
-{
+#ifndef WORKAROUND_H
+#define WORKAROUND_H
+typedef int nanvix_mutex_t;
 
-   nanvix_mutex_unlock (mutex);
 
-}
+
+#endif

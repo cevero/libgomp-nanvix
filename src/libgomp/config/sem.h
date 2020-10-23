@@ -47,8 +47,7 @@
 typedef int pthread_mutex_t;
 typedef int pthread_cond_t;
 
-#include "semaphore.h"
-
+#define HAVE_BROKEN_POSIX_SEMAPHORES 1
 #ifdef HAVE_BROKEN_POSIX_SEMAPHORES
 #include <nanvix/sys/mutex.h>
 
@@ -72,7 +71,6 @@ extern void gomp_sem_destroy (gomp_sem_t *sem);
 
 #else /* HAVE_BROKEN_POSIX_SEMAPHORES  */
 
-typedef sem_t gomp_sem_t;
 
 static inline void gomp_sem_init (gomp_sem_t *sem, int value)
 {

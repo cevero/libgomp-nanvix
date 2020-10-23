@@ -30,16 +30,22 @@
 #define GOMP_MUTEX_H 1
 
 #include <nanvix/sys/mutex.h>
+#include "workaround.h"
 
-//typedef void* nanvix_mutex_t;
 
-typedef nanvix_mutex_t gomp_mutex_t;
+typedef struct nanvix_mutex gomp_mutex_t;
 
+void  nanvix_mutex_destroy (gomp_mutex_t *mutex)
+{
+
+   uprintf("%d\n",&mutex);
+
+}
 #define GOMP_MUTEX_INIT_0 0
 
 static inline void gomp_mutex_init (gomp_mutex_t *mutex)
 {
-  nanvix_mutex_init (mutex, NULL);
+  nanvix_mutex_init (mutex);
 }
 
 static inline void gomp_mutex_lock (gomp_mutex_t *mutex)
