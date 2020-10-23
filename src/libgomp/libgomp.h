@@ -159,6 +159,27 @@ struct gomp_team_state
 
 
 
+#if defined __nvptx__
+extern struct gomp_thread *nvptx_thrs __attribute__((shared));
+static inline struct gomp_thread *gomp_thread (void)
+{
+  int tid;
+  asm ("mov.u32 %0, %%tid.y;" : "=r" (tid));
+  return nvptx_thrs + tid;
+}
+#elif defined HAVE_TLS || defined USE_EMUTLS
+extern __thread struct gomp_thread gomp_tls_data;
+static inline struct gomp_thread *gomp_thread (void)
+{
+  return &gomp_tls_data;
+}
+#else
+extern pthread_key_t gomp_tls_key;
+static inline struct gomp_thread *gomp_thread (void)
+{
+  return pthread_getspecific (gomp_tls_key);
+}
+#endif
 
 
 struct gomp_thread
@@ -217,27 +238,6 @@ extern pthread_attr_t gomp_thread_attr;
 extern pthread_key_t gomp_thread_destructor;
 #endif
 
-#if defined __nvptx__
-extern struct gomp_thread *nvptx_thrs __attribute__((shared));
-static inline struct gomp_thread *gomp_thread (void)
-{
-  int tid;
-  asm ("mov.u32 %0, %%tid.y;" : "=r" (tid));
-  return nvptx_thrs + tid;
-}
-#elif defined HAVE_TLS || defined USE_EMUTLS
-extern __thread struct gomp_thread gomp_tls_data;
-static inline struct gomp_thread *gomp_thread (void)
-{
-  return &gomp_tls_data;
-}
-#else
-extern pthread_key_t gomp_tls_key;
-static inline struct gomp_thread *gomp_thread (void)
-{
-  return pthread_getspecific (gomp_tls_key);
-}
-#endif
 
 
 
