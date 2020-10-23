@@ -9,7 +9,7 @@ typedef unsigned int pthread_key_t;
 
 extern void* pthread_getspecific (pthread_key_t key)
 {
-    uprintf("%d\n",key);
+    uprintf("pthread_getspecific %d\n",key);
     return NULL;
 }
 

@@ -28,7 +28,7 @@
 #include <nanvix/sys/semaphore.h>
 #include <nanvix/sys/mutex.h>
 #include <nanvix/ulib.h>
-
+#include "priority_queue.h"
 
 struct gomp_team_state
 {
