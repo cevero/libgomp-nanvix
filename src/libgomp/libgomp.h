@@ -75,6 +75,38 @@ struct gomp_team_state
 };
 
 
+enum gomp_schedule_type
+{
+  GFS_RUNTIME,
+  GFS_STATIC,
+  GFS_DYNAMIC,
+  GFS_GUIDED,
+  GFS_AUTO,
+  GFS_MONOTONIC = 0x800000U
+};
+
+
+
+
+
+
+
+struct gomp_task_icv
+{
+  unsigned long nthreads_var;
+  enum gomp_schedule_type run_sched_var;
+  int run_sched_chunk_size;
+  int default_device_var;
+  unsigned int thread_limit_var;
+  bool dyn_var;
+  bool nest_var;
+  char bind_var;
+  /* Internal ICV.  */
+  struct target_mem_desc *target_data;
+};
+
+
+
 
 
 //struct gomp_team
@@ -182,6 +214,48 @@ static inline struct gomp_thread *gomp_thread (void)
 #endif
 
 
+struct gomp_task
+{
+  /* Parent of this task.  */
+  struct gomp_task *parent;
+  /* Children of this task.  */
+  struct priority_queue children_queue;
+  /* Taskgroup this task belongs in.  */
+  struct gomp_taskgroup *taskgroup;
+  /* Tasks that depend on this task.  */
+  struct gomp_dependers_vec *dependers;
+  struct htab *depend_hash;
+  struct gomp_taskwait *taskwait;
+  /* Number of items in DEPEND.  */
+  size_t depend_count;
+  /* Number of tasks this task depends on.  Once this counter reaches
+     0, we have no unsatisfied dependencies, and this task can be put
+     into the various queues to be scheduled.  */
+  size_t num_dependees;
+
+  /* Priority of this task.  */
+  int priority;
+  /* The priority node for this task in each of the different queues.
+     We put this here to avoid allocating space for each priority
+     node.  Then we play offsetof() games to convert between pnode[]
+     entries and the gomp_task in which they reside.  */
+  struct priority_node pnode[3];
+
+  struct gomp_task_icv icv;
+  void (*fn) (void *);
+  void *fn_data;
+  enum gomp_task_kind kind;
+  bool in_tied_task;
+  bool final_task;
+  bool copy_ctors_done;
+  /* Set for undeferred tasks with unsatisfied dependencies which
+     block further execution of their parent until the dependencies
+     are satisfied.  */
+  bool parent_depends_on;
+  /* Dependencies provided and/or needed for this task.  DEPEND_COUNT
+     is the number of items available.  */
+  struct gomp_task_depend_entry depend[];
+};
 struct gomp_thread
 {
   /* This is the function that the thread should run upon launch.  */
@@ -218,6 +292,22 @@ struct gomp_thread
   kthread_t handle;
 #endif
 };
+
+
+
+
+gomp_new_icv (void)
+{
+  struct gomp_thread *thr = gomp_thread ();
+  struct gomp_task *task = gomp_malloc (sizeof (struct gomp_task));
+  gomp_init_task (task, NULL, &gomp_global_icv);
+  thr->task = task;
+#ifdef LIBGOMP_USE_PTHREADS
+  pthread_setspecific (gomp_thread_destructor, thr);
+#endif
+  return &task->icv;
+}
+
 
 
 static inline struct gomp_task_icv *gomp_icv (bool write)
