@@ -22,13 +22,19 @@
 #endif
 
 
+#include <nanvix/ulib.h>
 #include "config/workaround.h"
 #include "config/sem.h"
 #include "config/mutex.h"
 #include <nanvix/sys/semaphore.h>
 #include <nanvix/sys/mutex.h>
-#include <nanvix/ulib.h>
 #include "priority_queue.h"
+
+//////////////////////////////////////////////////////////////
+//declarations dumb                         /////////////////
+////////////////////////////////////////////////////////////
+
+typedef struct priority_queue;
 
 struct gomp_team_state
 {
@@ -212,7 +218,6 @@ static inline struct gomp_thread *gomp_thread (void)
   return pthread_getspecific (gomp_tls_key);
 }
 #endif
-
 
 struct gomp_task
 {

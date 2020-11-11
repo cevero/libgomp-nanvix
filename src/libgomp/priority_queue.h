@@ -31,8 +31,14 @@
 #ifndef _PRIORITY_QUEUE_H_
 #define _PRIORITY_QUEUE_H_
  
-#include "libgomp.h"
 /* One task.  */
+
+/////////////////////////////
+//dumb declarations//////////
+////////////////////////////
+
+
+struct gomp_task;
 
 struct priority_node
 {
@@ -119,6 +125,7 @@ enum priority_queue_type
 extern bool priority_queue_task_in_queue_p (enum priority_queue_type,
 					    struct priority_queue *,
 					    struct gomp_task *);
+
 extern void priority_queue_dump (enum priority_queue_type,
 				 struct priority_queue *);
 extern void priority_queue_verify (enum priority_queue_type,
@@ -139,6 +146,7 @@ extern struct gomp_task *priority_tree_next_task (enum priority_queue_type,
 static inline bool
 priority_queue_multi_p (struct priority_queue *head)
 {
+
   return __builtin_expect (head->t.root != NULL, 0);
 }
 
@@ -161,6 +169,7 @@ priority_queue_init (struct priority_queue *head)
 static inline void
 priority_queue_free (struct priority_queue *head)
 {
+    (void) head;
   /* There's nothing to do, as tasks were freed as they were removed
      in priority_queue_remove.  */
 }
