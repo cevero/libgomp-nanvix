@@ -37,8 +37,10 @@
 //dumb declarations//////////
 ////////////////////////////
 
-
 struct gomp_task;
+#include "config/workaround.h"
+
+///////////////////////////
 
 struct priority_node
 {
@@ -252,6 +254,7 @@ priority_list_insert (enum priority_queue_type type,
 		      bool adjust_parent_depends_on,
 		      bool task_is_parent_depends_on)
 {
+    (void)priority; 
   struct priority_node *node = task_to_priority_node (type, task);
   if (list->tasks)
     {

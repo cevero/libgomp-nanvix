@@ -92,7 +92,7 @@ export CFLAGS += -std=c99 -fno-builtin -fopenmp -Wfatal-errors
 export CFLAGS += -Wall -Wextra -Werror -Wa,--warn
 export CFLAGS += -Winit-self -Wswitch-default -Wfloat-equal
 export CFLAGS += -Wundef -Wshadow -Wuninitialized -Wlogical-op
-export CFLAGS += -Wvla
+export CFLAGS += -Wvla -Wno-pedantic
 export CFLAGS += -Wno-missing-profile
 export CFLAGS += -fno-stack-protector
 export CFLAGS += -Wno-unused-function
