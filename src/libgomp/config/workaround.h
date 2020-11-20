@@ -40,4 +40,14 @@ enum memmodel
   MEMMODEL_MAX = 0x80000U
 };
 
+//gomp_malloc function
+
+void *
+gomp_malloc (size_t size)
+{
+  void *ret = umalloc (size);
+  if (ret == NULL)
+    uprintf("Out of memory allocating %lu bytes", (unsigned long) size);
+  return ret;
+}
 #endif
