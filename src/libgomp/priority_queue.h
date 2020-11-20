@@ -39,7 +39,7 @@
 
 struct gomp_task;
 #include "config/workaround.h"
-
+#define _LIBGOMP_CHECKING_ 0
 ///////////////////////////
 
 struct priority_node
