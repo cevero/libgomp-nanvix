@@ -34,7 +34,7 @@
 //declarations dumb                         /////////////////
 ////////////////////////////////////////////////////////////
 
-typedef struct priority_queue;
+struct priority_queue;
 
 struct gomp_team_state
 {
