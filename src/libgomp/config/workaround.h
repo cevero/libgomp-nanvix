@@ -50,4 +50,9 @@ gomp_malloc (size_t size)
     uprintf("Out of memory allocating %lu bytes", (unsigned long) size);
   return ret;
 }
+
+const int omp_proc_bind_false =0;
+
+
+
 #endif

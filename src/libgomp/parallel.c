@@ -36,11 +36,11 @@ gomp_resolve_num_threads (unsigned specified, unsigned count)
   uprintf("%d",specified);
   struct gomp_thread *thr = gomp_thread ();
   struct gomp_task_icv *icv;
-//  unsigned threads_requested, max_num_threads, num_threads;
-//  unsigned long busy;
-//  struct gomp_thread_pool *pool;
+  unsigned threads_requested, max_num_threads, num_threads;
+  unsigned long busy;
+  struct gomp_thread_pool *pool;
 //
-//  icv = gomp_icv (false);
+  icv = gomp_icv (false);
 //
 //  if (specified == 1)
 //    return 1;

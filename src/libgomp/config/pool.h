@@ -29,7 +29,7 @@
 #ifndef GOMP_POOL_H
 #define GOMP_POOL_H 1
 
-#include "libgomp.h"
+#include "../libgomp.h"
 
 /* Get the thread pool, allocate and initialize it on demand.  */
 

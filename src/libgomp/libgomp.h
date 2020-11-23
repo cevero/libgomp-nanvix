@@ -29,11 +29,13 @@
 #include <nanvix/sys/semaphore.h>
 #include <nanvix/sys/mutex.h>
 #include "priority_queue.h"
+#include "libgomp_g.h"
 
 //////////////////////////////////////////////////////////////
 //declarations dumb                         /////////////////
 ////////////////////////////////////////////////////////////
 
+#define UINT_MAX 0x80000U
 struct priority_queue;
 
 struct gomp_team_state
@@ -111,8 +113,57 @@ struct gomp_task_icv
   struct target_mem_desc *target_data;
 };
 
+// privisory declare
+struct gomp_task_icv gomp_global_icv = {
+  .nthreads_var = 1,
+  .thread_limit_var = UINT_MAX,
+  .run_sched_var = GFS_DYNAMIC,
+  .run_sched_chunk_size = 1,
+  .default_device_var = 0,
+  .dyn_var = false,
+  .nest_var = false,
+  .bind_var = omp_proc_bind_false,
+  .target_data = NULL
+};
 
+//////
+enum gomp_task_kind
+{
+  /* Implicit task.  */
+  GOMP_TASK_IMPLICIT,
+  /* Undeferred task.  */
+  GOMP_TASK_UNDEFERRED,
+  /* Task created by GOMP_task and waiting to be run.  */
+  GOMP_TASK_WAITING,
+  /* Task currently executing or scheduled and about to execute.  */
+  GOMP_TASK_TIED,
+  /* Used for target tasks that have vars mapped and async run started,
+     but not yet completed.  Once that completes, they will be readded
+     into the queues as GOMP_TASK_WAITING in order to perform the var
+     unmapping.  */
+  GOMP_TASK_ASYNC_RUNNING
+};
 
+struct gomp_task_depend_entry
+{
+  /* Address of dependency.  */
+  void *addr;
+  struct gomp_task_depend_entry *next;
+  struct gomp_task_depend_entry *prev;
+  /* Task that provides the dependency in ADDR.  */
+  struct gomp_task *task;
+  /* Depend entry is of type "IN".  */
+  bool is_in;
+  bool redundant;
+  bool redundant_out;
+};
+
+struct gomp_dependers_vec
+{
+  size_t n_elem;
+  size_t allocated;
+  struct gomp_task *elem[];
+};
 
 
 //struct gomp_team
@@ -300,20 +351,44 @@ struct gomp_thread
 
 
 
+//struct gomp_task_icv *
+//gomp_new_icv (void)
+//{
+//  struct gomp_thread *thr = gomp_thread ();
+//  struct gomp_task *task = gomp_malloc (sizeof (struct gomp_task));
+//  gomp_init_task (task, NULL, &gomp_global_icv);
+//  thr->task = task;
+//#ifdef LIBGOMP_USE_PTHREADS
+//  kthread_setspecific (gomp_thread_destructor, thr);
+//#endif
+//  return &task->icv;
+//}
+//
+//
+//
+//static inline struct gomp_task_icv *gomp_icv (bool write)
+//{
+//  struct gomp_task *task = gomp_thread ()->task;
+//  if (task)
+//    return &task->icv;
+//  else if (write)
+//    return gomp_new_icv ();
+//  else
+//    return &gomp_global_icv;
+//}
+//
+//#ifdef LIBGOMP_USE_PTHREADS
+///* The attributes to be used during thread creation.  */
+//extern pthread_attr_t gomp_thread_attr;
+//
+//extern pthread_key_t gomp_thread_destructor;
+//#endif
+//
+//
 
-gomp_new_icv (void)
-{
-  struct gomp_thread *thr = gomp_thread ();
-  struct gomp_task *task = gomp_malloc (sizeof (struct gomp_task));
-  gomp_init_task (task, NULL, &gomp_global_icv);
-  thr->task = task;
-#ifdef LIBGOMP_USE_PTHREADS
-  pthread_setspecific (gomp_thread_destructor, thr);
-#endif
-  return &task->icv;
-}
+extern struct gomp_task_icv *gomp_new_icv (void);
 
-
+/* Here's how to access the current copy of the ICVs.  */
 
 static inline struct gomp_task_icv *gomp_icv (bool write)
 {
@@ -332,9 +407,132 @@ extern pthread_attr_t gomp_thread_attr;
 
 extern pthread_key_t gomp_thread_destructor;
 #endif
+/* Function prototypes.  */
 
+/* affinity.c */
 
+extern void gomp_init_affinity (void);
+#ifdef LIBGOMP_USE_PTHREADS
+extern void gomp_init_thread_affinity (pthread_attr_t *, unsigned int);
+#endif
+extern void **gomp_affinity_alloc (unsigned long, bool);
+extern void gomp_affinity_init_place (void *);
+extern bool gomp_affinity_add_cpus (void *, unsigned long, unsigned long,
+				    long, bool);
+extern bool gomp_affinity_remove_cpu (void *, unsigned long);
+extern bool gomp_affinity_copy_place (void *, void *, long);
+extern bool gomp_affinity_same_place (void *, void *);
+extern bool gomp_affinity_finalize_place_list (bool);
+extern bool gomp_affinity_init_level (int, unsigned long, bool);
+extern void gomp_affinity_print_place (void *);
+extern void gomp_get_place_proc_ids_8 (int, int64_t *);
+extern void gomp_display_affinity_place (char *, size_t, size_t *, int);
 
+/* affinity-fmt.c */
+
+extern void gomp_print_string (const char *str, size_t len);
+extern void gomp_set_affinity_format (const char *, size_t);
+extern void gomp_display_string (char *, size_t, size_t *, const char *,
+				 size_t);
+#ifdef LIBGOMP_USE_PTHREADS
+typedef pthread_t gomp_thread_handle;
+#else
+typedef struct {} gomp_thread_handle;
+#endif
+extern size_t gomp_display_affinity (char *, size_t, const char *,
+				     gomp_thread_handle,
+				     struct gomp_team_state *, unsigned int);
+extern void gomp_display_affinity_thread (gomp_thread_handle,
+					  struct gomp_team_state *,
+					  unsigned int) __attribute__((cold));
+
+/* iter.c */
+
+extern int gomp_iter_static_next (long *, long *);
+extern bool gomp_iter_dynamic_next_locked (long *, long *);
+extern bool gomp_iter_guided_next_locked (long *, long *);
+
+#ifdef HAVE_SYNC_BUILTINS
+extern bool gomp_iter_dynamic_next (long *, long *);
+extern bool gomp_iter_guided_next (long *, long *);
+#endif
+
+/* iter_ull.c */
+
+extern int gomp_iter_ull_static_next (unsigned long long *,
+				      unsigned long long *);
+extern bool gomp_iter_ull_dynamic_next_locked (unsigned long long *,
+					       unsigned long long *);
+extern bool gomp_iter_ull_guided_next_locked (unsigned long long *,
+					      unsigned long long *);
+
+#if defined HAVE_SYNC_BUILTINS && defined __LP64__
+extern bool gomp_iter_ull_dynamic_next (unsigned long long *,
+					unsigned long long *);
+extern bool gomp_iter_ull_guided_next (unsigned long long *,
+				       unsigned long long *);
+#endif
+
+/* ordered.c */
+
+extern void gomp_ordered_first (void);
+extern void gomp_ordered_last (void);
+extern void gomp_ordered_next (void);
+extern void gomp_ordered_static_init (void);
+extern void gomp_ordered_static_next (void);
+extern void gomp_ordered_sync (void);
+extern void gomp_doacross_init (unsigned, long *, long, size_t);
+extern void gomp_doacross_ull_init (unsigned, unsigned long long *,
+				    unsigned long long, size_t);
+
+/* parallel.c */
+
+extern unsigned gomp_resolve_num_threads (unsigned, unsigned);
+
+/* proc.c (in config/) */
+
+extern void gomp_init_num_threads (void);
+extern unsigned gomp_dynamic_max_threads (void);
+
+///* task.c */
+//
+//extern void gomp_init_task (struct gomp_task *, struct gomp_task *,
+//			    struct gomp_task_icv *);
+//extern void gomp_end_task (void);
+//extern void gomp_barrier_handle_tasks (gomp_barrier_state_t);
+//extern void gomp_task_maybe_wait_for_dependencies (void **);
+//extern bool gomp_create_target_task (struct gomp_device_descr *,
+//				     void (*) (void *), size_t, void **,
+//				     size_t *, unsigned short *, unsigned int,
+//				     void **, void **,
+//				     enum gomp_target_task_state);
+//extern struct gomp_taskgroup *gomp_parallel_reduction_register (uintptr_t *,
+//								unsigned);
+//extern void gomp_workshare_taskgroup_start (void);
+//extern void gomp_workshare_task_reduction_register (uintptr_t *, uintptr_t *);
+//
+//static void inline
+//gomp_finish_task (struct gomp_task *task)
+//{
+//  if (__builtin_expect (task->depend_hash != NULL, 0))
+//    free (task->depend_hash);
+//}
+//
+/* team.c */
+
+extern struct gomp_team *gomp_new_team (unsigned);
+extern void gomp_team_start (void (*) (void *), void *, unsigned,
+			     unsigned, struct gomp_team *,
+			     struct gomp_taskgroup *);
+extern void gomp_team_end (void);
+extern void gomp_free_thread (void *);
+extern int gomp_pause_host (void);
+
+/* target.c */
+
+extern void gomp_init_targets_once (void);
+extern int gomp_get_num_devices (void);
+extern bool gomp_target_task_fn (void *);
 
 
 
