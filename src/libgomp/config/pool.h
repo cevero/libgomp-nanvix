@@ -61,6 +61,7 @@ gomp_release_thread_pool (struct gomp_thread_pool *pool)
 static inline pthread_attr_t *
 gomp_adjust_thread_attr (pthread_attr_t *attr, pthread_attr_t *mutable_attr)
 {
+    (void) mutable_attr;
   /* Do nothing in the default implementation.  */
   return attr;
 }
