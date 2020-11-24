@@ -7,6 +7,18 @@
 typedef int nanvix_mutex_t;
 typedef unsigned int pthread_key_t;
 
+# define __SIZEOF_PTHREAD_MUTEX_T 24
+# define __SIZEOF_PTHREAD_ATTR_T 36
+# define __SIZEOF_PTHREAD_RWLOCK_T 32
+# define __SIZEOF_PTHREAD_BARRIER_T 20
+
+
+typedef union pthread_attr_t
+{
+  char __size[__SIZEOF_PTHREAD_ATTR_T];
+  long int __align;
+} pthread_attr_t;
+
 extern void* pthread_getspecific (pthread_key_t key)
 {
     uprintf("_FUNC_ %d\n",key);

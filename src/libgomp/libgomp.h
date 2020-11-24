@@ -26,6 +26,8 @@
 #include "config/workaround.h"
 #include "config/sem.h"
 #include "config/mutex.h"
+#include "config/simple-bar.h"
+
 #include <nanvix/sys/semaphore.h>
 #include <nanvix/sys/mutex.h>
 #include "priority_queue.h"
@@ -35,9 +37,11 @@
 //declarations dumb                         /////////////////
 ////////////////////////////////////////////////////////////
 
+#define LIBGOMP_USE_PTHREADS 1
 #define UINT_MAX 0x80000U
 struct priority_queue;
 
+////////////////////////////////////////////////////////
 struct gomp_team_state
 {
   /* This is the team of which the thread is currently a member.  */
@@ -312,6 +316,7 @@ struct gomp_task
      is the number of items available.  */
   struct gomp_task_depend_entry depend[];
 };
+
 struct gomp_thread
 {
   /* This is the function that the thread should run upon launch.  */
@@ -350,6 +355,23 @@ struct gomp_thread
 };
 
 
+struct gomp_thread_pool
+{
+  /* This array manages threads spawned from the top level, which will
+     return to the idle loop once the current PARALLEL construct ends.  */
+  struct gomp_thread **threads;
+  unsigned threads_size;
+  unsigned threads_used;
+  /* The last team is used for non-nested teams to delay their destruction to
+     make sure all the threads in the team move on to the pool's barrier before
+     the team's barrier is destroyed.  */
+  struct gomp_team *last_team;
+  /* Number of threads running in this contention group.  */
+  unsigned long threads_busy;
+
+  /* This barrier holds and releases threads waiting in thread pools.  */
+  gomp_simple_barrier_t threads_dock;
+};
 
 //struct gomp_task_icv *
 //gomp_new_icv (void)
@@ -435,7 +457,7 @@ extern void gomp_set_affinity_format (const char *, size_t);
 extern void gomp_display_string (char *, size_t, size_t *, const char *,
 				 size_t);
 #ifdef LIBGOMP_USE_PTHREADS
-typedef pthread_t gomp_thread_handle;
+typedef kthread_t gomp_thread_handle;
 #else
 typedef struct {} gomp_thread_handle;
 #endif

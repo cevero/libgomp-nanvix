@@ -31,8 +31,10 @@
 #ifndef GOMP_BARRIER_H
 #define GOMP_BARRIER_H 1
 
-#include <pthread.h>
+//#include <pthread.h>
+#include <nanvix/sys/thread.h>
 
+//#include "workaround.h"
 typedef struct
 {
   gomp_mutex_t mutex1;
