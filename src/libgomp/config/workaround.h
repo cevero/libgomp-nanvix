@@ -25,8 +25,9 @@ extern void* pthread_getspecific (pthread_key_t key)
     return NULL;
 }
 
-extern void* pthread_setspecific (pthread_key_t key)
+extern void* pthread_setspecific (pthread_key_t key,const void *__pointer)
 {
+    (void) __pointer;
     uprintf("_FUNC_ %d\n",key);
     return NULL;
 }
