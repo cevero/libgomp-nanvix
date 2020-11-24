@@ -54,6 +54,7 @@ gomp_get_thread_pool (struct gomp_thread *thr, unsigned nthreads)
 static inline void
 gomp_release_thread_pool (struct gomp_thread_pool *pool)
 {
+    (void)pool;
   /* Do nothing in the default implementation.  */
 }
 
