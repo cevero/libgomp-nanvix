@@ -221,7 +221,7 @@ free_team (struct gomp_team *team)
   gomp_barrier_destroy (&team->barrier);
   gomp_mutex_destroy (&team->task_lock);
   priority_queue_free (&team->task_queue);
-  free (team);
+  ufree (team);
 }
 
 static void
@@ -282,8 +282,8 @@ gomp_free_thread (void *arg __attribute__((unused)))
       if (pool->last_team)
 	free_team (pool->last_team);
 #ifndef __nvptx__
-      free (pool->threads);
-      free (pool);
+      ufree (pool->threads);
+      ufree (pool);
 #endif
       thr->thread_pool = NULL;
     }
@@ -293,7 +293,7 @@ gomp_free_thread (void *arg __attribute__((unused)))
     {
       struct gomp_task *task = thr->task;
       gomp_end_task ();
-      free (task);
+      ufree (task);
     }
 }
 
@@ -660,7 +660,7 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
 	      : (i == old_threads_used))
 	    {
 	      if (team->prev_ts.place_partition_len > 64)
-		free (affinity_thr);
+		ufree (affinity_thr);
 	      affinity_thr = NULL;
 	      affinity_count = 0;
 	    }
@@ -913,7 +913,7 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
     }
   if (__builtin_expect (affinity_thr != NULL, 0)
       && team->prev_ts.place_partition_len > 64)
-    free (affinity_thr);
+    ufree (affinity_thr);
 }
 #endif
 
@@ -971,7 +971,7 @@ gomp_team_end (void)
       do
 	{
 	  struct gomp_work_share *next_ws = ws->next_alloc;
-	  free (ws);
+	  ufree (ws);
 	  ws = next_ws;
 	}
       while (ws != NULL);
@@ -1079,8 +1079,8 @@ gomp_pause_host (void)
       if (pool->last_team)
 	free_team (pool->last_team);
 #ifndef __nvptx__
-      free (pool->threads);
-      free (pool);
+      ufree (pool->threads);
+      ufree (pool);
 #endif
       thr->thread_pool = NULL;
     }
