@@ -42,6 +42,157 @@
 struct priority_queue;
 
 ////////////////////////////////////////////////////////
+
+
+struct gomp_doacross_work_share
+{
+  union {
+    /* chunk_size copy, as ws->chunk_size is multiplied by incr for
+       GFS_DYNAMIC.  */
+    long chunk_size;
+    /* Likewise, but for ull implementation.  */
+    unsigned long long chunk_size_ull;
+    /* For schedule(static,0) this is the number
+       of iterations assigned to the last thread, i.e. number of
+       iterations / number of threads.  */
+    long q;
+    /* Likewise, but for ull implementation.  */
+    unsigned long long q_ull;
+  };
+  /* Size of each array entry (padded to cache line size).  */
+  unsigned long elt_sz;
+  /* Number of dimensions in sink vectors.  */
+  unsigned int ncounts;
+  /* True if the iterations can be flattened.  */
+  bool flattened;
+  /* Actual array (of elt_sz sized units), aligned to cache line size.
+     This is indexed by team_id for GFS_STATIC and outermost iteration
+     / chunk_size for other schedules.  */
+  unsigned char *array;
+  /* These two are only used for schedule(static,0).  */
+  /* This one is number of iterations % number of threads.  */
+  long t;
+  union {
+    /* And this one is cached t * (q + 1).  */
+    long boundary;
+    /* Likewise, but for the ull implementation.  */
+    unsigned long long boundary_ull;
+  };
+  /* Pointer to extra memory if needed for lastprivate(conditional).  */
+  void *extra;
+  /* Array of shift counts for each dimension if they can be flattened.  */
+  unsigned int shift_counts[];
+};
+
+struct gomp_work_share
+{
+  /* This member records the SCHEDULE clause to be used for this construct.
+     The user specification of "runtime" will already have been resolved.
+     If this is a SECTIONS construct, this value will always be DYNAMIC.  */
+  enum gomp_schedule_type sched;
+
+  int mode;
+
+  union {
+    struct {
+      /* This is the chunk_size argument to the SCHEDULE clause.  */
+      long chunk_size;
+
+      /* This is the iteration end point.  If this is a SECTIONS construct,
+	 this is the number of contained sections.  */
+      long end;
+
+      /* This is the iteration step.  If this is a SECTIONS construct, this
+	 is always 1.  */
+      long incr;
+    };
+
+    struct {
+      /* The same as above, but for the unsigned long long loop variants.  */
+      unsigned long long chunk_size_ull;
+      unsigned long long end_ull;
+      unsigned long long incr_ull;
+    };
+  };
+
+  union {
+    /* This is a circular queue that details which threads will be allowed
+       into the ordered region and in which order.  When a thread allocates
+       iterations on which it is going to work, it also registers itself at
+       the end of the array.  When a thread reaches the ordered region, it
+       checks to see if it is the one at the head of the queue.  If not, it
+       blocks on its RELEASE semaphore.  */
+    unsigned *ordered_team_ids;
+
+    /* This is a pointer to DOACROSS work share data.  */
+    struct gomp_doacross_work_share *doacross;
+  };
+
+  /* This is the number of threads that have registered themselves in
+     the circular queue ordered_team_ids.  */
+  unsigned ordered_num_used;
+
+  /* This is the team_id of the currently acknowledged owner of the ordered
+     section, or -1u if the ordered section has not been acknowledged by
+     any thread.  This is distinguished from the thread that is *allowed*
+     to take the section next.  */
+  unsigned ordered_owner;
+
+  /* This is the index into the circular queue ordered_team_ids of the
+     current thread that's allowed into the ordered reason.  */
+  unsigned ordered_cur;
+
+  /* This is a chain of allocated gomp_work_share blocks, valid only
+     in the first gomp_work_share struct in the block.  */
+  struct gomp_work_share *next_alloc;
+
+  /* The above fields are written once during workshare initialization,
+     or related to ordered worksharing.  Make sure the following fields
+     are in a different cache line.  */
+
+  /* This lock protects the update of the following members.  */
+  gomp_mutex_t lock __attribute__((aligned (64)));
+
+  /* This is the count of the number of threads that have exited the work
+     share construct.  If the construct was marked nowait, they have moved on
+     to other work; otherwise they're blocked on a barrier.  The last member
+     of the team to exit the work share construct must deallocate it.  */
+  unsigned threads_completed;
+
+  union {
+    /* This is the next iteration value to be allocated.  In the case of
+       GFS_STATIC loops, this the iteration start point and never changes.  */
+    long next;
+
+    /* The same, but with unsigned long long type.  */
+    unsigned long long next_ull;
+
+    /* This is the returned data structure for SINGLE COPYPRIVATE.  */
+    void *copyprivate;
+  };
+
+  union {
+    /* Link to gomp_work_share struct for next work sharing construct
+       encountered after this one.  */
+    gomp_ptrlock_t next_ws;
+
+    /* gomp_work_share structs are chained in the free work share cache
+       through this.  */
+    struct gomp_work_share *next_free;
+  };
+
+  /* Task reductions for this work-sharing construct.  */
+  uintptr_t *task_reductions;
+
+  /* If only few threads are in the team, ordered_team_ids can point
+     to this array which fills the padding at the end of this struct.  */
+  unsigned inline_ordered_team_ids[0];
+};
+
+/* This structure contains all of the thread-local data associated with 
+   a thread team.  This is the data that must be saved when a thread
+   encounters a nested PARALLEL construct.  */
+
 struct gomp_team_state
 {
   /* This is the team of which the thread is currently a member.  */
@@ -170,85 +321,85 @@ struct gomp_dependers_vec
 };
 
 
-//struct gomp_team
-//{
-//  /* This is the number of threads in the current team.  */
-//  unsigned nthreads;
-//
-//  /* This is number of gomp_work_share structs that have been allocated
-//     as a block last time.  */
-//  unsigned work_share_chunk;
-//
-//  /* This is the saved team state that applied to a master thread before
-//     the current thread was created.  */
-//  struct gomp_team_state prev_ts;
-//
-//  /* This semaphore should be used by the master thread instead of its
-//     "native" semaphore in the thread structure.  Required for nested
-//     parallels, as the master is a member of two teams.  */
-//  gomp_sem_t master_release;
-//
-//  /* This points to an array with pointers to the release semaphore
-//     of the threads in the team.  */
-//  gomp_sem_t **ordered_release;
-//
-//  /* List of work shares on which gomp_fini_work_share hasn't been
-//     called yet.  If the team hasn't been cancelled, this should be
-//     equal to each thr->ts.work_share, but otherwise it can be a possibly
-//     long list of workshares.  */
-//  struct gomp_work_share *work_shares_to_free;
-//
-//  /* List of gomp_work_share structs chained through next_free fields.
-//     This is populated and taken off only by the first thread in the
-//     team encountering a new work sharing construct, in a critical
-//     section.  */
-//  struct gomp_work_share *work_share_list_alloc;
-//
-//  /* List of gomp_work_share structs freed by free_work_share.  New
-//     entries are atomically added to the start of the list, and
-//     alloc_work_share can safely only move all but the first entry
-//     to work_share_list alloc, as free_work_share can happen concurrently
-//     with alloc_work_share.  */
-//  struct gomp_work_share *work_share_list_free;
-//
-//#ifdef HAVE_SYNC_BUILTINS
-//  /* Number of simple single regions encountered by threads in this
-//     team.  */
-//  unsigned long single_count;
-//#else
-//  /* Mutex protecting addition of workshares to work_share_list_free.  */
-//  gomp_mutex_t work_share_list_free_lock;
-//#endif
-//
-//  /* This barrier is used for most synchronization of the team.  */
-//  gomp_barrier_t barrier;
-//
-//  /* Initial work shares, to avoid allocating any gomp_work_share
-//     structs in the common case.  */
-//  struct gomp_work_share work_shares[8];
-//
-//  gomp_mutex_t task_lock;
-//  /* Scheduled tasks.  */
-//  struct priority_queue task_queue;
-//  /* Number of all GOMP_TASK_{WAITING,TIED} tasks in the team.  */
-//  unsigned int task_count;
-//  /* Number of GOMP_TASK_WAITING tasks currently waiting to be scheduled.  */
-//  unsigned int task_queued_count;
-//  /* Number of GOMP_TASK_{WAITING,TIED} tasks currently running
-//     directly in gomp_barrier_handle_tasks; tasks spawned
-//     from e.g. GOMP_taskwait or GOMP_taskgroup_end don't count, even when
-//     that is called from a task run from gomp_barrier_handle_tasks.
-//     task_running_count should be always <= team->nthreads,
-//     and if current task isn't in_tied_task, then it will be
-//     even < team->nthreads.  */
-//  unsigned int task_running_count;
-//  int work_share_cancelled;
-//  int team_cancelled;
-//
-//  /* This array contains structures for implicit tasks.  */
-//  struct gomp_task implicit_task[];
-//};
-//
+struct gomp_team
+{
+  /* This is the number of threads in the current team.  */
+  unsigned nthreads;
+
+  /* This is number of gomp_work_share structs that have been allocated
+     as a block last time.  */
+  unsigned work_share_chunk;
+
+  /* This is the saved team state that applied to a master thread before
+     the current thread was created.  */
+  struct gomp_team_state prev_ts;
+
+  /* This semaphore should be used by the master thread instead of its
+     "native" semaphore in the thread structure.  Required for nested
+     parallels, as the master is a member of two teams.  */
+  gomp_sem_t master_release;
+
+  /* This points to an array with pointers to the release semaphore
+     of the threads in the team.  */
+  gomp_sem_t **ordered_release;
+
+  /* List of work shares on which gomp_fini_work_share hasn't been
+     called yet.  If the team hasn't been cancelled, this should be
+     equal to each thr->ts.work_share, but otherwise it can be a possibly
+     long list of workshares.  */
+  struct gomp_work_share *work_shares_to_free;
+
+  /* List of gomp_work_share structs chained through next_free fields.
+     This is populated and taken off only by the first thread in the
+     team encountering a new work sharing construct, in a critical
+     section.  */
+  struct gomp_work_share *work_share_list_alloc;
+
+  /* List of gomp_work_share structs freed by free_work_share.  New
+     entries are atomically added to the start of the list, and
+     alloc_work_share can safely only move all but the first entry
+     to work_share_list alloc, as free_work_share can happen concurrently
+     with alloc_work_share.  */
+  struct gomp_work_share *work_share_list_free;
+
+#ifdef HAVE_SYNC_BUILTINS
+  /* Number of simple single regions encountered by threads in this
+     team.  */
+  unsigned long single_count;
+#else
+  /* Mutex protecting addition of workshares to work_share_list_free.  */
+  gomp_mutex_t work_share_list_free_lock;
+#endif
+
+  /* This barrier is used for most synchronization of the team.  */
+  gomp_barrier_t barrier;
+
+  /* Initial work shares, to avoid allocating any gomp_work_share
+     structs in the common case.  */
+  struct gomp_work_share work_shares[8];
+
+  gomp_mutex_t task_lock;
+  /* Scheduled tasks.  */
+  struct priority_queue task_queue;
+  /* Number of all GOMP_TASK_{WAITING,TIED} tasks in the team.  */
+  unsigned int task_count;
+  /* Number of GOMP_TASK_WAITING tasks currently waiting to be scheduled.  */
+  unsigned int task_queued_count;
+  /* Number of GOMP_TASK_{WAITING,TIED} tasks currently running
+     directly in gomp_barrier_handle_tasks; tasks spawned
+     from e.g. GOMP_taskwait or GOMP_taskgroup_end don't count, even when
+     that is called from a task run from gomp_barrier_handle_tasks.
+     task_running_count should be always <= team->nthreads,
+     and if current task isn't in_tied_task, then it will be
+     even < team->nthreads.  */
+  unsigned int task_running_count;
+  int work_share_cancelled;
+  int team_cancelled;
+
+  /* This array contains structures for implicit tasks.  */
+  struct gomp_task implicit_task[];
+};
+
 
 
 

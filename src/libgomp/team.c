@@ -29,7 +29,7 @@
 #include "libgomp.h"
 #include "config/pool.h"
 #include <nanvix/ulib.h>
-#include <string.h>
+//#include <posix/string.h>
 
 #ifdef LIBGOMP_USE_PTHREADS
 pthread_attr_t gomp_thread_attr;
@@ -57,7 +57,7 @@ struct gomp_thread_start_data
   struct gomp_thread_pool *thread_pool;
   unsigned int place;
   bool nested;
-  pthread_t handle;
+  kthread_t handle;
 };
 
 
@@ -1048,8 +1048,8 @@ gomp_pause_host (void)
       if (pool->threads_used > 0)
 	{
 	  int i;
-	  pthread_t *thrs
-	    = gomp_alloca (sizeof (pthread_t) * pool->threads_used);
+	  kthread_t *thrs
+	    = gomp_alloca (sizeof (kthread_t) * pool->threads_used);
 	  for (i = 1; i < pool->threads_used; i++)
 	    {
 	      struct gomp_thread *nthr = pool->threads[i];
@@ -1074,7 +1074,7 @@ gomp_pause_host (void)
 	  gomp_mutex_unlock (&gomp_managed_threads_lock);
 #endif
 	  for (i = 1; i < pool->threads_used; i++)
-	    pthread_join (thrs[i], NULL);
+	    kthread_join (thrs[i], NULL);
 	}
       if (pool->last_team)
 	free_team (pool->last_team);
