@@ -29,7 +29,7 @@
 #include "libgomp.h"
 #include "config/pool.h"
 #include <nanvix/ulib.h>
-//#include <posix/string.h>
+#include <posix/string.h>
 
 #ifdef LIBGOMP_USE_PTHREADS
 pthread_attr_t gomp_thread_attr;

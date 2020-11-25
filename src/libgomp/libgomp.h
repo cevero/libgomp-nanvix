@@ -33,16 +33,28 @@
 #include "priority_queue.h"
 #include "libgomp_g.h"
 
+#include "config/ptrlock.h"
+
 //////////////////////////////////////////////////////////////
 //declarations dumb                         /////////////////
 ////////////////////////////////////////////////////////////
 
 #define LIBGOMP_USE_PTHREADS 1
-#define UINT_MAX 0x80000U
+#define UINT_MAX 0x800000U
 struct priority_queue;
 
 ////////////////////////////////////////////////////////
 
+
+enum gomp_schedule_type
+{
+  GFS_RUNTIME,
+  GFS_STATIC,
+  GFS_DYNAMIC,
+  GFS_GUIDED,
+  GFS_AUTO,
+  GFS_MONOTONIC = 0x8000000U
+};
 
 struct gomp_doacross_work_share
 {
@@ -236,18 +248,6 @@ struct gomp_team_state
      the loop is statically scheduled.  */
   unsigned long static_trip;
 };
-
-
-enum gomp_schedule_type
-{
-  GFS_RUNTIME,
-  GFS_STATIC,
-  GFS_DYNAMIC,
-  GFS_GUIDED,
-  GFS_AUTO,
-  GFS_MONOTONIC = 0x800000U
-};
-
 
 
 
