@@ -23,7 +23,7 @@
 #
 
 # Builds Everything
-all: all-libgomp all-test
+all: all-test  all-libgomp 
 
 # Cleans Build Objects
 clean: clean-libgomp clean-test
