@@ -66,6 +66,10 @@ gomp_malloc (size_t size)
 
 const int omp_proc_bind_false =0;
 
+//meaning?
+
+//extern int pthread_detach (kthread_t __th) __THROW;
+extern int pthread_detach (kthread_t __th);
 
 
 #endif

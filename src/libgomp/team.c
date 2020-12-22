@@ -134,7 +134,7 @@ gomp_thread_start (void *xdata)
     }
 
   gomp_sem_destroy (&thr->release);
-  pthread_detach (pthread_self ());
+  pthread_detach (kthread_self ());
   thr->thread_pool = NULL;
   thr->task = NULL;
   return NULL;
@@ -235,7 +235,7 @@ gomp_free_pool_helper (void *thread_pool)
   thr->thread_pool = NULL;
   thr->task = NULL;
 #ifdef LIBGOMP_USE_PTHREADS
-  pthread_detach (pthread_self ());
+  pthread_detach (kthread_self ());
   pthread_exit (NULL);
 #elif defined(__nvptx__)
   asm ("exit;");
@@ -351,7 +351,7 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
   thr->ts.static_trip = 0;
   thr->task = &team->implicit_task[0];
 #ifdef GOMP_NEEDS_THREAD_HANDLE
-  thr->handle = pthread_self ();
+  thr->handle = kthread_self ();
 #endif
   nthreads_var = icv->nthreads_var;
   if (__builtin_expect (gomp_nthreads_var_list != NULL, 0)

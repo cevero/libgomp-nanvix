@@ -188,7 +188,7 @@ extern void gomp_vfatal (const char *, va_list)
 extern void gomp_fatal (const char *, ...)
 	__attribute__ ((noreturn, format (printf, 1, 2)));
 
-struct gomp_task;
+//struct gomp_task;
 struct gomp_taskgroup;
 struct htab;
 

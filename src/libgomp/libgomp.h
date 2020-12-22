@@ -320,6 +320,97 @@ struct gomp_dependers_vec
   struct gomp_task *elem[];
 };
 
+struct gomp_task
+{
+  /* Parent of this task.  */
+  struct gomp_task *parent;
+  /* Children of this task.  */
+  struct priority_queue children_queue;
+  /* Taskgroup this task belongs in.  */
+  struct gomp_taskgroup *taskgroup;
+  /* Tasks that depend on this task.  */
+  struct gomp_dependers_vec *dependers;
+  struct htab *depend_hash;
+  struct gomp_taskwait *taskwait;
+  /* Number of items in DEPEND.  */
+  size_t depend_count;
+  /* Number of tasks this task depends on.  Once this counter reaches
+     0, we have no unsatisfied dependencies, and this task can be put
+     into the various queues to be scheduled.  */
+  size_t num_dependees;
+
+  /* Priority of this task.  */
+  int priority;
+  /* The priority node for this task in each of the different queues.
+     We put this here to avoid allocating space for each priority
+     node.  Then we play offsetof() games to convert between pnode[]
+     entries and the gomp_task in which they reside.  */
+  struct priority_node pnode[3];
+
+  struct gomp_task_icv icv;
+  void (*fn) (void *);
+  void *fn_data;
+  enum gomp_task_kind kind;
+  bool in_tied_task;
+  bool final_task;
+  bool copy_ctors_done;
+  /* Set for undeferred tasks with unsatisfied dependencies which
+     block further execution of their parent until the dependencies
+     are satisfied.  */
+  bool parent_depends_on;
+  /* Dependencies provided and/or needed for this task.  DEPEND_COUNT
+     is the number of items available.  */
+  struct gomp_task_depend_entry depend[];
+};
+
+/* This structure describes a single #pragma omp taskgroup.  */
+
+struct gomp_taskgroup
+{
+  struct gomp_taskgroup *prev;
+  /* Queue of tasks that belong in this taskgroup.  */
+  struct priority_queue taskgroup_queue;
+  uintptr_t *reductions;
+  bool in_taskgroup_wait;
+  bool cancelled;
+  bool workshare;
+  gomp_sem_t taskgroup_sem;
+  size_t num_children;
+};
+
+/* Various state of OpenMP async offloading tasks.  */
+enum gomp_target_task_state
+{
+  GOMP_TARGET_TASK_DATA,
+  GOMP_TARGET_TASK_BEFORE_MAP,
+  GOMP_TARGET_TASK_FALLBACK,
+  GOMP_TARGET_TASK_READY_TO_RUN,
+  GOMP_TARGET_TASK_RUNNING,
+  GOMP_TARGET_TASK_FINISHED
+};
+
+/* This structure describes a target task.  */
+
+struct gomp_target_task
+{
+  struct gomp_device_descr *devicep;
+  void (*fn) (void *);
+  size_t mapnum;
+  size_t *sizes;
+  unsigned short *kinds;
+  unsigned int flags;
+  enum gomp_target_task_state state;
+  struct target_mem_desc *tgt;
+  struct gomp_task *task;
+  struct gomp_team *team;
+  /* Device-specific target arguments.  */
+  void **args;
+  void *hostaddrs[];
+};
+
+/* This structure describes a "team" of threads.  These are the threads
+   that are spawned by a PARALLEL constructs, as well as the work sharing
+   constructs that the team encounters.  */
 
 struct gomp_team
 {
@@ -425,48 +516,6 @@ static inline struct gomp_thread *gomp_thread (void)
 }
 #endif
 
-struct gomp_task
-{
-  /* Parent of this task.  */
-  struct gomp_task *parent;
-  /* Children of this task.  */
-  struct priority_queue children_queue;
-  /* Taskgroup this task belongs in.  */
-  struct gomp_taskgroup *taskgroup;
-  /* Tasks that depend on this task.  */
-  struct gomp_dependers_vec *dependers;
-  struct htab *depend_hash;
-  struct gomp_taskwait *taskwait;
-  /* Number of items in DEPEND.  */
-  size_t depend_count;
-  /* Number of tasks this task depends on.  Once this counter reaches
-     0, we have no unsatisfied dependencies, and this task can be put
-     into the various queues to be scheduled.  */
-  size_t num_dependees;
-
-  /* Priority of this task.  */
-  int priority;
-  /* The priority node for this task in each of the different queues.
-     We put this here to avoid allocating space for each priority
-     node.  Then we play offsetof() games to convert between pnode[]
-     entries and the gomp_task in which they reside.  */
-  struct priority_node pnode[3];
-
-  struct gomp_task_icv icv;
-  void (*fn) (void *);
-  void *fn_data;
-  enum gomp_task_kind kind;
-  bool in_tied_task;
-  bool final_task;
-  bool copy_ctors_done;
-  /* Set for undeferred tasks with unsatisfied dependencies which
-     block further execution of their parent until the dependencies
-     are satisfied.  */
-  bool parent_depends_on;
-  /* Dependencies provided and/or needed for this task.  DEPEND_COUNT
-     is the number of items available.  */
-  struct gomp_task_depend_entry depend[];
-};
 
 struct gomp_thread
 {
@@ -668,29 +717,29 @@ extern void gomp_init_num_threads (void);
 extern unsigned gomp_dynamic_max_threads (void);
 
 ///* task.c */
-//
-//extern void gomp_init_task (struct gomp_task *, struct gomp_task *,
-//			    struct gomp_task_icv *);
-//extern void gomp_end_task (void);
-//extern void gomp_barrier_handle_tasks (gomp_barrier_state_t);
-//extern void gomp_task_maybe_wait_for_dependencies (void **);
-//extern bool gomp_create_target_task (struct gomp_device_descr *,
-//				     void (*) (void *), size_t, void **,
-//				     size_t *, unsigned short *, unsigned int,
-//				     void **, void **,
-//				     enum gomp_target_task_state);
-//extern struct gomp_taskgroup *gomp_parallel_reduction_register (uintptr_t *,
-//								unsigned);
-//extern void gomp_workshare_taskgroup_start (void);
-//extern void gomp_workshare_task_reduction_register (uintptr_t *, uintptr_t *);
-//
-//static void inline
-//gomp_finish_task (struct gomp_task *task)
-//{
-//  if (__builtin_expect (task->depend_hash != NULL, 0))
-//    free (task->depend_hash);
-//}
-//
+
+extern void gomp_init_task (struct gomp_task *, struct gomp_task *,
+			    struct gomp_task_icv *);
+extern void gomp_end_task (void);
+extern void gomp_barrier_handle_tasks (gomp_barrier_state_t);
+extern void gomp_task_maybe_wait_for_dependencies (void **);
+extern bool gomp_create_target_task (struct gomp_device_descr *,
+				     void (*) (void *), size_t, void **,
+				     size_t *, unsigned short *, unsigned int,
+				     void **, void **,
+				     enum gomp_target_task_state);
+extern struct gomp_taskgroup *gomp_parallel_reduction_register (uintptr_t *,
+								unsigned);
+extern void gomp_workshare_taskgroup_start (void);
+extern void gomp_workshare_task_reduction_register (uintptr_t *, uintptr_t *);
+
+static void inline
+gomp_finish_task (struct gomp_task *task)
+{
+  if (__builtin_expect (task->depend_hash != NULL, 0))
+    ufree (task->depend_hash);
+}
+
 /* team.c */
 
 extern struct gomp_team *gomp_new_team (unsigned);
