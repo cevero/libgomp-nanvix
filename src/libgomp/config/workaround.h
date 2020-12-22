@@ -20,6 +20,19 @@ typedef union pthread_attr_t
   long int __align;
 } pthread_attr_t;
 
+
+//extern int pthread_attr_init (pthread_attr_t *__attr) __THROW __nonnull ((1));
+extern int pthread_attr_init (pthread_attr_t *__attr);
+
+/* Destroy thread attribute *ATTR.  */
+//extern int pthread_attr_destroy (pthread_attr_t *__attr)
+//     __THROW __nonnull ((1));
+
+extern int pthread_attr_destroy (pthread_attr_t *__attr);
+
+extern int pthread_attr_getstacksize (pthread_attr_t *__attr,int * stacksize);
+extern int pthread_attr_setstacksize (pthread_attr_t *__attr,int * stacksize);
+
 extern void* pthread_getspecific (pthread_key_t key)
 {
     uprintf("_FUNC_ %d\n",key);
