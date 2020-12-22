@@ -26,7 +26,7 @@
 /* This file handles the (bare) PARALLEL construct.  */
 
 #include "libgomp.h"
-#include <limits.h>
+#include "limits.h"
 
 
 /* Determine the number of threads to be launched for a PARALLEL construct.
