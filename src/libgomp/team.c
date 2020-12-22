@@ -833,7 +833,7 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
       start_data->nested = nested;
 
       attr = gomp_adjust_thread_attr (attr, &thread_attr);
-      err = pthread_create (&start_data->handle, attr, gomp_thread_start,
+      err = kthread_create (&start_data->handle, attr, gomp_thread_start,
 			    start_data);
       start_data++;
       if (err != 0)

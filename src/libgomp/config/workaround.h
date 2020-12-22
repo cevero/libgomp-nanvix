@@ -31,7 +31,7 @@ extern int pthread_attr_init (pthread_attr_t *__attr);
 extern int pthread_attr_destroy (pthread_attr_t *__attr);
 
 extern int pthread_attr_getstacksize (pthread_attr_t *__attr,int * stacksize);
-extern int pthread_attr_setstacksize (pthread_attr_t *__attr,int * stacksize);
+extern int pthread_attr_setstacksize (pthread_attr_t *__attr,size_t  stacksize);
 
 extern void* pthread_getspecific (pthread_key_t key)
 {
