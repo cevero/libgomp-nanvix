@@ -1,6 +1,7 @@
 #include "semaphore.h"
 #include <nanvix/ulib.h>
 #include "mutex.h"
+#include "../omp.h.in"
 
 #ifndef WORKAROUND_H
 #define WORKAROUND_H
@@ -64,7 +65,7 @@ gomp_malloc (size_t size)
   return ret;
 }
 
-const int omp_proc_bind_false =0;
+//const int omp_proc_bind_false =0;
 
 //meaning?
 

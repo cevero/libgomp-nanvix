@@ -236,7 +236,7 @@ gomp_free_pool_helper (void *thread_pool)
   thr->task = NULL;
 #ifdef LIBGOMP_USE_PTHREADS
   pthread_detach (kthread_self ());
-  pthread_exit (NULL);
+  kthread_exit (NULL);
 #elif defined(__nvptx__)
   asm ("exit;");
 #else
@@ -1030,7 +1030,7 @@ gomp_pause_pool_helper (void *thread_pool)
   gomp_sem_destroy (&thr->release);
   thr->thread_pool = NULL;
   thr->task = NULL;
-  pthread_exit (NULL);
+  kthread_exit (NULL);
 }
 
 /* Free a thread pool and release its threads.  Return non-zero on
