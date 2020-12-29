@@ -31,6 +31,7 @@
 #include <nanvix/ulib.h>
 #include <posix/string.h>
 
+
 #ifdef LIBGOMP_USE_PTHREADS
 pthread_attr_t gomp_thread_attr;
 
@@ -832,8 +833,9 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
       start_data->thread_pool = pool;
       start_data->nested = nested;
 
-      attr = gomp_adjust_thread_attr (attr, &thread_attr);
-      err = kthread_create (&start_data->handle, attr, gomp_thread_start,
+     // attr = gomp_adjust_thread_attr (attr, &thread_attr);
+      //err = kthread_create (&start_data->handle, attr, gomp_thread_start,
+      err = kthread_create (&start_data->handle,  gomp_thread_start,
 			    start_data);
       start_data++;
       if (err != 0)
