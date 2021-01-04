@@ -27,8 +27,10 @@
    creation and termination.  */
 
 #include "libgomp.h"
-#include <stdlib.h>
-#include <string.h>
+//#include <stdlib.h>
+//#include <string.h>
+#include <nanvix/ulib.h>
+#include <posix/string.h>
 #include "gomp-constants.h"
 
 typedef struct gomp_task_depend_entry *hash_entry_type;
