@@ -12,6 +12,7 @@ typedef unsigned int pthread_key_t;
 # define __SIZEOF_PTHREAD_ATTR_T 36
 # define __SIZEOF_PTHREAD_RWLOCK_T 32
 # define __SIZEOF_PTHREAD_BARRIER_T 20
+#define stderr 0
 
 
 typedef union pthread_attr_t
@@ -85,5 +86,7 @@ gomp_malloc (size_t size)
 //extern int pthread_detach (kthread_t __th) __THROW;
 extern int pthread_detach (kthread_t __th);
 
+extern void fputs(char* str, void*);
+extern void fputc(char str, void*);
 
 #endif
