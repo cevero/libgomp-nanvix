@@ -28,7 +28,7 @@
 
 #include "libgomp.h"
 #include "gomp-constants.h"
-#include <limits.h>
+#include "limits.h"
 
 void
 omp_set_num_threads (int n)
