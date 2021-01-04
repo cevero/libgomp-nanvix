@@ -13,6 +13,8 @@ typedef unsigned int pthread_key_t;
 # define __SIZEOF_PTHREAD_RWLOCK_T 32
 # define __SIZEOF_PTHREAD_BARRIER_T 20
 #define stderr 0
+#define EXIT_SUCCESS 0
+#define EXIT_FAILURE 1
 
 
 typedef union pthread_attr_t
