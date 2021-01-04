@@ -44,7 +44,7 @@ htab_alloc (size_t size)
 static inline void
 htab_free (void *ptr)
 {
-  free (ptr);
+  ufree (ptr);
 }
 
 #include "hashtab.h"
@@ -135,7 +135,7 @@ gomp_clear_parent_in_tree (prio_splay_tree sp, prio_splay_tree_node node)
   /* No need to remove the node from the tree.  We're nuking
      everything, so just free the nodes and our caller can clear the
      entire splay tree.  */
-  free (node);
+  ufree (node);
   gomp_clear_parent_in_tree (sp, left);
   gomp_clear_parent_in_tree (sp, right);
 }
@@ -484,7 +484,7 @@ GOMP_task (void (*fn) (void *), void *data, void (*cpyfn) (void *, void *),
 	    do_cancel:
 	      gomp_mutex_unlock (&team->task_lock);
 	      gomp_finish_task (task);
-	      free (task);
+	      ufree (task);
 	      return;
 	    }
 	  if (taskgroup)
@@ -789,7 +789,7 @@ gomp_create_target_task (struct gomp_device_descr *devicep,
 	do_cancel:
 	  gomp_mutex_unlock (&team->task_lock);
 	  gomp_finish_task (task);
-	  free (task);
+	  ufree (task);
 	  return true;
 	}
       if (taskgroup)
@@ -818,7 +818,7 @@ gomp_create_target_task (struct gomp_device_descr *devicep,
       gomp_task_run_post_handle_depend_hash (task);
       gomp_mutex_unlock (&team->task_lock);
       gomp_finish_task (task);
-      free (task);
+      ufree (task);
       return false;
     }
   if (taskgroup)
@@ -1214,7 +1214,7 @@ gomp_task_run_post_handle_dependers (struct gomp_task *child_task,
       ++team->task_queued_count;
       ++ret;
     }
-  free (child_task->dependers);
+  ufree (child_task->dependers);
   child_task->dependers = NULL;
   if (ret > 1)
     gomp_team_barrier_set_task_pending (&team->barrier);
@@ -1341,7 +1341,7 @@ gomp_barrier_handle_tasks (gomp_barrier_state_t state)
 	      if (to_free)
 		{
 		  gomp_finish_task (to_free);
-		  free (to_free);
+		  ufree (to_free);
 		  to_free = NULL;
 		}
 	      goto finish_cancelled;
@@ -1358,7 +1358,7 @@ gomp_barrier_handle_tasks (gomp_barrier_state_t state)
       if (to_free)
 	{
 	  gomp_finish_task (to_free);
-	  free (to_free);
+	  ufree (to_free);
 	  to_free = NULL;
 	}
       if (child_task)
@@ -1461,7 +1461,7 @@ GOMP_taskwait (void)
 	  if (to_free)
 	    {
 	      gomp_finish_task (to_free);
-	      free (to_free);
+	      ufree (to_free);
 	    }
 	  if (destroy_taskwait)
 	    gomp_sem_destroy (&taskwait.taskwait_sem);
@@ -1480,7 +1480,7 @@ GOMP_taskwait (void)
 	      if (to_free)
 		{
 		  gomp_finish_task (to_free);
-		  free (to_free);
+		  ufree (to_free);
 		  to_free = NULL;
 		}
 	      goto finish_cancelled;
@@ -1509,7 +1509,7 @@ GOMP_taskwait (void)
       if (to_free)
 	{
 	  gomp_finish_task (to_free);
-	  free (to_free);
+	  ufree (to_free);
 	  to_free = NULL;
 	}
       if (child_task)
@@ -1705,7 +1705,7 @@ gomp_task_maybe_wait_for_dependencies (void **depend)
 	  if (to_free)
 	    {
 	      gomp_finish_task (to_free);
-	      free (to_free);
+	      ufree (to_free);
 	    }
 	  gomp_sem_destroy (&taskwait.taskwait_sem);
 	  return;
@@ -1739,7 +1739,7 @@ gomp_task_maybe_wait_for_dependencies (void **depend)
 	      if (to_free)
 		{
 		  gomp_finish_task (to_free);
-		  free (to_free);
+		  ufree (to_free);
 		  to_free = NULL;
 		}
 	      goto finish_cancelled;
@@ -1760,7 +1760,7 @@ gomp_task_maybe_wait_for_dependencies (void **depend)
       if (to_free)
 	{
 	  gomp_finish_task (to_free);
-	  free (to_free);
+	  ufree (to_free);
 	  to_free = NULL;
 	}
       if (child_task)
@@ -1921,7 +1921,7 @@ GOMP_taskgroup_end (void)
 	      if (to_free)
 		{
 		  gomp_finish_task (to_free);
-		  free (to_free);
+		  ufree (to_free);
 		}
 	      goto finish;
 	    }
@@ -1939,7 +1939,7 @@ GOMP_taskgroup_end (void)
 	      if (to_free)
 		{
 		  gomp_finish_task (to_free);
-		  free (to_free);
+		  ufree (to_free);
 		  to_free = NULL;
 		}
 	      goto finish_cancelled;
@@ -1964,7 +1964,7 @@ GOMP_taskgroup_end (void)
       if (to_free)
 	{
 	  gomp_finish_task (to_free);
-	  free (to_free);
+	  ufree (to_free);
 	  to_free = NULL;
 	}
       if (child_task)
@@ -2021,7 +2021,7 @@ GOMP_taskgroup_end (void)
  finish:
   task->taskgroup = taskgroup->prev;
   gomp_sem_destroy (&taskgroup->taskgroup_sem);
-  free (taskgroup);
+  ufree (taskgroup);
 }
 
 static inline __attribute__((always_inline)) void
@@ -2132,7 +2132,7 @@ gomp_create_artificial_team (void)
     {
       thr->task = task;
       gomp_end_task ();
-      free (task);
+      ufree (task);
       thr->task = &team->implicit_task[0];
     }
 #ifdef LIBGOMP_USE_PTHREADS
