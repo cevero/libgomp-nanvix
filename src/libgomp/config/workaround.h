@@ -16,6 +16,27 @@ typedef unsigned int pthread_key_t;
 #define EXIT_SUCCESS 0
 #define EXIT_FAILURE 1
 
+#define MEMMODEL_SYNC (1<<15)
+/* Memory model types for the __atomic* builtins.
+   This must match the order in libstdc++-v3/include/bits/atomic_base.h.  */
+enum memmodel
+{
+  MEMMODEL_RELAXED = 0,
+  MEMMODEL_CONSUME = 1,
+  MEMMODEL_ACQUIRE = 2,
+  MEMMODEL_RELEASE = 3,
+  MEMMODEL_ACQ_REL = 4,
+  MEMMODEL_SEQ_CST = 5,
+  MEMMODEL_LAST = 6,
+  MEMMODEL_SYNC_ACQUIRE = MEMMODEL_ACQUIRE | MEMMODEL_SYNC,
+  MEMMODEL_SYNC_RELEASE = MEMMODEL_RELEASE | MEMMODEL_SYNC,
+  MEMMODEL_SYNC_SEQ_CST = MEMMODEL_SEQ_CST | MEMMODEL_SYNC,
+  /* Say that all the higher bits are valid target extensions.  */
+//  MEMMODEL_MAX = INTTYPE_MAXIMUM (int)
+  MEMMODEL_MAX = 0x80000U
+};
+
+
 
 typedef union pthread_attr_t
 {
@@ -49,26 +70,11 @@ extern void* pthread_setspecific (pthread_key_t key,const void *__pointer)
     return NULL;
 }
 
+extern int pthread_key_create (pthread_key_t *__key,
+			       void (*__destr_function) (void *));
 
-#define MEMMODEL_SYNC (1<<15)
-/* Memory model types for the __atomic* builtins.
-   This must match the order in libstdc++-v3/include/bits/atomic_base.h.  */
-enum memmodel
-{
-  MEMMODEL_RELAXED = 0,
-  MEMMODEL_CONSUME = 1,
-  MEMMODEL_ACQUIRE = 2,
-  MEMMODEL_RELEASE = 3,
-  MEMMODEL_ACQ_REL = 4,
-  MEMMODEL_SEQ_CST = 5,
-  MEMMODEL_LAST = 6,
-  MEMMODEL_SYNC_ACQUIRE = MEMMODEL_ACQUIRE | MEMMODEL_SYNC,
-  MEMMODEL_SYNC_RELEASE = MEMMODEL_RELEASE | MEMMODEL_SYNC,
-  MEMMODEL_SYNC_SEQ_CST = MEMMODEL_SEQ_CST | MEMMODEL_SYNC,
-  /* Say that all the higher bits are valid target extensions.  */
-//  MEMMODEL_MAX = INTTYPE_MAXIMUM (int)
-  MEMMODEL_MAX = 0x80000U
-};
+/* Destroy KEY.  */
+extern int pthread_key_delete (pthread_key_t __key);// __THROW;
 
 //gomp_malloc function
 
