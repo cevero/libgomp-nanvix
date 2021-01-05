@@ -78,14 +78,14 @@ extern int pthread_key_delete (pthread_key_t __key);// __THROW;
 
 //gomp_malloc function
 
-void *
-gomp_malloc (size_t size)
-{
-  void *ret = umalloc (size);
-  if (ret == NULL)
-    uprintf("Out of memory allocating %lu bytes", (unsigned long) size);
-  return ret;
-}
+//void *
+//gomp_malloc (size_t size)
+//{
+//  void *ret = umalloc (size);
+//  if (ret == NULL)
+//    uprintf("Out of memory allocating %lu bytes", (unsigned long) size);
+//  return ret;
+//}
 
 //const int omp_proc_bind_false =0;
 

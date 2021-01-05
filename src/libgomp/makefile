@@ -31,7 +31,7 @@ ARCHIVE = $(LIBGOMP)
 
 # C Source Files
 SRC = $(wildcard *.c)
-SRC = error.c team.c icv.c task.c parallel.c
+#SRC = error.c team.c icv.c task.c parallel.c
 
 OBJ = $(SRC:.c=.$(OBJ_SUFFIX).o)
 
