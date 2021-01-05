@@ -199,7 +199,7 @@ priority_tree_remove (enum priority_queue_type type,
 #if _LIBGOMP_CHECKING_
       memset (list, 0xaf, sizeof (*list));
 #endif
-      free (list);
+      ufree (list);
     }
 }
 

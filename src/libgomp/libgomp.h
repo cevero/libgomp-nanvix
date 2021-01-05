@@ -645,6 +645,15 @@ struct gomp_team
 
 
 
+enum gomp_cancel_kind
+{
+  GOMP_CANCEL_PARALLEL = 1,
+  GOMP_CANCEL_LOOP = 2,
+  GOMP_CANCEL_FOR = GOMP_CANCEL_LOOP,
+  GOMP_CANCEL_DO = GOMP_CANCEL_LOOP,
+  GOMP_CANCEL_SECTIONS = 4,
+  GOMP_CANCEL_TASKGROUP = 8
+};
 
 #if defined __nvptx__
 extern struct gomp_thread *nvptx_thrs __attribute__((shared));
