@@ -36,6 +36,8 @@
 /////////////////////////////
 //dumb declarations//////////
 ////////////////////////////
+void *
+gomp_malloc (size_t size);
 
 struct gomp_task;
 #include "config/workaround.h"

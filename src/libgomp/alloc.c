@@ -99,9 +99,9 @@ void
 gomp_aligned_free (void *ptr)
 {
 #ifdef GOMP_HAVE_EFFICIENT_ALIGNED_ALLOC
-  free (ptr);
+  ufree (ptr);
 #else
   if (ptr)
-    free (((void **) ptr)[-1]);
+    ufree (((void **) ptr)[-1]);
 #endif
 }
