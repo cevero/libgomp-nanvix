@@ -185,7 +185,7 @@ GOMP_parallel_reductions (void (*fn) (void *), void *data,
   fn (data);
   ialias_call (GOMP_parallel_end) ();
   gomp_sem_destroy (&taskgroup->taskgroup_sem);
-  free (taskgroup);
+  ufree (taskgroup);
   return num_threads;
 }
 
