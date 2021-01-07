@@ -1,5 +1,8 @@
+#logs
 *err.txt
 *log.txt
+*.err
+*.log
 
 # Toolchain
 utils/toolchain
