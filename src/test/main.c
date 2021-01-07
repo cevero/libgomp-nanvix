@@ -23,7 +23,8 @@
  */
 
 #include <nanvix/ulib.h>
-#include "../libgomp/parallel.c"
+//#include "../libgomp/libgomp.h"
+#include "../libgomp/libgomp.h"
 /**
  * @brief Test Server
  */
