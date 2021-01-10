@@ -37,6 +37,11 @@ SRC = $(wildcard *.c)
 # Object Files
 OBJ = $(SRC:.c=.$(OBJ_SUFFIX).o)
 
+# Library
+
+LIB =  $(LIBDIR)/libgomp-$(TARGET).a
+
+
 #===============================================================================
 
 include $(BUILDDIR)/makefile.executable
