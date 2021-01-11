@@ -39,7 +39,7 @@ OBJ = $(SRC:.c=.$(OBJ_SUFFIX).o)
 
 # Library
 
-LIB =  $(LIBDIR)/libgomp-$(TARGET).a
+LIBS +=  $(LIBDIR)/libgomp-$(TARGET).a
 
 
 #===============================================================================
