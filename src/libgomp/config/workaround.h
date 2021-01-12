@@ -57,18 +57,9 @@ extern int pthread_attr_destroy (pthread_attr_t *__attr);
 extern int pthread_attr_getstacksize (pthread_attr_t *__attr,int * stacksize);
 extern int pthread_attr_setstacksize (pthread_attr_t *__attr,size_t  stacksize);
 
-extern void* pthread_getspecific (pthread_key_t key)
-{
-    uprintf("_FUNC_ %d\n",key);
-    return NULL;
-}
+extern void* pthread_getspecific (pthread_key_t key);
 
-extern void* pthread_setspecific (pthread_key_t key,const void *__pointer)
-{
-    (void) __pointer;
-    uprintf("_FUNC_ %d\n",key);
-    return NULL;
-}
+extern void* pthread_setspecific (pthread_key_t key,const void *__pointer);
 
 extern int pthread_key_create (pthread_key_t *__key,
 			       void (*__destr_function) (void *));
@@ -93,6 +84,7 @@ extern int pthread_key_delete (pthread_key_t __key);// __THROW;
 
 //extern int pthread_detach (kthread_t __th) __THROW;
 extern int pthread_detach (kthread_t __th);
+
 
 extern void fputs(char* str, void*);
 extern void fputc(char str, void*);

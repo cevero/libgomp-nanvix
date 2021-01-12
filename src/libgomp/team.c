@@ -31,7 +31,7 @@
 #include <nanvix/ulib.h>
 #include <posix/string.h>
 
-
+#define LIBGOMP_USE_PTHREADS 1
 #ifdef LIBGOMP_USE_PTHREADS
 pthread_attr_t gomp_thread_attr;
 
