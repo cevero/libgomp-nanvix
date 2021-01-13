@@ -88,7 +88,7 @@ extern int pthread_detach (kthread_t __th);
 
 extern void fputs(char* str, void*);
 extern void fputc(char str, void*);
-extern void nanvix_mutex_destroy(struct mutex *lock);
+extern void nanvix_mutex_destroy(struct nanvix_mutex *lock);
 
 
 

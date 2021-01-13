@@ -40,7 +40,7 @@ void gomp_sem_init (gomp_sem_t *sem, int value)
 {
   int ret;
 
-  ret = nanvix_mutex_init (&sem->mutex, NULL);
+  ret = nanvix_mutex_init (&sem->mutex);
   if (ret)
     return;
 

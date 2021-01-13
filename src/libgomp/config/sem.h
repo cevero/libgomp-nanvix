@@ -44,13 +44,15 @@
 # pragma GCC visibility pop
 #endif
 
-typedef int pthread_mutex_t;
-typedef int pthread_cond_t;
 
 #define HAVE_BROKEN_POSIX_SEMAPHORES 1
 #ifdef HAVE_BROKEN_POSIX_SEMAPHORES
 #include <nanvix/sys/mutex.h>
 
+/////////// dumb declarations //////////////
+typedef struct nanvix_mutex pthread_mutex_t;
+typedef int pthread_cond_t;
+//////////////////////////////////////
 
 struct gomp_sem
 {

@@ -1,4 +1,5 @@
 #include "config/workaround.h"
+#include <nanvix/sys/mutex.h>
 
 
 void* pthread_getspecific (pthread_key_t key)
@@ -57,5 +58,5 @@ extern void fputc(char str, void* c)
 ////NANVIX DEFINITIONS//////
 
 
-static inline void nanvix_mutex_destroy(struct mutex *lock) {}
+inline void nanvix_mutex_destroy(struct nanvix_mutex *lock) {}
 
