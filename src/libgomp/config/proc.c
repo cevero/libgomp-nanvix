@@ -29,7 +29,7 @@
 
    The following implementation uses a mix of POSIX and BSD routines.  */
 
-#include "libgomp.h"
+#include "../libgomp.h"
 #include <unistd.h>
 #include <stdlib.h>
 #ifdef HAVE_GETLOADAVG

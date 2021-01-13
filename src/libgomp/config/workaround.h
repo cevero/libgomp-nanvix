@@ -132,9 +132,10 @@ extern int pthread_detach (kthread_t __th);
 
 extern void fputs(char* str, void*);
 extern void fputc(char str, void*);
-extern void nanvix_mutex_destroy( nanvix_mutex_t *lock);
+extern int nanvix_mutex_destroy( nanvix_mutex_t *lock);
 extern int pthread_cond_wait(pthread_cond_t *cond, nanvix_mutex_t *mutex);
-
+extern int nanvix_cond_signal(pthread_cond_t *__cond);
+extern int nanvix_cond_destroy(pthread_cond_t *__cond);
 
 
 
