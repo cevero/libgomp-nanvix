@@ -35,12 +35,12 @@
 
 typedef struct nanvix_mutex gomp_mutex_t;
 
-void  nanvix_mutex_destroy (gomp_mutex_t *mutex)
-{
-
-   uprintf("%d\n",&mutex);
-
-}
+//void  nanvix_mutex_destroy (gomp_mutex_t *mutex)
+//{
+//
+//   uprintf("%d\n",&mutex);
+//
+//}
 #define GOMP_MUTEX_INIT_0 0
 
 static inline void gomp_mutex_init (gomp_mutex_t *mutex)

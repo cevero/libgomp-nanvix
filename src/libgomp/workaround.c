@@ -53,3 +53,9 @@ extern void fputc(char str, void* c)
     (void) c;
     uprintf("_FUNC_ \n");
 }
+
+////NANVIX DEFINITIONS//////
+
+
+static inline void nanvix_mutex_destroy(struct mutex *lock) {}
+
