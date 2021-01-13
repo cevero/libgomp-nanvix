@@ -33,6 +33,7 @@
 
 #include "../libgomp.h"
 #include "sem.h"
+#include <nanvix/sys/mutex.h>
 #include "workaround.h"
 
 #ifdef HAVE_BROKEN_POSIX_SEMAPHORES

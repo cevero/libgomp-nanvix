@@ -451,17 +451,17 @@ struct gomp_taskwait
 
 
 // privisory declare
-struct gomp_task_icv gomp_global_icv = {
-  .nthreads_var = 1,
-  .thread_limit_var = UINT_MAX,
-  .run_sched_var = GFS_DYNAMIC,
-  .run_sched_chunk_size = 1,
-  .default_device_var = 0,
-  .dyn_var = false,
-  .nest_var = false,
-  .bind_var = omp_proc_bind_false,
-  .target_data = NULL
-};
+//struct gomp_task_icv gomp_global_icv = {
+//  .nthreads_var = 1,
+//  .thread_limit_var = UINT_MAX,
+//  .run_sched_var = GFS_DYNAMIC,
+//  .run_sched_chunk_size = 1,
+//  .default_device_var = 0,
+//  .dyn_var = false,
+//  .nest_var = false,
+//  .bind_var = omp_proc_bind_false,
+//  .target_data = NULL
+//};
 
 //////
 
