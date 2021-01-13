@@ -33,6 +33,7 @@
 
 #include "../libgomp.h"
 #include "sem.h"
+#include "workaround.h"
 
 #ifdef HAVE_BROKEN_POSIX_SEMAPHORES
 //#include <stdlib.h>
@@ -69,7 +70,7 @@ void gomp_sem_wait (gomp_sem_t *sem)
 
   while (sem->value <= 0)
     {
-      ret = nanvix_cond_wait (&sem->cond, &sem->mutex);
+      ret = pthread_cond_wait (&sem->cond, &sem->mutex);
       if (ret)
 	{
 	  nanvix_mutex_unlock (&sem->mutex);

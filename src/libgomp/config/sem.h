@@ -34,12 +34,12 @@
 #ifndef GOMP_SEM_H
 #define GOMP_SEM_H 1
 
+#include "workaround.h"
 #ifdef HAVE_ATTRIBUTE_VISIBILITY
 # pragma GCC visibility push(default)
 #endif
 
 #include <nanvix/sys/semaphore.h>
-#include "workaround.h"
 #ifdef HAVE_ATTRIBUTE_VISIBILITY
 # pragma GCC visibility pop
 #endif
