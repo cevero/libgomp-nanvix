@@ -39,7 +39,7 @@
 #endif
 
 #include <nanvix/sys/semaphore.h>
-
+#include "workaround.h"
 #ifdef HAVE_ATTRIBUTE_VISIBILITY
 # pragma GCC visibility pop
 #endif
@@ -51,7 +51,6 @@
 
 /////////// dumb declarations //////////////
 typedef struct nanvix_mutex pthread_mutex_t;
-typedef int pthread_cond_t;
 //////////////////////////////////////
 
 struct gomp_sem

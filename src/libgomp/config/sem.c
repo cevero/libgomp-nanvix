@@ -32,6 +32,7 @@
    bad for a default.  */
 
 #include "../libgomp.h"
+#include "sem.h"
 
 #ifdef HAVE_BROKEN_POSIX_SEMAPHORES
 //#include <stdlib.h>
@@ -44,7 +45,7 @@ void gomp_sem_init (gomp_sem_t *sem, int value)
   if (ret)
     return;
 
-  ret = nanvix_cond_init (&sem->cond, NULL);
+  ret = pthread_cond_init (&sem->cond, NULL);
   if (ret)
     return;
 

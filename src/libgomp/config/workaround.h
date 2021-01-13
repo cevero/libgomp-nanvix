@@ -2,10 +2,11 @@
 #include <nanvix/ulib.h>
 #include "mutex.h"
 #include "../omp.h.in"
+#include <nanvix/sys/mutex.h>
 
 #ifndef WORKAROUND_H
 #define WORKAROUND_H
-typedef int nanvix_mutex_t;
+typedef struct nanvix_mutex nanvix_mutex_t;
 typedef unsigned int pthread_key_t;
 
 # define __SIZEOF_PTHREAD_MUTEX_T 24
@@ -37,10 +38,49 @@ enum memmodel
 };
 
 
-
+struct __pthread_cond_s
+{
+  __extension__ union
+  {
+    __extension__ unsigned long long int __wseq;
+    struct
+    {
+      unsigned int __low;
+      unsigned int __high;
+    } __wseq32;
+  };
+  __extension__ union
+  {
+    __extension__ unsigned long long int __g1_start;
+    struct
+    {
+      unsigned int __low;
+      unsigned int __high;
+    } __g1_start32;
+  };
+  unsigned int __g_refs[2];
+  unsigned int __g_size[2];
+  unsigned int __g1_orig_size;
+  unsigned int __wrefs;
+  unsigned int __g_signals[2];
+};
+typedef union
+{
+  struct __pthread_cond_s __data;
+  char __size[10];
+ // char __size[__SIZEOF_PTHREAD_COND_T];
+  __extension__ long long int __align;
+} pthread_cond_t;
+typedef union
+{
+  //char __size[__SIZEOF_PTHREAD_CONDATTR_T];
+  char __size[10];
+  int __align;
+} pthread_condattr_t;
 typedef union pthread_attr_t
 {
-  char __size[__SIZEOF_PTHREAD_ATTR_T];
+  //char __size[__SIZEOF_PTHREAD_ATTR_T];
+  char __size[10];
   long int __align;
 } pthread_attr_t;
 
@@ -57,12 +97,16 @@ extern int pthread_attr_destroy (pthread_attr_t *__attr);
 extern int pthread_attr_getstacksize (pthread_attr_t *__attr,int * stacksize);
 extern int pthread_attr_setstacksize (pthread_attr_t *__attr,size_t  stacksize);
 
+extern int pthread_cond_init (pthread_cond_t *__restrict __cond,
+        const pthread_condattr_t *__restrict __cond_attr);
+
 extern void* pthread_getspecific (pthread_key_t key);
 
 extern void* pthread_setspecific (pthread_key_t key,const void *__pointer);
 
 extern int pthread_key_create (pthread_key_t *__key,
 			       void (*__destr_function) (void *));
+
 
 /* Destroy KEY.  */
 extern int pthread_key_delete (pthread_key_t __key);// __THROW;
@@ -88,7 +132,9 @@ extern int pthread_detach (kthread_t __th);
 
 extern void fputs(char* str, void*);
 extern void fputc(char str, void*);
-extern void nanvix_mutex_destroy(struct nanvix_mutex *lock);
+extern void nanvix_mutex_destroy( nanvix_mutex_t *lock);
+extern int pthread_cond_wait(pthread_cond_t *cond, nanvix_mutex_t *mutex);
+
 
 
 

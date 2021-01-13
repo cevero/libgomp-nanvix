@@ -35,6 +35,14 @@ int pthread_attr_setstacksize (pthread_attr_t *__attr,size_t  stacksize)
     uprintf("_FUNC_ \n");
     return 0;
 }
+extern int pthread_cond_init (pthread_cond_t *__restrict __cond,
+			      const pthread_condattr_t *__restrict __cond_attr)
+{
+    (void) __cond;
+    (void) __cond_attr;
+    uprintf("_FUNC_ \n");
+    return 0;
+}
 extern int pthread_detach (kthread_t __th)
 {
     (void) __th;
@@ -55,8 +63,22 @@ extern void fputc(char str, void* c)
     uprintf("_FUNC_ \n");
 }
 
+int pthread_key_delete (pthread_key_t __key)// __THROW;
+{
+    (void) __key;
+    uprintf("_FUNC_ \n");
+    return 0;
+}
+
 ////NANVIX DEFINITIONS//////
 
 
-inline void nanvix_mutex_destroy(struct nanvix_mutex *lock) {}
+inline void nanvix_mutex_destroy(struct nanvix_mutex_t *lock) {}
 
+int nanvix_cond_wait(pthread_cond_t *cond, nanvix_mutex_t *mutex)
+{
+
+    (void) cond;
+    (void) mutex;
+    uprintf("_FUNC_ \n");
+}
