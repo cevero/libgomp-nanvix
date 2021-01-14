@@ -29,8 +29,8 @@
 #include "limits.h"
 
 ////////dumb signature//////
-void
-gomp_team_end (void);
+//void
+//gomp_team_end (void);
 //////////////////////
 
 

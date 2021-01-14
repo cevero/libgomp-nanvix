@@ -31,7 +31,7 @@
    interested in sem_wait as a cancelation point, but it's not too
    bad for a default.  */
 
-#include "../libgomp.h"
+//#include "../libgomp.h"
 #include "sem.h"
 #include <nanvix/sys/mutex.h>
 #include "workaround.h"
