@@ -1,7 +1,7 @@
 #include "semaphore.h"
 #include <nanvix/ulib.h>
 #include "mutex.h"
-#include "../omp.h.in"
+//#include "../omp.h.in"
 #include <nanvix/sys/mutex.h>
 
 #ifndef WORKAROUND_H

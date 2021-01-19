@@ -37,6 +37,7 @@
 
 #include "../libgomp.h"
 #include "workaround.h"
+#include "omp-lock.h"
 
 #ifdef HAVE_BROKEN_POSIX_SEMAPHORES
 void

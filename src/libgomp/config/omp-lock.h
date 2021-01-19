@@ -6,9 +6,9 @@
    same PTHREADS primitive, but for OpenMP 3.0 sem_t needs to be used
    instead, as pthread_mutex_unlock should not be called by different
    thread than the one that called pthread_mutex_lock.  */
-
-#include <pthread.h>
-#include <semaphore.h>
+#include "workaround.h"
+//#include <pthread.h>
+//#include <semaphore.h>
 
 typedef pthread_mutex_t omp_lock_25_t;
 typedef struct { pthread_mutex_t lock; int count; } omp_nest_lock_25_t;
