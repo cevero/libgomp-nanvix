@@ -49,31 +49,31 @@ gomp_init_lock_30 (omp_lock_t *lock)
 void
 gomp_destroy_lock_30 (omp_lock_t *lock)
 {
-  pthread_mutex_destroy (lock);
+  nanvix_mutex_destroy (lock);
 }
 
 void
 gomp_set_lock_30 (omp_lock_t *lock)
 {
-  pthread_mutex_lock (lock);
+  nanvix_mutex_lock (lock);
 }
 
 void
 gomp_unset_lock_30 (omp_lock_t *lock)
 {
-  pthread_mutex_unlock (lock);
+  nanvix_mutex_unlock (lock);
 }
 
 int
 gomp_test_lock_30 (omp_lock_t *lock)
 {
-  return pthread_mutex_trylock (lock) == 0;
+  return nanvix_mutex_trylock (lock) == 0;
 }
 
 void
 gomp_init_nest_lock_30 (omp_nest_lock_t *lock)
 {
-  pthread_mutex_init (&lock->lock, NULL);
+  nanvix_mutex_init (&lock->lock);
   lock->count = 0;
   lock->owner = NULL;
 }
@@ -81,7 +81,7 @@ gomp_init_nest_lock_30 (omp_nest_lock_t *lock)
 void
 gomp_destroy_nest_lock_30 (omp_nest_lock_t *lock)
 {
-  pthread_mutex_destroy (&lock->lock);
+  nanvix_mutex_destroy (&lock->lock);
 }
 
 void
@@ -91,7 +91,7 @@ gomp_set_nest_lock_30 (omp_nest_lock_t *lock)
 
   if (lock->owner != me)
     {
-      pthread_mutex_lock (&lock->lock);
+      nanvix_mutex_lock (&lock->lock);
       lock->owner = me;
     }
   lock->count++;
@@ -103,7 +103,7 @@ gomp_unset_nest_lock_30 (omp_nest_lock_t *lock)
   if (--lock->count == 0)
     {
       lock->owner = NULL;
-      pthread_mutex_unlock (&lock->lock);
+      nanvix_mutex_unlock (&lock->lock);
     }
 }
 
@@ -114,7 +114,7 @@ gomp_test_nest_lock_30 (omp_nest_lock_t *lock)
 
   if (lock->owner != me)
     {
-      if (pthread_mutex_trylock (&lock->lock) != 0)
+      if (nanvix_mutex_trylock (&lock->lock) != 0)
 	return 0;
       lock->owner = me;
     }
@@ -213,31 +213,31 @@ gomp_test_nest_lock_30 (omp_nest_lock_t *lock)
 void
 gomp_init_lock_25 (omp_lock_25_t *lock)
 {
-  pthread_mutex_init (lock, NULL);
+  nanvix_mutex_init (lock);
 }
 
 void
 gomp_destroy_lock_25 (omp_lock_25_t *lock)
 {
-  pthread_mutex_destroy (lock);
+  nanvix_mutex_destroy (lock);
 }
 
 void
 gomp_set_lock_25 (omp_lock_25_t *lock)
 {
-  pthread_mutex_lock (lock);
+  nanvix_mutex_lock (lock);
 }
 
 void
 gomp_unset_lock_25 (omp_lock_25_t *lock)
 {
-  pthread_mutex_unlock (lock);
+  nanvix_mutex_unlock (lock);
 }
 
 int
 gomp_test_lock_25 (omp_lock_25_t *lock)
 {
-  return pthread_mutex_trylock (lock) == 0;
+  return nanvix_mutex_trylock (lock) == 0;
 }
 
 void
@@ -245,23 +245,23 @@ gomp_init_nest_lock_25 (omp_nest_lock_25_t *lock)
 {
   pthread_mutexattr_t attr;
 
-  pthread_mutexattr_init (&attr);
-  pthread_mutexattr_settype (&attr, PTHREAD_MUTEX_RECURSIVE);
-  pthread_mutex_init (&lock->lock, &attr);
+  nanvix_mutexattr_init (&attr);
+  nanvix_mutexattr_settype (&attr, PTHREAD_MUTEX_RECURSIVE);
+  nanvix_mutex_init (&lock->lock, &attr);
   lock->count = 0;
-  pthread_mutexattr_destroy (&attr);
+  nanvix_mutexattr_destroy (&attr);
 }
 
 void
 gomp_destroy_nest_lock_25 (omp_nest_lock_25_t *lock)
 {
-  pthread_mutex_destroy (&lock->lock);
+  nanvix_mutex_destroy (&lock->lock);
 }
 
 void
 gomp_set_nest_lock_25 (omp_nest_lock_25_t *lock)
 {
-  pthread_mutex_lock (&lock->lock);
+  nanvix_mutex_lock (&lock->lock);
   lock->count++;
 }
 
@@ -269,7 +269,7 @@ void
 gomp_unset_nest_lock_25 (omp_nest_lock_25_t *lock)
 {
   lock->count--;
-  pthread_mutex_unlock (&lock->lock);
+  nanvix_mutex_unlock (&lock->lock);
 }
 
 int

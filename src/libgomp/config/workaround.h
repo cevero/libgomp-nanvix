@@ -13,6 +13,7 @@ typedef unsigned int pthread_key_t;
 # define __SIZEOF_PTHREAD_ATTR_T 36
 # define __SIZEOF_PTHREAD_RWLOCK_T 32
 # define __SIZEOF_PTHREAD_BARRIER_T 20
+#define __SIZEOF_PTHREAD_MUTEXATTR_T 4
 #define stderr 0
 #define EXIT_SUCCESS 0
 #define EXIT_FAILURE 1
@@ -37,6 +38,14 @@ enum memmodel
   MEMMODEL_MAX = 0x80000U
 };
 
+
+////pthread types////
+
+typedef union
+{
+  char __size[__SIZEOF_PTHREAD_MUTEXATTR_T];
+  int __align;
+} pthread_mutexattr_t;
 
 struct __pthread_cond_s
 {
@@ -84,6 +93,8 @@ typedef union pthread_attr_t
   long int __align;
 } pthread_attr_t;
 
+
+/////end pthread types
 
 //extern int pthread_attr_init (pthread_attr_t *__attr) __THROW __nonnull ((1));
 extern int pthread_attr_init (pthread_attr_t *__attr);
@@ -136,7 +147,10 @@ extern int nanvix_mutex_destroy( nanvix_mutex_t *lock);
 extern int pthread_cond_wait(pthread_cond_t *cond, nanvix_mutex_t *mutex);
 extern int nanvix_cond_signal(pthread_cond_t *__cond);
 extern int nanvix_cond_destroy(pthread_cond_t *__cond);
-
+extern int nanvix_mutex_trylock (nanvix_mutex_t *__mutex);
+extern int nanvix_mutexattr_init (pthread_mutexattr_t *__attr);
+extern int nanvix_mutexattr_destroy (pthread_mutexattr_t *__attr);
+extern int nanvix_mutexattr_settype (pthread_mutexattr_t *__attr, int __kind);
 
 
 #endif

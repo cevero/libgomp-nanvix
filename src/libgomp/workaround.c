@@ -2,6 +2,10 @@
 #include <nanvix/sys/mutex.h>
 
 
+
+///// pthread functions ///////
+
+
 void* pthread_getspecific (pthread_key_t key)
 {
     uprintf("_FUNC_ %d\n",key);
@@ -94,6 +98,36 @@ int nanvix_cond_destroy(pthread_cond_t *__cond)
 
 {
     (void) __cond;
+    uprintf("_FUNC_ \n");
+    return 0;
+}
+
+int nanvix_mutex_trylock(nanvix_mutex_t *__mutex)
+{
+    (void) __mutex;
+    uprintf("_FUNC_ \n");
+    return 0;
+}
+
+int nanvix_mutexattr_init (pthread_mutexattr_t *__attr)
+{
+    (void) __attr;
+    uprintf("_FUNC_ \n");
+    return 0;
+}
+
+int nanvix_mutexattr_destroy (pthread_mutexattr_t *__attr)
+{
+    (void) __attr;
+    uprintf("_FUNC_ \n");
+    return 0;
+}
+
+
+int nanvix_mutexattr_settype (pthread_mutexattr_t *__attr, int __kind)
+{
+    (void) __attr;
+    (void) __kind;
     uprintf("_FUNC_ \n");
     return 0;
 }
