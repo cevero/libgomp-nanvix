@@ -31,8 +31,8 @@
 
 #include "libgomp.h"
 
-#if (@OMP_LOCK_SIZE@ == @OMP_LOCK_KIND@) \
-    && (@OMP_LOCK_ALIGN@ <= @OMP_LOCK_SIZE@)
+#if (4 == 4) \
+    && (4 <= 4)
 # define OMP_LOCK_DIRECT
 typedef omp_lock_t *omp_lock_arg_t;
 # define omp_lock_arg(arg) (arg)
@@ -41,8 +41,8 @@ typedef union { omp_lock_t *lock; uint64_t u; } *omp_lock_arg_t;
 # define omp_lock_arg(arg) ((arg)->lock)
 # endif
 
-#if (@OMP_NEST_LOCK_SIZE@ == @OMP_NEST_LOCK_KIND@) \
-    && (@OMP_NEST_LOCK_ALIGN@ <= @OMP_NEST_LOCK_SIZE@)
+#if (16 == 8) \
+    && (8 <= 16)
 # define OMP_NEST_LOCK_DIRECT
 typedef omp_nest_lock_t *omp_nest_lock_arg_t;
 # define omp_nest_lock_arg(arg) (arg)
@@ -51,8 +51,8 @@ typedef union { omp_nest_lock_t *lock; uint64_t u; } *omp_nest_lock_arg_t;
 # define omp_nest_lock_arg(arg) ((arg)->lock)
 # endif
 
-#if (@OMP_LOCK_25_SIZE@ == @OMP_LOCK_25_KIND@) \
-    && (@OMP_LOCK_25_ALIGN@ <= @OMP_LOCK_25_SIZE@)
+#if (4 == 4) \
+    && (4 <= 4)
 # define OMP_LOCK_25_DIRECT
 typedef omp_lock_25_t *omp_lock_25_arg_t;
 # define omp_lock_25_arg(arg) (arg)
@@ -61,8 +61,8 @@ typedef union { omp_lock_25_t *lock; uint64_t u; } *omp_lock_25_arg_t;
 # define omp_lock_25_arg(arg) ((arg)->lock)
 # endif
 
-#if (@OMP_NEST_LOCK_25_SIZE@ == @OMP_NEST_LOCK_25_KIND@) \
-    && (@OMP_NEST_LOCK_25_ALIGN@ <= @OMP_NEST_LOCK_25_SIZE@)
+#if (8 == 8) \
+    && (4 <= 8)
 # define OMP_NEST_LOCK_25_DIRECT
 typedef omp_nest_lock_25_t *omp_nest_lock_25_arg_t;
 # define omp_nest_lock_25_arg(arg) (arg)
@@ -74,19 +74,19 @@ typedef union { omp_nest_lock_25_t *lock; uint64_t u; } *omp_nest_lock_25_arg_t;
 static inline void
 omp_check_defines (void)
 {
-  char test[(@OMP_LOCK_SIZE@ != sizeof (omp_lock_t)
-	     || @OMP_LOCK_ALIGN@ != __alignof (omp_lock_t)
-	     || @OMP_NEST_LOCK_SIZE@ != sizeof (omp_nest_lock_t)
-	     || @OMP_NEST_LOCK_ALIGN@ != __alignof (omp_nest_lock_t)
-	     || @OMP_LOCK_KIND@ != sizeof (*(omp_lock_arg_t) 0)
-	     || @OMP_NEST_LOCK_KIND@ != sizeof (*(omp_nest_lock_arg_t) 0))
+  char test[(4 != sizeof (omp_lock_t)
+	     || 4 != __alignof (omp_lock_t)
+	     || 16 != sizeof (omp_nest_lock_t)
+	     || 8 != __alignof (omp_nest_lock_t)
+	     || 4 != sizeof (*(omp_lock_arg_t) 0)
+	     || 8 != sizeof (*(omp_nest_lock_arg_t) 0))
 	    ? -1 : 1] __attribute__ ((__unused__));
-  char test2[(@OMP_LOCK_25_SIZE@ != sizeof (omp_lock_25_t)
-	     || @OMP_LOCK_25_ALIGN@ != __alignof (omp_lock_25_t)
-	     || @OMP_NEST_LOCK_25_SIZE@ != sizeof (omp_nest_lock_25_t)
-	     || @OMP_NEST_LOCK_25_ALIGN@ != __alignof (omp_nest_lock_25_t)
-	     || @OMP_LOCK_25_KIND@ != sizeof (*(omp_lock_25_arg_t) 0)
-	     || @OMP_NEST_LOCK_25_KIND@
+  char test2[(4 != sizeof (omp_lock_25_t)
+	     || 4 != __alignof (omp_lock_25_t)
+	     || 8 != sizeof (omp_nest_lock_25_t)
+	     || 4 != __alignof (omp_nest_lock_25_t)
+	     || 4 != sizeof (*(omp_lock_25_arg_t) 0)
+	     || 8
 		!= sizeof (*(omp_nest_lock_25_arg_t) 0))
 	    ? -1 : 1] __attribute__ ((__unused__));
 }
