@@ -29,7 +29,7 @@
 #define _GNU_SOURCE
 #include "libgomp.h"
 #include "gomp-constants.h"
-#include <limits.h>
+#include "limits.h"
 #ifndef LIBGOMP_OFFLOADED_ONLY
 #include "libgomp_f.h"
 #include "oacc-int.h"
