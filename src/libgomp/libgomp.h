@@ -34,6 +34,7 @@
 #include "libgomp_g.h"
 
 #include "config/ptrlock.h"
+#include "config/omp-lock.h"
 
 //////////////////////////////////////////////////////////////
 //declarations dumb                         /////////////////
