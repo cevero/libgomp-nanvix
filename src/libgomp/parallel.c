@@ -40,17 +40,6 @@
    If the IF clause is false, SPECIFIED is forced to 1.  When NUM_THREADS
    is not present, SPECIFIED is 0.  */
 
-struct gomp_task_icv gomp_global_icv = {
-  .nthreads_var = 1,
-  .thread_limit_var = UINT_MAX,
-  .run_sched_var = GFS_DYNAMIC,
-  .run_sched_chunk_size = 1,
-  .default_device_var = 0,
-  .dyn_var = false,
-  .nest_var = false,
-  .bind_var = omp_proc_bind_false,
-  .target_data = NULL
-};
 unsigned
 gomp_resolve_num_threads (unsigned specified, unsigned count)
 {
