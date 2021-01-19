@@ -35,13 +35,14 @@
    Solaris requires this for C99 and later.  */
 #define _XOPEN_SOURCE 600
 
-#include "libgomp.h"
+#include "../libgomp.h"
+#include "workaround.h"
 
 #ifdef HAVE_BROKEN_POSIX_SEMAPHORES
 void
 gomp_init_lock_30 (omp_lock_t *lock)
 {
-  pthread_mutex_init (lock, NULL);
+  nanvix_mutex_init (lock);
 }
 
 void
