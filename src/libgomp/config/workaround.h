@@ -9,11 +9,12 @@
 typedef struct nanvix_mutex nanvix_mutex_t;
 typedef unsigned int pthread_key_t;
 
-# define __SIZEOF_PTHREAD_MUTEX_T 24
+//# define __SIZEOF_PTHREAD_MUTEX_T 24
 # define __SIZEOF_PTHREAD_ATTR_T 36
 # define __SIZEOF_PTHREAD_RWLOCK_T 32
 # define __SIZEOF_PTHREAD_BARRIER_T 20
 #define __SIZEOF_PTHREAD_MUTEXATTR_T 4
+#  define __SIZEOF_PTHREAD_MUTEX_T 40
 #define stderr 0
 #define EXIT_SUCCESS 0
 #define EXIT_FAILURE 1
