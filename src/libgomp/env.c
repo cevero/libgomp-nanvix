@@ -32,16 +32,17 @@
 #include "limits.h"
 #ifndef LIBGOMP_OFFLOADED_ONLY
 #include "libgomp_f.h"
-#include "oacc-int.h"
-#include <ctype.h>
-#include <stdlib.h>
-#include <stdio.h>
+//#include "oacc-int.h"
+//#include <ctype.h>
+//#include <stdlib.h>
+//#include <stdio.h>
+#include <nanvix/ulib.h>
 #ifdef HAVE_INTTYPES_H
 # include <inttypes.h>	/* For PRIu64.  */
 #endif
 #ifdef STRING_WITH_STRINGS
-# include <string.h>
-# include <strings.h>
+# include <posix/string.h>
+//# include <strings.h>
 #else
 # ifdef HAVE_STRING_H
 #  include <string.h>
@@ -51,16 +52,44 @@
 #  endif
 # endif
 #endif
-#include <errno.h>
-#include "thread-stacksize.h"
+//#include <errno.h>
+#include "config/thread-stacksize.h"
 
 #ifndef HAVE_STRTOULL
 # define strtoull(ptr, eptr, base) strtoul (ptr, eptr, base)
 #endif
 #endif /* LIBGOMP_OFFLOADED_ONLY */
 
-#include "secure_getenv.h"
+//#include "secure_getenv.h"
+////////////////////getenv/////////////////////
 
+#if SUPPORTS_WEAKREF && defined (HAVE___SECURE_GETENV)
+static char* weak_secure_getenv (const char*)
+  __attribute__((__weakref__("__secure_getenv")));
+#endif
+
+/* Implementation of secure_getenv() for targets where it is not provided but
+   we have at least means to test real and effective IDs.  */
+
+static inline char *
+secure_getenv (const char *name)
+{
+#if SUPPORTS_WEAKREF && defined (HAVE___SECURE_GETENV)
+  if (weak_secure_getenv)
+    return weak_secure_getenv (name);
+#endif
+
+  if ((getuid () == geteuid ()) && (getgid () == getegid ()))
+    return getenv (name);
+  else
+    return NULL;
+}
+#else
+#define secure_getenv getenv
+#endif
+#endif
+
+/////////////////getenv////////////////////////
 struct gomp_task_icv gomp_global_icv = {
   .nthreads_var = 1,
   .thread_limit_var = UINT_MAX,
@@ -69,7 +98,8 @@ struct gomp_task_icv gomp_global_icv = {
   .default_device_var = 0,
   .dyn_var = false,
   .nest_var = false,
-  .bind_var = omp_proc_bind_false,
+  //.bind_var = omp_proc_bind_false,
+  .bind_var = false,
   .target_data = NULL
 };
 

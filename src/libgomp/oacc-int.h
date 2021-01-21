@@ -39,10 +39,10 @@
 #define OACC_INT_H 1
 
 #include "openacc.h"
-#include "config.h"
-#include <stddef.h>
-#include <stdbool.h>
-#include <stdarg.h>
+//#include "config.h"
+#include <posix/stddef.h>
+#include <posix/stdbool.h>
+#include <posix/stdarg.h>
 
 #ifdef HAVE_ATTRIBUTE_VISIBILITY
 # pragma GCC visibility push(hidden)
