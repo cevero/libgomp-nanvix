@@ -61,35 +61,12 @@
 #endif /* LIBGOMP_OFFLOADED_ONLY */
 
 //#include "secure_getenv.h"
-////////////////////getenv/////////////////////
-
-#if SUPPORTS_WEAKREF && defined (HAVE___SECURE_GETENV)
-static char* weak_secure_getenv (const char*)
-  __attribute__((__weakref__("__secure_getenv")));
-#endif
-
-/* Implementation of secure_getenv() for targets where it is not provided but
-   we have at least means to test real and effective IDs.  */
-
-static inline char *
-secure_getenv (const char *name)
+char * getenv(char* string)
 {
-#if SUPPORTS_WEAKREF && defined (HAVE___SECURE_GETENV)
-  if (weak_secure_getenv)
-    return weak_secure_getenv (name);
-#endif
-
-  if ((getuid () == geteuid ()) && (getgid () == getegid ()))
-    return getenv (name);
-  else
+    (void) string;
     return NULL;
 }
-#else
-#define secure_getenv getenv
-#endif
-#endif
 
-/////////////////getenv////////////////////////
 struct gomp_task_icv gomp_global_icv = {
   .nthreads_var = 1,
   .thread_limit_var = UINT_MAX,

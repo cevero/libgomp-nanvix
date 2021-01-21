@@ -31,9 +31,9 @@ ARCHIVE = $(LIBGOMP)
 
 # C Source Files
 #SRC = $(wildcard *.c)
-SRC =  workaround.c config/sem.c config/mutex.c config/lock.c \
-	   env.c splay-tree.c  priority_queue.c work.c team.c parallel.c\
-	   icv.c #error.c alloc.c#task.c   config/proc.c
+SRC =  workaround.c  libgomp.c config/sem.c config/mutex.c config/lock.c \
+	    splay-tree.c  priority_queue.c work.c team.c parallel.c\
+	   icv.c#error.c alloc.c#task.c  env.c config/proc.c
 
 OBJ = $(SRC:.c=.$(OBJ_SUFFIX).o)
 
