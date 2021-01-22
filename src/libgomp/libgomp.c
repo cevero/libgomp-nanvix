@@ -2,6 +2,8 @@
 #include "limits.h"
 
 
+
+
 struct gomp_task_icv gomp_global_icv = {
   .nthreads_var = 1,
   .thread_limit_var = UINT_MAX,
@@ -38,11 +40,3 @@ char *gomp_affinity_format_var = "level %L thread %i affinity %A";
 size_t gomp_affinity_format_len;
 
 
-typedef enum omp_proc_bind_t
-{
-  omp_proc_bind_false = 0,
-  omp_proc_bind_true = 1,
-  omp_proc_bind_master = 2,
-  omp_proc_bind_close = 3,
-  omp_proc_bind_spread = 4
-} omp_proc_bind_t;

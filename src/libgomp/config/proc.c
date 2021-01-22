@@ -30,8 +30,9 @@
    The following implementation uses a mix of POSIX and BSD routines.  */
 
 #include "../libgomp.h"
-#include <unistd.h>
-#include <stdlib.h>
+//#include <unistd.h>
+//#include <stdlib.h>
+#include <nanvix/ulib.h>
 #ifdef HAVE_GETLOADAVG
 # ifdef HAVE_SYS_LOADAVG_H
 #  include <sys/loadavg.h>

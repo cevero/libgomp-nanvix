@@ -363,6 +363,15 @@ struct gomp_team_state
 };
 
 
+typedef enum omp_proc_bind_t
+{
+  omp_proc_bind_false = 0,
+  omp_proc_bind_true = 1,
+  omp_proc_bind_master = 2,
+  omp_proc_bind_close = 3,
+  omp_proc_bind_spread = 4
+} omp_proc_bind_t;
+
 
 
 

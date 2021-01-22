@@ -782,105 +782,105 @@ gomp_create_target_task (struct gomp_device_descr *devicep,
   task->final_task = 0;
   gomp_mutex_lock (&team->task_lock);
   /* If parallel or taskgroup has been cancelled, don't start new tasks.  */
-  if (__builtin_expect (gomp_cancel_var, 0))
-    {
-      if (gomp_team_barrier_cancelled (&team->barrier))
-	{
-	do_cancel:
-	  gomp_mutex_unlock (&team->task_lock);
-	  gomp_finish_task (task);
-	  ufree (task);
-	  return true;
-	}
-      if (taskgroup)
-	{
-	  if (taskgroup->cancelled)
-	    goto do_cancel;
-	  if (taskgroup->workshare
-	      && taskgroup->prev
-	      && taskgroup->prev->cancelled)
-	    goto do_cancel;
-	}
-    }
-  if (depend_size)
-    {
-      gomp_task_handle_depend (task, parent, depend);
-      if (task->num_dependees)
-	{
-	  if (taskgroup)
-	    taskgroup->num_children++;
-	  gomp_mutex_unlock (&team->task_lock);
-	  return true;
-	}
-    }
-  if (state == GOMP_TARGET_TASK_DATA)
-    {
-      gomp_task_run_post_handle_depend_hash (task);
-      gomp_mutex_unlock (&team->task_lock);
-      gomp_finish_task (task);
-      ufree (task);
-      return false;
-    }
-  if (taskgroup)
-    taskgroup->num_children++;
-  /* For async offloading, if we don't need to wait for dependencies,
-     run the gomp_target_task_fn right away, essentially schedule the
-     mapping part of the task in the current thread.  */
-  if (devicep != NULL
-      && (devicep->capabilities & GOMP_OFFLOAD_CAP_OPENMP_400))
-    {
-      priority_queue_insert (PQ_CHILDREN, &parent->children_queue, task, 0,
-			     PRIORITY_INSERT_END,
-			     /*adjust_parent_depends_on=*/false,
-			     task->parent_depends_on);
-      if (taskgroup)
-	priority_queue_insert (PQ_TASKGROUP, &taskgroup->taskgroup_queue,
-			       task, 0, PRIORITY_INSERT_END,
-			       /*adjust_parent_depends_on=*/false,
-			       task->parent_depends_on);
-      task->pnode[PQ_TEAM].next = NULL;
-      task->pnode[PQ_TEAM].prev = NULL;
-      task->kind = GOMP_TASK_TIED;
-      ++team->task_count;
-      gomp_mutex_unlock (&team->task_lock);
-
-      thr->task = task;
-      gomp_target_task_fn (task->fn_data);
-      thr->task = parent;
-
-      gomp_mutex_lock (&team->task_lock);
-      task->kind = GOMP_TASK_ASYNC_RUNNING;
-      /* If GOMP_PLUGIN_target_task_completion has run already
-	 in between gomp_target_task_fn and the mutex lock,
-	 perform the requeuing here.  */
-      if (ttask->state == GOMP_TARGET_TASK_FINISHED)
-	gomp_target_task_completion (team, task);
-      else
-	ttask->state = GOMP_TARGET_TASK_RUNNING;
-      gomp_mutex_unlock (&team->task_lock);
-      return true;
-    }
-  priority_queue_insert (PQ_CHILDREN, &parent->children_queue, task, 0,
-			 PRIORITY_INSERT_BEGIN,
-			 /*adjust_parent_depends_on=*/false,
-			 task->parent_depends_on);
-  if (taskgroup)
-    priority_queue_insert (PQ_TASKGROUP, &taskgroup->taskgroup_queue, task, 0,
-			   PRIORITY_INSERT_BEGIN,
-			   /*adjust_parent_depends_on=*/false,
-			   task->parent_depends_on);
-  priority_queue_insert (PQ_TEAM, &team->task_queue, task, 0,
-			 PRIORITY_INSERT_END,
-			 /*adjust_parent_depends_on=*/false,
-			 task->parent_depends_on);
-  ++team->task_count;
-  ++team->task_queued_count;
-  gomp_team_barrier_set_task_pending (&team->barrier);
-  do_wake = team->task_running_count + !parent->in_tied_task
-	    < team->nthreads;
-  gomp_mutex_unlock (&team->task_lock);
-  if (do_wake)
-    gomp_team_barrier_wake (&team->barrier, 1);
+//  if (__builtin_expect (gomp_cancel_var, 0))
+//    {
+//      if (gomp_team_barrier_cancelled (&team->barrier))
+//	{
+//	do_cancel:
+//	  gomp_mutex_unlock (&team->task_lock);
+//	  gomp_finish_task (task);
+//	  ufree (task);
+//	  return true;
+//	}
+//      if (taskgroup)
+//	{
+//	  if (taskgroup->cancelled)
+//	    goto do_cancel;
+//	  if (taskgroup->workshare
+//	      && taskgroup->prev
+//	      && taskgroup->prev->cancelled)
+//	    goto do_cancel;
+//	}
+//    }
+//  if (depend_size)
+//    {
+//      gomp_task_handle_depend (task, parent, depend);
+//      if (task->num_dependees)
+//	{
+//	  if (taskgroup)
+//	    taskgroup->num_children++;
+//	  gomp_mutex_unlock (&team->task_lock);
+//	  return true;
+//	}
+//    }
+//  if (state == GOMP_TARGET_TASK_DATA)
+//    {
+//      gomp_task_run_post_handle_depend_hash (task);
+//      gomp_mutex_unlock (&team->task_lock);
+//      gomp_finish_task (task);
+//      ufree (task);
+//      return false;
+//    }
+//  if (taskgroup)
+//    taskgroup->num_children++;
+//  /* For async offloading, if we don't need to wait for dependencies,
+//     run the gomp_target_task_fn right away, essentially schedule the
+//     mapping part of the task in the current thread.  */
+//  if (devicep != NULL
+//      && (devicep->capabilities & GOMP_OFFLOAD_CAP_OPENMP_400))
+//    {
+//      priority_queue_insert (PQ_CHILDREN, &parent->children_queue, task, 0,
+//			     PRIORITY_INSERT_END,
+//			     /*adjust_parent_depends_on=*/false,
+//			     task->parent_depends_on);
+//      if (taskgroup)
+//	priority_queue_insert (PQ_TASKGROUP, &taskgroup->taskgroup_queue,
+//			       task, 0, PRIORITY_INSERT_END,
+//			       /*adjust_parent_depends_on=*/false,
+//			       task->parent_depends_on);
+//      task->pnode[PQ_TEAM].next = NULL;
+//      task->pnode[PQ_TEAM].prev = NULL;
+//      task->kind = GOMP_TASK_TIED;
+//      ++team->task_count;
+//      gomp_mutex_unlock (&team->task_lock);
+//
+//      thr->task = task;
+//      gomp_target_task_fn (task->fn_data);
+//      thr->task = parent;
+//
+//      gomp_mutex_lock (&team->task_lock);
+//      task->kind = GOMP_TASK_ASYNC_RUNNING;
+//      /* If GOMP_PLUGIN_target_task_completion has run already
+//	 in between gomp_target_task_fn and the mutex lock,
+//	 perform the requeuing here.  */
+//      if (ttask->state == GOMP_TARGET_TASK_FINISHED)
+//	gomp_target_task_completion (team, task);
+//      else
+//	ttask->state = GOMP_TARGET_TASK_RUNNING;
+//      gomp_mutex_unlock (&team->task_lock);
+//      return true;
+//    }
+//  priority_queue_insert (PQ_CHILDREN, &parent->children_queue, task, 0,
+//			 PRIORITY_INSERT_BEGIN,
+//			 /*adjust_parent_depends_on=*/false,
+//			 task->parent_depends_on);
+//  if (taskgroup)
+//    priority_queue_insert (PQ_TASKGROUP, &taskgroup->taskgroup_queue, task, 0,
+//			   PRIORITY_INSERT_BEGIN,
+//			   /*adjust_parent_depends_on=*/false,
+//			   task->parent_depends_on);
+//  priority_queue_insert (PQ_TEAM, &team->task_queue, task, 0,
+//			 PRIORITY_INSERT_END,
+//			 /*adjust_parent_depends_on=*/false,
+//			 task->parent_depends_on);
+//  ++team->task_count;
+//  ++team->task_queued_count;
+//  gomp_team_barrier_set_task_pending (&team->barrier);
+//  do_wake = team->task_running_count + !parent->in_tied_task
+//	    < team->nthreads;
+//  gomp_mutex_unlock (&team->task_lock);
+//  if (do_wake)
+//    gomp_team_barrier_wake (&team->barrier, 1);
   return true;
 }
 
@@ -1130,7 +1130,7 @@ gomp_task_run_post_handle_depend_hash (struct gomp_task *child_task)
 	      = htab_find_slot (&parent->depend_hash, &child_task->depend[i],
 				NO_INSERT);
 	    if (*slot != &child_task->depend[i])
-	      abort ();
+	      uabort ();
 	    if (child_task->depend[i].next)
 	      *slot = child_task->depend[i].next;
 	    else
