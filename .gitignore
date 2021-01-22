@@ -48,3 +48,5 @@ include/posix/
 
 # Excludes
 !img/*.img
+
+setup.sh
