@@ -95,7 +95,7 @@ export CFLAGS += -std=c99 -Wno-pedantic -fno-builtin -fopenmp -Wfatal-errors
 #export CFLAGS += -Wvla -Wno-pedantic
 #export CFLAGS += -Wno-missing-profile
 #export CFLAGS += -fno-stack-protector
-export CFLAGS += -Wno-unused-function
+export CFLAGS += -Wno-unused-function 
 export CFLAGS += -I $(INCDIR)
 export CFLAGS += -I $(ROOTDIR)/src/lwip/src/include
 export CFLAGS += $(ADDONS)

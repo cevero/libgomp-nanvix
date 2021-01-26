@@ -40,3 +40,19 @@ char *gomp_affinity_format_var = "level %L thread %i affinity %A";
 size_t gomp_affinity_format_len;
 
 
+struct gomp_task_icv *
+gomp_new_icv (void)
+{
+  struct gomp_thread *thr = gomp_thread ();
+  struct gomp_task *task = gomp_malloc (sizeof (struct gomp_task));
+  gomp_init_task (task, NULL, &gomp_global_icv);
+  thr->task = task;
+#ifdef LIBGOMP_USE_PTHREADS
+  pthread_setspecific (gomp_thread_destructor, thr);
+#endif
+  return &task->icv;
+}
+
+
+
+
