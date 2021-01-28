@@ -70,25 +70,25 @@ typedef omp_nest_lock_25_t *omp_nest_lock_25_arg_t;
 typedef union { omp_nest_lock_25_t *lock; uint64_t u; } *omp_nest_lock_25_arg_t;
 # define omp_nest_lock_25_arg(arg) ((arg)->lock)
 # endif
-
-static inline void
-omp_check_defines (void)
-{
-  char test[(4 != sizeof (omp_lock_t)
-	     || 4 != __alignof (omp_lock_t)
-	     || 16 != sizeof (omp_nest_lock_t)
-	     || 8 != __alignof (omp_nest_lock_t)
-	     || 4 != sizeof (*(omp_lock_arg_t) 0)
-	     || 8 != sizeof (*(omp_nest_lock_arg_t) 0))
-	    ? -1 : 1] __attribute__ ((__unused__));
-  char test2[(4 != sizeof (omp_lock_25_t)
-	     || 4 != __alignof (omp_lock_25_t)
-	     || 8 != sizeof (omp_nest_lock_25_t)
-	     || 4 != __alignof (omp_nest_lock_25_t)
-	     || 4 != sizeof (*(omp_lock_25_arg_t) 0)
-	     || 8
-		!= sizeof (*(omp_nest_lock_25_arg_t) 0))
-	    ? -1 : 1] __attribute__ ((__unused__));
-}
-
+//
+//static inline void
+//omp_check_defines (void)
+//{
+//  char test[(4 != sizeof (omp_lock_t)
+//	     || 4 != __alignof (omp_lock_t)
+//	     || 16 != sizeof (omp_nest_lock_t)
+//	     || 8 != __alignof (omp_nest_lock_t)
+//	     || 4 != sizeof (*(omp_lock_arg_t) 0)
+//	     || 8 != sizeof (*(omp_nest_lock_arg_t) 0))
+//	    ? -1 : 1] __attribute__ ((__unused__));
+//  char test2[(4 != sizeof (omp_lock_25_t)
+//	     || 4 != __alignof (omp_lock_25_t)
+//	     || 8 != sizeof (omp_nest_lock_25_t)
+//	     || 4 != __alignof (omp_nest_lock_25_t)
+//	     || 4 != sizeof (*(omp_lock_25_arg_t) 0)
+//	     || 8
+//		!= sizeof (*(omp_nest_lock_25_arg_t) 0))
+//	    ? -1 : 1] __attribute__ ((__unused__));
+//}
+//
 #endif /* LIBGOMP_F_H */
