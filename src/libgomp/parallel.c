@@ -43,20 +43,20 @@
 unsigned
 gomp_resolve_num_threads (unsigned specified, unsigned count)
 {
-//  struct gomp_thread *thr = gomp_thread ();
-//  struct gomp_task_icv *icv;
+  struct gomp_thread *thr = gomp_thread ();
+  struct gomp_task_icv *icv;
   unsigned threads_requested, max_num_threads, num_threads;
-//  unsigned long busy;
-//  struct gomp_thread_pool *pool;
-//
-//  icv = gomp_icv (false);
-//
-//  if (specified == 1)
-//    return 1;
-//  else if (thr->ts.active_level >= 1 && !icv->nest_var)
-//    return 1;
-//  else if (thr->ts.active_level >= gomp_max_active_levels_var)
-//    return 1;
+  unsigned long busy;
+  struct gomp_thread_pool *pool;
+
+  icv = gomp_icv (false);
+
+  if (specified == 1)
+    return 1;
+  else if (thr->ts.active_level >= 1 && !icv->nest_var)
+    return 1;
+  else if (thr->ts.active_level >= gomp_max_active_levels_var)
+    return 1;
 //
 //  /* If NUM_THREADS not specified, use nthreads_var.  */
 //  if (specified == 0)
