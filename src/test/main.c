@@ -35,7 +35,7 @@ int __main2(int argc, const char *argv[])
     int * a = umalloc(9*sizeof(int));
     for(int i=0;i<9;i++)
         a[i]=i;
-	#pragma omp parallel// num_threads(2) 
+	#pragma omp parallel num_threads(2) 
 	uprintf("parallel region %d %d\n",a[2],(int)sizeof(int));
 
     ufree(a);
