@@ -128,8 +128,8 @@ void
 GOMP_parallel_start (void (*fn) (void *), void *data, unsigned num_threads)
 {
   num_threads = gomp_resolve_num_threads (num_threads, 0);
- // gomp_team_start (fn, data, num_threads, 0, gomp_new_team (num_threads),
-//		   NULL);
+  gomp_team_start (fn, data, num_threads, 0, gomp_new_team (num_threads),
+		   NULL);
 }
 
 void
@@ -268,7 +268,7 @@ GOMP_parallel (void (*fn) (void *), void *data, unsigned num_threads,
 //  gomp_team_barrier_cancel (team);
 //  return true;
 //}
-//
+//
 ///* The public OpenMP API for thread and team related inquiries.  */
 //
 //int

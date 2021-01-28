@@ -75,11 +75,11 @@ gomp_dynamic_max_threads (void)
   loadavg = 0;
 #ifdef HAVE_GETLOADAVG
   {
-    double dloadavg[3];
-    if (getloadavg (dloadavg, 3) == 3)
-      {
-	/* Add 0.1 to get a kind of biased rounding.  */
-	loadavg = dloadavg[2] + 0.1;
+//   // double dloadavg[3];
+//    if (getloadavg (dloadavg, 3) == 3)
+//      {
+//	/* Add 0.1 to get a kind of biased rounding.  */
+//	loadavg = dloadavg[2] + 0.1;
       }
   }
 #endif
