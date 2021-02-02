@@ -189,24 +189,24 @@ gomp_new_team (unsigned nthreads)
 #endif
   team->work_shares_to_free = &team->work_shares[0];
   gomp_init_work_share (&team->work_shares[0], 0, nthreads);
-//  team->work_shares[0].next_alloc = NULL;
-//  team->work_share_list_free = NULL;
-//  team->work_share_list_alloc = &team->work_shares[1];
-//  for (i = 1; i < 7; i++)
-//    team->work_shares[i].next_free = &team->work_shares[i + 1];
-//  team->work_shares[i].next_free = NULL;
-//
-//  gomp_sem_init (&team->master_release, 0);
-//  team->ordered_release = (void *) &team->implicit_task[nthreads];
-//  team->ordered_release[0] = &team->master_release;
-//
-//  priority_queue_init (&team->task_queue);
-//  team->task_count = 0;
-//  team->task_queued_count = 0;
-//  team->task_running_count = 0;
-//  team->work_share_cancelled = 0;
-//  team->team_cancelled = 0;
-//
+  team->work_shares[0].next_alloc = NULL;
+  team->work_share_list_free = NULL;
+  team->work_share_list_alloc = &team->work_shares[1];
+  for (i = 1; i < 7; i++)
+    team->work_shares[i].next_free = &team->work_shares[i + 1];
+  team->work_shares[i].next_free = NULL;
+
+  gomp_sem_init (&team->master_release, 0);
+  team->ordered_release = (void *) &team->implicit_task[nthreads];
+  team->ordered_release[0] = &team->master_release;
+
+  priority_queue_init (&team->task_queue);
+  team->task_count = 0;
+  team->task_queued_count = 0;
+  team->task_running_count = 0;
+  team->work_share_cancelled = 0;
+  team->team_cancelled = 0;
+
   return team;
 }
 
@@ -314,12 +314,12 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
   struct gomp_task_icv *icv;
   bool nested;
   struct gomp_thread_pool *pool;
-//  unsigned i, n, old_threads_used = 0;
-//  pthread_attr_t thread_attr, *attr;
-//  unsigned long nthreads_var;
-//  char bind, bind_var;
-//  unsigned int s = 0, rest = 0, p = 0, k = 0;
-//  unsigned int affinity_count = 0;
+  unsigned i, n, old_threads_used = 0;
+  pthread_attr_t thread_attr, *attr;
+  unsigned long nthreads_var;
+  char bind, bind_var;
+  unsigned int s = 0, rest = 0, p = 0, k = 0;
+  unsigned int affinity_count = 0;
   struct gomp_thread **affinity_thr = NULL;
 //  bool force_display = false;
 //
@@ -574,7 +574,7 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
 //			affinity_thr
 //			  = gomp_alloca (team->prev_ts.place_partition_len
 //					 * sizeof (struct gomp_thread *));
-//		      memset (affinity_thr, '\0',
+//		      umemset (affinity_thr, '\0',
 //			      team->prev_ts.place_partition_len
 //			      * sizeof (struct gomp_thread *));
 //		      for (j = i; j < old_threads_used; j++)
@@ -593,7 +593,7 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
 //			  pool->threads[j] = NULL;
 //			}
 //		      if (nthreads > old_threads_used)
-//			memset (&pool->threads[old_threads_used],
+//			umemset (&pool->threads[old_threads_used],
 //				'\0', ((nthreads - old_threads_used)
 //				       * sizeof (struct gomp_thread *)));
 //		      n = nthreads;
