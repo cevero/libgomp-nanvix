@@ -158,9 +158,9 @@ get_last_team (unsigned nthreads)
     }
   return NULL;
 }
-//
+
 ///* Create a new team data structure.  */
-//
+
 struct gomp_team *
 gomp_new_team (unsigned nthreads)
 {
@@ -321,25 +321,25 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
   unsigned int s = 0, rest = 0, p = 0, k = 0;
   unsigned int affinity_count = 0;
   struct gomp_thread **affinity_thr = NULL;
-//  bool force_display = false;
-//
-//  thr = gomp_thread ();
-//  nested = thr->ts.level;
-//  pool = thr->thread_pool;
-//  task = thr->task;
-//  icv = task ? &task->icv : &gomp_global_icv;
-//  if (__builtin_expect (gomp_places_list != NULL, 0) && thr->place == 0)
-//    {
-//      gomp_init_affinity ();
+  bool force_display = false;
+
+  thr = gomp_thread ();
+  nested = thr->ts.level;
+  pool = thr->thread_pool;
+  task = thr->task;
+  icv = task ? &task->icv : &gomp_global_icv;
+  if (__builtin_expect (gomp_places_list != NULL, 0) && thr->place == 0)
+    {
+      gomp_init_affinity ();
 //      if (__builtin_expect (gomp_display_affinity_var, 0) && nthreads == 1)
 //	gomp_display_affinity_thread (gomp_thread_self (), &thr->ts,
 //				      thr->place);
-//    }
-//
-//  /* Always save the previous state, even if this isn't a nested team.
-//     In particular, we should save any work share state from an outer
-//     orphaned work share construct.  */
-//  team->prev_ts = thr->ts;
+    }
+
+  /* Always save the previous state, even if this isn't a nested team.
+     In particular, we should save any work share state from an outer
+     orphaned work share construct.  */
+  team->prev_ts = thr->ts;
 //
 //  thr->ts.team = team;
 //  thr->ts.team_id = 0;
