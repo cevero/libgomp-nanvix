@@ -131,3 +131,13 @@ int nanvix_mutexattr_settype (pthread_mutexattr_t *__attr, int __kind)
     uprintf("%s \n",__func__);
     return 0;
 }
+
+int pthread_attr_init (pthread_attr_t *__attr)
+{
+
+    (void) __attr;
+    uprintf("%s \n",__func__);
+    return 0;
+
+}
+
