@@ -43,8 +43,7 @@
 #endif
 
 
-//double
-int
+double
 omp_get_wtime (void)
 {
 #ifdef HAVE_CLOCK_GETTIME
@@ -61,8 +60,7 @@ omp_get_wtime (void)
 #endif
 }
 
-//double
-int
+double
 omp_get_wtick (void)
 {
 #ifdef HAVE_CLOCK_GETTIME
