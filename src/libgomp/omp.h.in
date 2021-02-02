@@ -131,8 +131,10 @@ extern void omp_set_nest_lock (omp_nest_lock_t *) __GOMP_NOTHROW;
 extern void omp_unset_nest_lock (omp_nest_lock_t *) __GOMP_NOTHROW;
 extern int omp_test_nest_lock (omp_nest_lock_t *) __GOMP_NOTHROW;
 
-extern double omp_get_wtime (void) __GOMP_NOTHROW;
-extern double omp_get_wtick (void) __GOMP_NOTHROW;
+extern int omp_get_wtime (void) __GOMP_NOTHROW;
+extern int omp_get_wtick (void) __GOMP_NOTHROW;
+//extern double omp_get_wtime (void) __GOMP_NOTHROW;
+//extern double omp_get_wtick (void) __GOMP_NOTHROW;
 
 extern void omp_set_schedule (omp_sched_t, int) __GOMP_NOTHROW;
 extern void omp_get_schedule (omp_sched_t *, int *) __GOMP_NOTHROW;
