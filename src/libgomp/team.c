@@ -142,22 +142,22 @@ pthread_key_t gomp_tls_key;
 //}
 #endif
 //
-//static inline struct gomp_team *
-//get_last_team (unsigned nthreads)
-//{
-//  struct gomp_thread *thr = gomp_thread ();
-//  if (thr->ts.team == NULL)
-//    {
-//      struct gomp_thread_pool *pool = gomp_get_thread_pool (thr, nthreads);
-//      struct gomp_team *last_team = pool->last_team;
-//      if (last_team != NULL && last_team->nthreads == nthreads)
-//        {
-//          pool->last_team = NULL;
-//          return last_team;
-//        }
-//    }
-//  return NULL;
-//}
+static inline struct gomp_team *
+get_last_team (unsigned nthreads)
+{
+  struct gomp_thread *thr = gomp_thread ();
+  if (thr->ts.team == NULL)
+    {
+      struct gomp_thread_pool *pool = gomp_get_thread_pool (thr, nthreads);
+      struct gomp_team *last_team = pool->last_team;
+      if (last_team != NULL && last_team->nthreads == nthreads)
+        {
+          pool->last_team = NULL;
+          return last_team;
+        }
+    }
+  return NULL;
+}
 //
 ///* Create a new team data structure.  */
 //
@@ -166,29 +166,29 @@ gomp_new_team (unsigned nthreads)
 {
   struct gomp_team *team;
   int i;
+
+  team = get_last_team (nthreads);
+  if (team == NULL)
+    {
+      size_t extra = sizeof (team->ordered_release[0])
+		     + sizeof (team->implicit_task[0]);
+      team = gomp_malloc (sizeof (*team) + nthreads * extra);
 //
-//  team = get_last_team (nthreads);
-//  if (team == NULL)
-//    {
-//      size_t extra = sizeof (team->ordered_release[0])
-//		     + sizeof (team->implicit_task[0]);
-//      team = gomp_malloc (sizeof (*team) + nthreads * extra);
-//
-//#ifndef HAVE_SYNC_BUILTINS
-//      gomp_mutex_init (&team->work_share_list_free_lock);
-//#endif
-//      gomp_barrier_init (&team->barrier, nthreads);
-//      gomp_mutex_init (&team->task_lock);
-//
-//      team->nthreads = nthreads;
-//    }
-//
-//  team->work_share_chunk = 8;
-//#ifdef HAVE_SYNC_BUILTINS
-//  team->single_count = 0;
-//#endif
-//  team->work_shares_to_free = &team->work_shares[0];
-//  gomp_init_work_share (&team->work_shares[0], 0, nthreads);
+#ifndef HAVE_SYNC_BUILTINS
+      gomp_mutex_init (&team->work_share_list_free_lock);
+#endif
+      gomp_barrier_init (&team->barrier, nthreads);
+      gomp_mutex_init (&team->task_lock);
+
+      team->nthreads = nthreads;
+    }
+
+  team->work_share_chunk = 8;
+#ifdef HAVE_SYNC_BUILTINS
+  team->single_count = 0;
+#endif
+  team->work_shares_to_free = &team->work_shares[0];
+  gomp_init_work_share (&team->work_shares[0], 0, nthreads);
 //  team->work_shares[0].next_alloc = NULL;
 //  team->work_share_list_free = NULL;
 //  team->work_share_list_alloc = &team->work_shares[1];

@@ -32,6 +32,7 @@
 #include <posix/string.h>
 
 
+
 /* Allocate a new work share structure, preferably from current team's
    free gomp_work_share cache.  */
 
@@ -123,7 +124,7 @@ gomp_init_work_share (struct gomp_work_share *ws, size_t ordered,
 	ws->ordered_team_ids = gomp_malloc (ordered);
       else
 	ws->ordered_team_ids = ws->inline_ordered_team_ids;
-      memset (ws->ordered_team_ids, '\0', ordered);
+      umemset (ws->ordered_team_ids, '\0', ordered);
       ws->ordered_num_used = 0;
       ws->ordered_owner = -1;
       ws->ordered_cur = 0;
