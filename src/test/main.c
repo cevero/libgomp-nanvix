@@ -23,7 +23,7 @@
  */
 
 #include <nanvix/ulib.h>
-#include "../libgomp/libgomp.h"
+#include "../libgomp/omp2.h"
 /**
  * @brief Test Server
  */
@@ -40,9 +40,12 @@ int __main2(int argc, const char *argv[])
     int * a = umalloc(9*sizeof(int));
     for(int i=0;i<9;i++)
         a[i]=i;
-	#pragma omp parallel  num_threads(3) 
-    uprintf("Hello world form thread %d \n",omp_get_thread_num());
-//	uprintf("parallel region \n",a[2],(int)sizeof(int));
+	#pragma omp parallel default(none)// num_threads(3) 
+    {
+        uprintf("Available %d threads \n",omp_get_num_threads());
+        uprintf("Hello world form thread %d \n",omp_get_thread_num());
+//      uprintf("parallel region \n",a[2],(int)sizeof(int));
+    }
 
     ufree(a);
 
