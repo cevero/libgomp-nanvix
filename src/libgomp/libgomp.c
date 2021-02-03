@@ -54,5 +54,77 @@ size_t gomp_affinity_format_len;
 //}
 
 
+bool
+gomp_target_task_fn (void *data)
+{
+  struct gomp_target_task *ttask = (struct gomp_target_task *) data;
+  struct gomp_device_descr *devicep = ttask->devicep;
+
+  if (ttask->fn != NULL)
+    {
+      void *fn_addr;
+      if (devicep == NULL
+	  || !(devicep->capabilities & GOMP_OFFLOAD_CAP_OPENMP_400)
+	  || !(fn_addr = gomp_get_target_fn_addr (devicep, ttask->fn))
+	  || (devicep->can_run_func && !devicep->can_run_func (fn_addr)))
+	{
+	  ttask->state = GOMP_TARGET_TASK_FALLBACK;
+	  gomp_target_fallback (ttask->fn, ttask->hostaddrs, devicep);
+	  return false;
+	}
+
+      if (ttask->state == GOMP_TARGET_TASK_FINISHED)
+	{
+	  if (ttask->tgt)
+	    gomp_unmap_vars (ttask->tgt, true);
+	  return false;
+	}
+
+      void *actual_arguments;
+      if (devicep->capabilities & GOMP_OFFLOAD_CAP_SHARED_MEM)
+	{
+	  ttask->tgt = NULL;
+	  actual_arguments = ttask->hostaddrs;
+	}
+      else
+	{
+	  ttask->tgt = gomp_map_vars (devicep, ttask->mapnum, ttask->hostaddrs,
+				      NULL, ttask->sizes, ttask->kinds, true,
+				      GOMP_MAP_VARS_TARGET);
+	  actual_arguments = (void *) ttask->tgt->tgt_start;
+	}
+      ttask->state = GOMP_TARGET_TASK_READY_TO_RUN;
+
+      uassert (devicep->async_run_func);
+      devicep->async_run_func (devicep->target_id, fn_addr, actual_arguments,
+			       ttask->args, (void *) ttask);
+      return true;
+    }
+  else if (devicep == NULL
+	   || !(devicep->capabilities & GOMP_OFFLOAD_CAP_OPENMP_400)
+	   || devicep->capabilities & GOMP_OFFLOAD_CAP_SHARED_MEM)
+    return false;
+
+  size_t i;
+  if (ttask->flags & GOMP_TARGET_FLAG_UPDATE)
+    gomp_update (devicep, ttask->mapnum, ttask->hostaddrs, ttask->sizes,
+		 ttask->kinds, true);
+  else if ((ttask->flags & GOMP_TARGET_FLAG_EXIT_DATA) == 0)
+    for (i = 0; i < ttask->mapnum; i++)
+      if ((ttask->kinds[i] & 0xff) == GOMP_MAP_STRUCT)
+	{
+	  gomp_map_vars (devicep, ttask->sizes[i] + 1, &ttask->hostaddrs[i],
+			 NULL, &ttask->sizes[i], &ttask->kinds[i], true,
+			 GOMP_MAP_VARS_ENTER_DATA);
+	  i += ttask->sizes[i];
+	}
+      else
+	gomp_map_vars (devicep, 1, &ttask->hostaddrs[i], NULL, &ttask->sizes[i],
+		       &ttask->kinds[i], true, GOMP_MAP_VARS_ENTER_DATA);
+  else
+    gomp_exit_data (devicep, ttask->mapnum, ttask->hostaddrs, ttask->sizes,
+		    ttask->kinds);
+  return false;
+}
 
 

@@ -68,76 +68,76 @@ struct gomp_thread_start_data
 static void *
 gomp_thread_start (void *xdata)
 {
-//  struct gomp_thread_start_data *data = xdata;
-//  struct gomp_thread *thr;
-//  struct gomp_thread_pool *pool;
-//  void (*local_fn) (void *);
-//  void *local_data;
-//
-//#if defined HAVE_TLS || defined USE_EMUTLS
-//  thr = &gomp_tls_data;
-//#else
-//  struct gomp_thread local_thr;
-//  thr = &local_thr;
-//  pthread_setspecific (gomp_tls_key, thr);
-//#endif
-//  gomp_sem_init (&thr->release, 0);
-//
-//  /* Extract what we need from data.  */
-//  local_fn = data->fn;
-//  local_data = data->fn_data;
-//  thr->thread_pool = data->thread_pool;
-//  thr->ts = data->ts;
-//  thr->task = data->task;
-//  thr->place = data->place;
-//#ifdef GOMP_NEEDS_THREAD_HANDLE
-//  thr->handle = data->handle;
-//#endif
-//
-//  thr->ts.team->ordered_release[thr->ts.team_id] = &thr->release;
-//
-//  /* Make thread pool local. */
-//  pool = thr->thread_pool;
-//
-//  if (data->nested)
-//    {
-//      struct gomp_team *team = thr->ts.team;
-//      struct gomp_task *task = thr->task;
-//
-//      gomp_barrier_wait (&team->barrier);
-//
-//      local_fn (local_data);
-//      gomp_team_barrier_wait_final (&team->barrier);
-//      gomp_finish_task (task);
-//      gomp_barrier_wait_last (&team->barrier);
-//    }
-//  else
-//    {
-//      pool->threads[thr->ts.team_id] = thr;
-//
-//      gomp_simple_barrier_wait (&pool->threads_dock);
-//      do
-//	{
-//	  struct gomp_team *team = thr->ts.team;
-//	  struct gomp_task *task = thr->task;
-//
-//	  local_fn (local_data);
-//	  gomp_team_barrier_wait_final (&team->barrier);
-//	  gomp_finish_task (task);
-//
-//	  gomp_simple_barrier_wait (&pool->threads_dock);
-//
-//	  local_fn = thr->fn;
-//	  local_data = thr->data;
-//	  thr->fn = NULL;
-//	}
-//      while (local_fn);
-//    }
-//
-//  gomp_sem_destroy (&thr->release);
-//  pthread_detach (kthread_self ());
-//  thr->thread_pool = NULL;
-//  thr->task = NULL;
+  struct gomp_thread_start_data *data = xdata;
+  struct gomp_thread *thr;
+  struct gomp_thread_pool *pool;
+  void (*local_fn) (void *);
+  void *local_data;
+
+#if defined HAVE_TLS || defined USE_EMUTLS
+  thr = &gomp_tls_data;
+#else
+  struct gomp_thread local_thr;
+  thr = &local_thr;
+  pthread_setspecific (gomp_tls_key, thr);
+#endif
+  gomp_sem_init (&thr->release, 0);
+
+  /* Extract what we need from data.  */
+  local_fn = data->fn;
+  local_data = data->fn_data;
+  thr->thread_pool = data->thread_pool;
+  thr->ts = data->ts;
+  thr->task = data->task;
+  thr->place = data->place;
+#ifdef GOMP_NEEDS_THREAD_HANDLE
+  thr->handle = data->handle;
+#endif
+
+  thr->ts.team->ordered_release[thr->ts.team_id] = &thr->release;
+
+  /* Make thread pool local. */
+  pool = thr->thread_pool;
+
+  if (data->nested)
+    {
+      struct gomp_team *team = thr->ts.team;
+      struct gomp_task *task = thr->task;
+
+      gomp_barrier_wait (&team->barrier);
+
+      local_fn (local_data);
+      gomp_team_barrier_wait_final (&team->barrier);
+      gomp_finish_task (task);
+      gomp_barrier_wait_last (&team->barrier);
+    }
+  else
+    {
+      pool->threads[thr->ts.team_id] = thr;
+
+      gomp_simple_barrier_wait (&pool->threads_dock);
+      do
+	{
+	  struct gomp_team *team = thr->ts.team;
+	  struct gomp_task *task = thr->task;
+
+	  local_fn (local_data);
+	  gomp_team_barrier_wait_final (&team->barrier);
+	  gomp_finish_task (task);
+
+	  gomp_simple_barrier_wait (&pool->threads_dock);
+
+	  local_fn = thr->fn;
+	  local_data = thr->data;
+	  thr->fn = NULL;
+	}
+      while (local_fn);
+    }
+
+  gomp_sem_destroy (&thr->release);
+  pthread_detach (kthread_self ());
+  thr->thread_pool = NULL;
+  thr->task = NULL;
   return NULL;
 }
 #endif

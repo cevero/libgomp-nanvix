@@ -241,7 +241,7 @@ htab_create (size_t size)
   result->n_elements = 0;
   result->n_deleted = 0;
   result->size_prime_index = size_prime_index;
-  memset (result->entries, 0, size * sizeof (hash_entry_type));
+  umemset (result->entries, 0, size * sizeof (hash_entry_type));
   return result;
 }
 
