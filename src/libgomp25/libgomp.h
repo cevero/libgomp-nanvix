@@ -40,16 +40,18 @@
 #include "config.h"
 #include "gstdint.h"
 
-#include <pthread.h>
-#include <stdbool.h>
+//#include <pthread.h>
+
+#include <nanvix/ulib.h>
+#include <posix/stdbool.h>
 
 #ifdef HAVE_ATTRIBUTE_VISIBILITY
 # pragma GCC visibility push(hidden)
 #endif
 
-#include "sem.h"
-#include "mutex.h"
-#include "bar.h"
+#include "config/sem.h"
+#include "config/mutex.h"
+#include "config/bar.h"
 
 
 /* This structure contains the data to control one work-sharing construct,

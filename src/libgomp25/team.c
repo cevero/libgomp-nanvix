@@ -29,8 +29,9 @@
    creation and termination.  */
 
 #include "libgomp.h"
-#include <stdlib.h>
-#include <string.h>
+//#include <stdlib.h>
+#include <posix/string.h>
+#include <nanvix/ulib.h>
 
 /* This array manages threads spawned from the top level, which will
    return to the idle loop once the current PARALLEL construct ends.  */
