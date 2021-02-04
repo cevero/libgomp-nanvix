@@ -1,7 +1,8 @@
+
 #
 # MIT License
 #
-# Copyright(c) 2011-2020 The Maintainers of Nanvix
+# Copyright(c) 2018 Pedro Henrique Penna <pedrohenriquepenna@gmail.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,50 +23,25 @@
 # SOFTWARE.
 #
 
-# Builds Everything
-all:  all-libgomp25 all-libgomp all-test
-
-# Cleans Build Objects
-clean: clean-libgomp25 clean-libgomp clean-test
-
-# Cleans Everything
-distclean: distclean-libgomp25 distclean-libgomp distclean-test
-
 #===============================================================================
-# LibGOMP 2.5
+# Binaries Sources and Objects
 #===============================================================================
 
-all-libgomp25:
-	$(MAKE) -C libgomp25 all
+# Binary
+ARCHIVE = $(LIBGOMP25)
 
-clean-libgomp25:
-	$(MAKE) -C libgomp25 clean
+# C Source Files
+#SRC = $(wildcard *.c)
+SRC = team.c parallel.c
+	  
+	  
+#	  barrier.c
+#workaround.c error.c alloc.c libgomp.c config/proc.c config/sem.c config/mutex.c config/lock.c \
+	   config/bar.c splay-tree.c task.c priority_queue.c work.c team.c parallel.c\
+#	   icv.c# #  env.c 
 
-distclean-libgomp25:
-	$(MAKE) -C libgomp25 distclean
-
-#===============================================================================
-# LibGOMP
-#===============================================================================
-
-all-libgomp:
-	$(MAKE) -C libgomp all
-
-clean-libgomp:
-	$(MAKE) -C libgomp clean
-
-distclean-libgomp:
-	$(MAKE) -C libgomp distclean
+OBJ = $(SRC:.c=.$(OBJ_SUFFIX).o)
 
 #===============================================================================
-# test
-#===============================================================================
 
-all-test:
-	$(MAKE) -C test all
-
-clean-test:
-	$(MAKE) -C test clean
-
-distclean-test:
-	$(MAKE) -C test distclean
+include $(BUILDDIR)/makefile.archive
