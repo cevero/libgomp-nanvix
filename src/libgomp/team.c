@@ -83,22 +83,22 @@ gomp_thread_start (void *xdata)
 #endif
   gomp_sem_init (&thr->release, 0);
 
-//  /* Extract what we need from data.  */
-//  local_fn = data->fn;
-//  local_data = data->fn_data;
-//  thr->thread_pool = data->thread_pool;
-//  thr->ts = data->ts;
-//  thr->task = data->task;
-//  thr->place = data->place;
-//#ifdef GOMP_NEEDS_THREAD_HANDLE
-//  thr->handle = data->handle;
-//#endif
-//
-//  thr->ts.team->ordered_release[thr->ts.team_id] = &thr->release;
-//
-//  /* Make thread pool local. */
-//  pool = thr->thread_pool;
-//
+  /* Extract what we need from data.  */
+  local_fn = data->fn;
+  local_data = data->fn_data;
+  thr->thread_pool = data->thread_pool;
+  thr->ts = data->ts;
+  thr->task = data->task;
+  thr->place = data->place;
+#ifdef GOMP_NEEDS_THREAD_HANDLE
+  thr->handle = data->handle;
+#endif
+
+  thr->ts.team->ordered_release[thr->ts.team_id] = &thr->release;
+
+  /* Make thread pool local. */
+  pool = thr->thread_pool;
+
 //  if (data->nested)
 //    {
 //      struct gomp_team *team = thr->ts.team;
@@ -134,10 +134,10 @@ gomp_thread_start (void *xdata)
 //      while (local_fn);
 //    }
 //
-//  gomp_sem_destroy (&thr->release);
-//  pthread_detach (kthread_self ());
-//  thr->thread_pool = NULL;
-//  thr->task = NULL;
+  gomp_sem_destroy (&thr->release);
+  pthread_detach (kthread_self ());
+  thr->thread_pool = NULL;
+  thr->task = NULL;
   return NULL;
 }
 #endif

@@ -40,8 +40,9 @@ int __main2(int argc, const char *argv[])
     int * a = umalloc(9*sizeof(int));
     for(int i=0;i<9;i++)
         a[i]=i;
-	#pragma omp parallel// default(none)// num_threads(3) 
+	#pragma omp parallel// num_threads(3)// default(none)//  
     {
+        omp_set_num_threads(2);
         
 //	#pragma omp for 
 //    for(int i=0;i<9;i++)
