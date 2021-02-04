@@ -27,6 +27,8 @@
    control variables.  */
 
 #include "libgomp.h"
+#include "omp2.h"
+
 #include "gomp-constants.h"
 #include "limits.h"
 

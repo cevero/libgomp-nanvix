@@ -40,12 +40,12 @@ char *gomp_affinity_format_var = "level %L thread %i affinity %A";
 size_t gomp_affinity_format_len;
 
 
-void
-omp_set_num_threads (int n)
-{
-  struct gomp_task_icv *icv = gomp_icv (true);
-  icv->nthreads_var = (n > 0 ? n : 1);
-}
+//void
+//omp_set_num_threads (int n)
+//{
+//  struct gomp_task_icv *icv = gomp_icv (true);
+//  icv->nthreads_var = (n > 0 ? n : 1);
+//}
 
 //struct gomp_task_icv *
 //gomp_new_icv (void)

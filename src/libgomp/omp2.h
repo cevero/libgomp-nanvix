@@ -31,18 +31,18 @@
 /* These two structures get edited by the libgomp build process to 
    reflect the shape of the two types.  Their internals are private
    to the library.  */
+#include "libgomp.h"
+//typedef struct
+//{
+//  unsigned char _x[4] 
+//    __attribute__((__aligned__(4)));
+//} omp_lock_t;
 
-typedef struct
-{
-  unsigned char _x[4] 
-    __attribute__((__aligned__(4)));
-} omp_lock_t;
-
-typedef struct
-{
-  unsigned char _x[16] 
-    __attribute__((__aligned__(8)));
-} omp_nest_lock_t;
+//typedef struct
+//{
+//  unsigned char _x[16] 
+//    __attribute__((__aligned__(8)));
+//} omp_nest_lock_t;
 #endif
 
 typedef enum omp_sched_t
@@ -54,14 +54,14 @@ typedef enum omp_sched_t
   omp_sched_monotonic = 0x80000000U
 } omp_sched_t;
 
-typedef enum omp_proc_bind_t
-{
-  omp_proc_bind_false = 0,
-  omp_proc_bind_true = 1,
-  omp_proc_bind_master = 2,
-  omp_proc_bind_close = 3,
-  omp_proc_bind_spread = 4
-} omp_proc_bind_t;
+//typedef enum omp_proc_bind_t
+//{
+//  omp_proc_bind_false = 0,
+//  omp_proc_bind_true = 1,
+//  omp_proc_bind_master = 2,
+//  omp_proc_bind_close = 3,
+//  omp_proc_bind_spread = 4
+//} omp_proc_bind_t;
 
 typedef enum omp_sync_hint_t
 {
