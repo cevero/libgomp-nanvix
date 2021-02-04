@@ -88,7 +88,7 @@ include $(MAKEDIR)/makefile.libgomp
 #===============================================================================
 
 # Compiler Options
-export CFLAGS += -std=c99 -Wno-pedantic -fno-builtin -fopenmp #-Wfatal-errors
+export CFLAGS += -std=c99 -Wno-pedantic -fno-builtin -fopenmp -Wfatal-errors
 ##export CFLAGS += -Wall -Wextra -Werror -Wa,--warn
 ##export CFLAGS += -Winit-self -Wswitch-default -Wfloat-equal
 ##export CFLAGS += -Wundef -Wshadow -Wuninitialized -Wlogical-op

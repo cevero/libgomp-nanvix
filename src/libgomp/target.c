@@ -26,18 +26,19 @@
 /* This file contains the support of offloading.  */
 
 #include "libgomp.h"
-#include "oacc-plugin.h"
+//#include "oacc-plugin.h"
 //#include "oacc-int.h"
 #include "gomp-constants.h"
-#include <limits.h>
-#include <stdbool.h>
-#include <stdlib.h>
+#include "limits.h"
+#include <posix/stdbool.h>
+//#include <stdlib.h>
+#include <nanvix/ulib.h>
 #ifdef HAVE_INTTYPES_H
 # include <inttypes.h>  /* For PRIu64.  */
 #endif
-#include <string.h>
-#include <assert.h>
-#include <errno.h>
+#include <posix/string.h>
+//#include <assert.h>
+#include <posix/errno.h>
 
 #ifdef PLUGIN_SUPPORT
 #include <dlfcn.h>

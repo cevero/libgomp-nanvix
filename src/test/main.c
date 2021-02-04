@@ -40,8 +40,13 @@ int __main2(int argc, const char *argv[])
     int * a = umalloc(9*sizeof(int));
     for(int i=0;i<9;i++)
         a[i]=i;
-	#pragma omp parallel default(none)// num_threads(3) 
+	#pragma omp parallel// default(none)// num_threads(3) 
     {
+        
+//	#pragma omp for 
+//    for(int i=0;i<9;i++)
+//        uprintf("Hello world form thread %d it = %d\n",omp_get_thread_num(),i);
+        
         uprintf("Available %d threads \n",omp_get_num_threads());
         uprintf("Hello world form thread %d \n",omp_get_thread_num());
 //      uprintf("parallel region \n",a[2],(int)sizeof(int));
