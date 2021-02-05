@@ -28,7 +28,8 @@
 /* This file handles the CRITICAL construct.  */
 
 #include "libgomp.h"
-#include <stdlib.h>
+//#include <stdlib.h>
+#include <nanvix/ulib.h>
 
 
 static gomp_mutex_t default_lock;
@@ -76,7 +77,7 @@ GOMP_critical_name_start (void **pptr)
 	  if (plock != NULL)
 	    {
 	      gomp_mutex_destroy (nlock);
-	      free (nlock);
+	      ufree (nlock);
 	    }
 	  else
 	    plock = nlock;

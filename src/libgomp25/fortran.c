@@ -29,7 +29,8 @@
 
 #include "libgomp.h"
 #include "libgomp_f.h"
-#include <stdlib.h>
+//#include <stdlib.h>
+#include <nanvix/ulib.h>
 
 #ifdef HAVE_ATTRIBUTE_ALIAS
 /* Use internal aliases if possible.  */
@@ -66,7 +67,7 @@ void
 omp_init_lock_ (omp_lock_arg_t lock)
 {
 #ifndef OMP_LOCK_DIRECT
-  omp_lock_arg (lock) = malloc (sizeof (omp_lock_t));
+  omp_lock_arg (lock) = umalloc (sizeof (omp_lock_t));
 #endif
   omp_init_lock (omp_lock_arg (lock));
 }
@@ -75,7 +76,7 @@ void
 omp_init_nest_lock_ (omp_nest_lock_arg_t lock)
 {
 #ifndef OMP_NEST_LOCK_DIRECT
-  omp_nest_lock_arg (lock) = malloc (sizeof (omp_nest_lock_t));
+  omp_nest_lock_arg (lock) = umalloc (sizeof (omp_nest_lock_t));
 #endif
   omp_init_nest_lock (omp_nest_lock_arg (lock));
 }
@@ -85,7 +86,7 @@ omp_destroy_lock_ (omp_lock_arg_t lock)
 {
   omp_destroy_lock (omp_lock_arg (lock));
 #ifndef OMP_LOCK_DIRECT
-  free (omp_lock_arg (lock));
+  ufree (omp_lock_arg (lock));
   omp_lock_arg (lock) = NULL;
 #endif
 }
@@ -95,7 +96,7 @@ omp_destroy_nest_lock_ (omp_nest_lock_arg_t lock)
 {
   omp_destroy_nest_lock (omp_nest_lock_arg (lock));
 #ifndef OMP_NEST_LOCK_DIRECT
-  free (omp_nest_lock_arg (lock));
+  ufree (omp_nest_lock_arg (lock));
   omp_nest_lock_arg (lock) = NULL;
 #endif
 }

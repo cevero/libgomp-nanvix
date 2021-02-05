@@ -30,13 +30,14 @@
    general we cannot allow memory allocation to fail.  */
 
 #include "libgomp.h"
-#include <stdlib.h>
+//#include <stdlib.h>
+#include <nanvix/ulib.h>
 
 
 void *
 gomp_malloc (size_t size)
 {
-  void *ret = malloc (size);
+  void *ret = umalloc (size);
   if (ret == NULL)
     gomp_fatal ("Out of memory allocating %lu bytes", (unsigned long) size);
   return ret;
@@ -45,7 +46,7 @@ gomp_malloc (size_t size)
 void *
 gomp_malloc_cleared (size_t size)
 {
-  void *ret = calloc (1, size);
+  void *ret = ucalloc (1, size);
   if (ret == NULL)
     gomp_fatal ("Out of memory allocating %lu bytes", (unsigned long) size);
   return ret;
@@ -54,7 +55,7 @@ gomp_malloc_cleared (size_t size)
 void *
 gomp_realloc (void *old, size_t size)
 {
-  void *ret = realloc (old, size);
+  void *ret = urealloc (old, size);
   if (ret == NULL)
     gomp_fatal ("Out of memory allocating %lu bytes", (unsigned long) size);
   return ret;

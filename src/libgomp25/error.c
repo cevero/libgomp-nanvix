@@ -3,9 +3,7 @@
 
    This file is part of the GNU OpenMP Library (libgomp).
 
-   Libgomp is free software; you can redistribute it and/or modify it
-   under the terms of the GNU Lesser General Public License as published by
-   the Free Software Foundation; either version 2.1 of the License, or
+   Libgomp is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation; either version 2.1 of the License, or
    (at your option) any later version.
 
    Libgomp is distributed in the hope that it will be useful, but WITHOUT ANY
@@ -33,16 +31,17 @@
    been pointed somewhere unsafe?  */
 
 #include "libgomp.h"
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <posix/stdarg.h>
+//#include <posix/stdio>
+#include <nanvix/ulib.h>
+//#include <posix/stdlib.h>
 
 
 static void
 gomp_verror (const char *fmt, va_list list)
 {
   fputs ("\nlibgomp: ", stderr);
-  vfprintf (stderr, fmt, list);
+  uprintf (stderr, fmt, list);
   fputc ('\n', stderr);
 }
 
@@ -65,5 +64,5 @@ gomp_fatal (const char *fmt, ...)
   gomp_verror (fmt, list);
   va_end (list);
 
-  exit (EXIT_FAILURE);
+  ___nanvix_exit (EXIT_FAILURE);
 }

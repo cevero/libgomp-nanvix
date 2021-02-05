@@ -49,6 +49,7 @@
 # pragma GCC visibility push(hidden)
 #endif
 
+#include "config/nanvix/workaround.h"
 #include "config/nanvix/sem.h"
 #include "config/nanvix/mutex.h"
 #include "config/nanvix/bar.h"

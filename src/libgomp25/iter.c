@@ -29,7 +29,8 @@
    for loops and sections.  */
 
 #include "libgomp.h"
-#include <stdlib.h>
+#include <nanvix/ulib.h>
+//#include <stdlib.h>
 
 
 /* This function implements the STATIC scheduling method.  The caller should

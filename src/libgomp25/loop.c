@@ -28,7 +28,8 @@
 /* This file handles the LOOP (FOR/DO) construct.  */
 
 #include "libgomp.h"
-#include <stdlib.h>
+#include <nanvix/ulib.h>
+//#include <stdlib.h>
 
 
 /* Initialize the given work share construct from the given arguments.  */
@@ -136,7 +137,7 @@ GOMP_loop_runtime_start (long start, long end, long incr,
       return gomp_loop_guided_start (start, end, incr, gomp_run_sched_chunk,
 				     istart, iend);
     default:
-      abort ();
+      uabort ();
     }
 }
 
@@ -217,7 +218,7 @@ GOMP_loop_ordered_runtime_start (long start, long end, long incr,
 					     gomp_run_sched_chunk,
 					     istart, iend);
     default:
-      abort ();
+      uabort ();
     }
 }
 
@@ -285,7 +286,7 @@ GOMP_loop_runtime_next (long *istart, long *iend)
     case GFS_GUIDED:
       return gomp_loop_guided_next (istart, iend);
     default:
-      abort ();
+      uabort ();
     }
 }
 
@@ -362,7 +363,7 @@ GOMP_loop_ordered_runtime_next (long *istart, long *iend)
     case GFS_GUIDED:
       return gomp_loop_ordered_guided_next (istart, iend);
     default:
-      abort ();
+      uabort ();
     }
 }
 

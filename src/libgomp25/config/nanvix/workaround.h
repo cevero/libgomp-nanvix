@@ -49,7 +49,7 @@ enum memmodel
 
 
 ////pthread types////
-
+typedef struct nanvix_mutex pthread_mutex_t;
 typedef union
 {
   char __size[__SIZEOF_SEM_T];

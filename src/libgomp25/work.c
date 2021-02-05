@@ -29,8 +29,8 @@
    of threads.  */
 
 #include "libgomp.h"
-#include <stdlib.h>
-#include <string.h>
+#include <nanvix/ulib.h>
+#include <posix/string.h>
 
 
 /* Create a new work share structure.  */
@@ -59,7 +59,7 @@ static void
 free_work_share (struct gomp_work_share *ws)
 {
   gomp_mutex_destroy (&ws->lock);
-  free (ws);
+  ufree (ws);
 }
 
 

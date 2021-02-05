@@ -122,7 +122,7 @@ gomp_sem_wait (struct nanvix_semaphore *sem)
 {
   /* With POSIX, the wait can be canceled by signals.  We don't want that.
      It is expected that the return value here is -1 and errno is EINTR.  */
-  while (sem_wait (sem) != 0)
-    continue;
+//  while (sem_wait (sem) != 0)
+//    continue;
 }
 #endif
