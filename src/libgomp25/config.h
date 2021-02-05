@@ -2,19 +2,19 @@
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* Define to 1 if you have the `aligned_alloc' function. */
-#define HAVE_ALIGNED_ALLOC 1
+#define HAVE_ALIGNED_ALLOC 0
 
 /* Define to 1 if the target assembler supports .symver directive. */
-#define HAVE_AS_SYMVER_DIRECTIVE 1
+#define HAVE_AS_SYMVER_DIRECTIVE 0
 
 /* Define to 1 if the target supports __attribute__((alias(...))). */
-#define HAVE_ATTRIBUTE_ALIAS 1
+#define HAVE_ATTRIBUTE_ALIAS 0
 
 /* Define to 1 if the target supports __attribute__((dllexport)). */
 /* #undef HAVE_ATTRIBUTE_DLLEXPORT */
 
 /* Define to 1 if the target supports __attribute__((visibility(...))). */
-#define HAVE_ATTRIBUTE_VISIBILITY 1
+#define HAVE_ATTRIBUTE_VISIBILITY 0
 
 /* Define if the POSIX Semaphores do not work on your system. */
 /* #undef HAVE_BROKEN_POSIX_SEMAPHORES */
@@ -38,16 +38,16 @@
 #define HAVE_GETGID 1
 
 /* Define if gethostname is supported. */
-#define HAVE_GETHOSTNAME 1
+#define HAVE_GETHOSTNAME 0
 
 /* Define to 1 if you have the `getloadavg' function. */
-#define HAVE_GETLOADAVG 1
+#define HAVE_GETLOADAVG 0
 
 /* Define if getpid is supported. */
-#define HAVE_GETPID 1
+#define HAVE_GETPID 0
 
 /* Define to 1 if you have the `getuid' function. */
-#define HAVE_GETUID 1
+#define HAVE_GETUID 0
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1
@@ -56,22 +56,23 @@
 #define HAVE_LIBDL 1
 
 /* Define to 1 if you have the `memalign' function. */
-#define HAVE_MEMALIGN 1
+#define HAVE_MEMALIGN 0
 
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
 
 /* Define to 1 if you have the `posix_memalign' function. */
-#define HAVE_POSIX_MEMALIGN 1
+#define HAVE_POSIX_MEMALIGN 0
 
 /* Define if pthread_{,attr_}{g,s}etaffinity_np is supported. */
-#define HAVE_PTHREAD_AFFINITY_NP 1
+#define HAVE_PTHREAD_AFFINITY_NP 0
 
 /* Define to 1 if you have the <pthread.h> header file. */
 #define HAVE_PTHREAD_H 1
 
 /* Define to 1 if you have the `secure_getenv' function. */
 #define HAVE_SECURE_GETENV 1
+#undef HAVE_SECURE_GETENV
 
 /* Define to 1 if you have the <semaphore.h> header file. */
 #define HAVE_SEMAPHORE_H 1
@@ -118,6 +119,7 @@
 
 /* Define to 1 if the target supports thread-local storage. */
 #define HAVE_TLS 1
+//#undef HAVE_TLS 
 
 /* Define if uname is supported and struct utsname has nodename field. */
 /* #undef HAVE_UNAME */
@@ -182,7 +184,7 @@
 #define PLUGIN_NVPTX_DYNAMIC 0
 
 /* Define if all infrastructure, needed for plugins, is supported. */
-#define PLUGIN_SUPPORT 1
+#define PLUGIN_SUPPORT 0
 
 /* The size of `char', as computed by sizeof. */
 /* #undef SIZEOF_CHAR */

@@ -155,7 +155,7 @@ unsigned long gomp_run_sched_chunk = 1;
 //{
 //  const char *env;
 //
-//  env = getenv (name);
+////  env = getenv (name);
 //  if (env == NULL)
 //    return;
 //
@@ -178,21 +178,21 @@ unsigned long gomp_run_sched_chunk = 1;
 //  if (*env != '\0')
 //    gomp_error ("Invalid value for environment variable %s", name);
 //}
-//
-//static void __attribute__((constructor))
-//initialize_env (void)
-//{
-//  unsigned long stacksize;
-//
-//  /* Do a compile time check that mkomp_h.pl did good job.  */
+
+static void __attribute__((constructor))
+initialize_env (void)
+{
+  unsigned long stacksize;
+
+  /* Do a compile time check that mkomp_h.pl did good job.  */
 //  omp_check_defines ();
 //
 //  parse_schedule ();
 //  parse_boolean ("OMP_DYNAMIC", &gomp_dyn_var);
 //  parse_boolean ("OMP_NESTED", &gomp_nest_var);
-//  if (!parse_unsigned_long ("OMP_NUM_THREADS", &gomp_nthreads_var))
-//    gomp_init_num_threads ();
-//
+  //if (!parse_unsigned_long ("OMP_NUM_THREADS", &gomp_nthreads_var))
+    gomp_init_num_threads ();
+
 //  /* Not strictly environment related, but ordering constructors is tricky.  */
 //  pthread_attr_init (&gomp_thread_attr);
 //  pthread_attr_setdetachstate (&gomp_thread_attr, PTHREAD_CREATE_DETACHED);
@@ -219,7 +219,7 @@ unsigned long gomp_run_sched_chunk = 1;
 //      if (err != 0)
 //	gomp_error ("Stack size change failed: %s", strerror (err));
 //    }
-//}
+}
 
 
 /* The public OpenMP API routines that access these variables.  */
@@ -228,6 +228,7 @@ void
 omp_set_num_threads (int n)
 {
   gomp_nthreads_var = (n > 0 ? n : 1);
+ qnt_threads  = (n > 0 ? n : 1);
 }
 
 void

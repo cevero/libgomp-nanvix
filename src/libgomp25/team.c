@@ -71,6 +71,7 @@ struct gomp_thread_start_data
 static void *
 gomp_thread_start (void *xdata)
 {
+    uprintf("%s \n",__func__);
   struct gomp_thread_start_data *data = xdata;
   struct gomp_thread *thr;
   void (*local_fn) (void *);
@@ -78,6 +79,7 @@ gomp_thread_start (void *xdata)
 
 #ifdef HAVE_TLS
   thr = &gomp_tls_data;
+    uprintf("thread = %d\n",omp_get_thread_num());
 #else
   struct gomp_thread local_thr;
   thr = &local_thr;
@@ -129,6 +131,7 @@ gomp_thread_start (void *xdata)
       while (local_fn);
     }
 
+    uprintf("%s end \n",__func__);
   return NULL;
 }
 
@@ -138,6 +141,7 @@ gomp_thread_start (void *xdata)
 static struct gomp_team *
 new_team (unsigned nthreads, struct gomp_work_share *work_share)
 {
+    uprintf("%s \n",__func__);
   struct gomp_team *team;
   size_t size;
 
@@ -166,6 +170,7 @@ new_team (unsigned nthreads, struct gomp_work_share *work_share)
 static void
 free_team (struct gomp_team *team)
 {
+    uprintf("%s \n",__func__);
   ufree (team->work_shares);
   gomp_mutex_destroy (&team->work_share_lock);
   gomp_barrier_destroy (&team->barrier);
@@ -180,6 +185,7 @@ void
 gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
 		 struct gomp_work_share *work_share)
 {
+    uprintf("%s \n",__func__);
   struct gomp_thread_start_data *start_data;
   struct gomp_thread *thr, *nthr;
   struct gomp_team *team;
@@ -309,6 +315,7 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
 void
 gomp_team_end (void)
 {
+    uprintf("%s \n",__func__);
   struct gomp_thread *thr = gomp_thread ();
   struct gomp_team *team = thr->ts.team;
 

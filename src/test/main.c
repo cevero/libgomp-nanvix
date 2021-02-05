@@ -23,7 +23,10 @@
  */
 
 #include <nanvix/ulib.h>
+#include <nanvix/sys/thread.h>
 #include "../libgomp25/omp.h"
+
+#define NTHREADS_MAX  (THREAD_MAX - 1)
 /**
  * @brief Test Server
  */
@@ -32,29 +35,51 @@
 //    
 //	uprintf("parallel region \n");
 //}
+
+
+void*
+Hello(void * index){
+    int pid;
+    pid = (int)((intptr_t)index);
+uprintf("Hello from thread%d\n",pid);
+
+}
 int __main2(int argc, const char *argv[])
 {
 	((void) argc);
 	((void) argv);
+	kthread_t tid[NTHREADS_MAX];
+//
+//    for (int i = 0; i < NTHREADS_MAX; i++)
+//        kthread_create(&tid[i],Hello,((void*) (intptr_t)i));
+//
+//    for (int i = 0; i < NTHREADS_MAX; i++)
+//        kthread_join(tid[i],NULL);
 
     int * a = umalloc(9*sizeof(int));
     for(int i=0;i<9;i++)
         a[i]=i;
-	#pragma omp parallel // num_threads(3)// default(none)//  
+
+
+
+//        uprintf("Hello world from thread %d of %d \n",omp_get_thread_num(),omp_get_num_threads());
+        omp_set_num_threads(4);
+	#pragma omp parallel // num_threads(NTHREADS_MAX)// default(none)//  
     {
      //   omp_set_num_threads(4);
-        omp_set_dynamic(0);
-        omp_set_num_threads(2);
-        uprintf("Hello world from thread %d of %d \n",omp_get_thread_num(),omp_get_num_threads());
-	#pragma omp for 
-    for(int i=0;i<4;i++)
-        uprintf("Hello world form thread %d it = %d\n",omp_get_thread_num(),i);
+        uprintf("Hello world from thread %d of %d procs= %d\n",omp_get_thread_num(),omp_get_num_threads(),omp_get_num_procs());
+//	#pragma omp for
+//    for(int i=0;i<4;i++)
+//        uprintf("Hello world form thread %d it = %d\n",omp_get_thread_num(),i);
         
 //      uprintf("parallel region \n",a[2],(int)sizeof(int));
     }
 
+    uprintf("sai da zona paralela\n");
+    
+
     ufree(a);
 
-	return (0);
+    return (0);
 }
 
