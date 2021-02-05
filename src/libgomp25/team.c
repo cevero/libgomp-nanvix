@@ -32,6 +32,7 @@
 //#include <stdlib.h>
 #include <posix/string.h>
 #include <nanvix/ulib.h>
+#include <nanvix/sys/thread.h>
 
 /* This array manages threads spawned from the top level, which will
    return to the idle loop once the current PARALLEL construct ends.  */
@@ -165,11 +166,11 @@ new_team (unsigned nthreads, struct gomp_work_share *work_share)
 static void
 free_team (struct gomp_team *team)
 {
-  free (team->work_shares);
+  ufree (team->work_shares);
   gomp_mutex_destroy (&team->work_share_lock);
   gomp_barrier_destroy (&team->barrier);
   gomp_sem_destroy (&team->master_release);
-  free (team);
+  ufree (team);
 }
 
 
@@ -272,7 +273,7 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
   /* Launch new threads.  */
   for (; i < nthreads; ++i, ++start_data)
     {
-      pthread_t pt;
+      kthread_t pt;
       int err;
 
       start_data->ts.team = team;
@@ -284,7 +285,7 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
       start_data->fn_data = data;
       start_data->nested = nested;
 
-      err = pthread_create (&pt, &gomp_thread_attr,
+      err = kthread_create (&pt,
 			    gomp_thread_start, start_data);
       if (err != 0)
 	gomp_fatal ("Thread creation failed: %s", strerror (err));

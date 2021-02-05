@@ -38,7 +38,7 @@ SRC = $(wildcard *.c)
 OBJ = $(SRC:.c=.$(OBJ_SUFFIX).o)
 
 # Library
-LIB2 := $(LIBDIR)/libgomp-$(TARGET).a
+LIB2 := $(LIBDIR)/libgomp25-$(TARGET).a
 LIB2 +=  $(LIBS)
 LIBS := $(LIB2)
 

@@ -33,7 +33,7 @@
    interested in sem_wait as a cancelation point, but it's not too
    bad for a default.  */
 
-#include "libgomp.h"
+#include "../../libgomp.h"
 
 #ifdef HAVE_BROKEN_POSIX_SEMAPHORES
 //#include <stdlib.h>

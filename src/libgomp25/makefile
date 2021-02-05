@@ -32,7 +32,7 @@ ARCHIVE = $(LIBGOMP25)
 
 # C Source Files
 #SRC = $(wildcard *.c)
-SRC = team.c parallel.c
+SRC = workaround.c config/nanvix/sem.c config/nanvix/mutex.c team.c parallel.c
 	  
 	  
 #	  barrier.c

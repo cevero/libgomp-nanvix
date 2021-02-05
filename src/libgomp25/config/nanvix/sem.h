@@ -63,7 +63,7 @@ typedef struct nanvix_mutex pthread_mutex_t;
 //  int			value;
 //};
 
-typedef struct nanvix_semaphore gomp_sem_t;
+//typedef struct nanvix_semaphore gomp_sem_t;
 
 extern void gomp_sem_init (gomp_sem_t *sem, int value);
 
