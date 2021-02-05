@@ -1,27 +1,29 @@
-/* Copyright (C) 2005-2019 Free Software Foundation, Inc.
+/* Copyright (C) 2005, 2006 Free Software Foundation, Inc.
    Contributed by Richard Henderson <rth@redhat.com>.
 
-   This file is part of the GNU Offloading and Multi Processing Library
-   (libgomp).
+   This file is part of the GNU OpenMP Library (libgomp).
 
    Libgomp is free software; you can redistribute it and/or modify it
-   under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 3, or (at your option)
-   any later version.
+   under the terms of the GNU Lesser General Public License as published by
+   the Free Software Foundation; either version 2.1 of the License, or
+   (at your option) any later version.
 
    Libgomp is distributed in the hope that it will be useful, but WITHOUT ANY
    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-   FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+   FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for
    more details.
 
-   Under Section 7 of GPL version 3, you are granted additional
-   permissions described in the GCC Runtime Library Exception, version
-   3.1, as published by the Free Software Foundation.
+   You should have received a copy of the GNU Lesser General Public License
+   along with libgomp; see the file COPYING.LIB.  If not, write to the
+   Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+   MA 02110-1301, USA.  */
 
-   You should have received a copy of the GNU General Public License and
-   a copy of the GCC Runtime Library Exception along with this program;
-   see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
-   <http://www.gnu.org/licenses/>.  */
+/* As a special exception, if you link this library with other files, some
+   of which are compiled with GCC, to produce an executable, this library
+   does not by itself cause the resulting executable to be covered by the
+   GNU General Public License.  This exception does not however invalidate
+   any other reasons why the executable file might be covered by the GNU
+   General Public License.  */
 
 /* This is the default POSIX 1003.1b implementation of a semaphore
    synchronization mechanism for libgomp.  This type is private to
@@ -34,33 +36,34 @@
 #ifndef GOMP_SEM_H
 #define GOMP_SEM_H 1
 
-#include "workaround.h"
 #ifdef HAVE_ATTRIBUTE_VISIBILITY
 # pragma GCC visibility push(default)
 #endif
 
+#include "workaround.h"
+//#include <semaphore.h>
 #include <nanvix/sys/semaphore.h>
+
 #ifdef HAVE_ATTRIBUTE_VISIBILITY
 # pragma GCC visibility pop
 #endif
 
-
-#define HAVE_BROKEN_POSIX_SEMAPHORES 1
 #ifdef HAVE_BROKEN_POSIX_SEMAPHORES
+//#include <pthread.h>
 #include <nanvix/sys/mutex.h>
 
 /////////// dumb declarations //////////////
 typedef struct nanvix_mutex pthread_mutex_t;
 //////////////////////////////////////
 
-struct gomp_sem
-{
-  pthread_mutex_t	mutex;
-  pthread_cond_t	cond;
-  int			value;
-};
+//struct gomp_sem
+//{
+//  pthread_mutex_t	mutex;
+//  pthread_cond_t	cond;
+//  int			value;
+//};
 
-typedef struct gomp_sem gomp_sem_t;
+typedef struct nanvix_semaphore gomp_sem_t;
 
 extern void gomp_sem_init (gomp_sem_t *sem, int value);
 
@@ -72,8 +75,9 @@ extern void gomp_sem_destroy (gomp_sem_t *sem);
 
 #else /* HAVE_BROKEN_POSIX_SEMAPHORES  */
 
+typedef sem_t gomp_sem_t;
 
-static inline void gomp_sem_init (gomp_sem_t *sem, int value)
+static inline void gomp_sem_init (nanvix_semaphore *sem, int value)
 {
   nanvix_semaphore_init (sem,  value);
 }
@@ -82,12 +86,13 @@ extern void gomp_sem_wait (gomp_sem_t *sem);
 
 static inline void gomp_sem_post (gomp_sem_t *sem)
 {
-  nanvix_semaphore_down (sem);
+    nanvix_semaphore_down (sem);
 }
 
 static inline void gomp_sem_destroy (gomp_sem_t *sem)
 {
-  sem_destroy (sem);
+  //sem_destroy (sem);
+    uprintf("%s %d\n",__func__,key);
 }
 #endif /* doesn't HAVE_BROKEN_POSIX_SEMAPHORES  */
 #endif /* GOMP_SEM_H  */

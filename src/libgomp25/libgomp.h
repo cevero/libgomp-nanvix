@@ -49,9 +49,9 @@
 # pragma GCC visibility push(hidden)
 #endif
 
-#include "config/sem.h"
-#include "config/mutex.h"
-#include "config/bar.h"
+#include "config/nanvix/sem.h"
+#include "config/nanvix/mutex.h"
+#include "config/nanvix/bar.h"
 
 
 /* This structure contains the data to control one work-sharing construct,
