@@ -77,22 +77,22 @@ extern void gomp_sem_destroy (gomp_sem_t *sem);
 
 typedef sem_t gomp_sem_t;
 
-static inline void gomp_sem_init (nanvix_semaphore *sem, int value)
+static inline void gomp_sem_init (struct nanvix_semaphore *sem, int value)
 {
   nanvix_semaphore_init (sem,  value);
 }
 
-extern void gomp_sem_wait (gomp_sem_t *sem);
+extern void gomp_sem_wait (struct nanvix_semaphore *sem);
 
-static inline void gomp_sem_post (gomp_sem_t *sem)
+static inline void gomp_sem_post (struct nanvix_semaphore *sem)
 {
     nanvix_semaphore_down (sem);
 }
 
-static inline void gomp_sem_destroy (gomp_sem_t *sem)
+static inline void gomp_sem_destroy (struct nanvix_semaphore *sem)
 {
   //sem_destroy (sem);
-    uprintf("%s %d\n",__func__,key);
+    uprintf("%s %d\n",__func__);
 }
 #endif /* doesn't HAVE_BROKEN_POSIX_SEMAPHORES  */
 #endif /* GOMP_SEM_H  */

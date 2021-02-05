@@ -33,7 +33,7 @@
 #ifndef GOMP_BARRIER_H
 #define GOMP_BARRIER_H 1
 
-#include <pthread.h>
+//#include <pthread.h>
 
 typedef struct
 {

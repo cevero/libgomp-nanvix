@@ -5,7 +5,7 @@
    In this default POSIX implementation, we map the two locks to the
    same PTHREADS primitive.  */
 
-#include <pthread.h>
+#include <nanvix/sys/mutex.h>
 
-typedef pthread_mutex_t omp_lock_t;
-typedef struct { pthread_mutex_t lock; int count; } omp_nest_lock_t;
+typedef struct nanvix_mutex omp_lock_t;
+typedef struct {struct nanvix_mutex lock; int count; } omp_nest_lock_t;

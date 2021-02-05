@@ -317,7 +317,7 @@ extern void gomp_work_share_end_nowait (void);
 #include "libgomp_g.h"
 
 /* Include omp.h by parts.  */
-#include "omp-lock.h"
+#include "config/nanvix/omp-lock.h"
 #define _LIBGOMP_OMP_LOCK_DEFINED 1
 #include "omp.h.in"
 

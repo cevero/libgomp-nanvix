@@ -38,9 +38,9 @@
 #ifdef HAVE_BROKEN_POSIX_SEMAPHORES
 //#include <stdlib.h>
 #include <nanvix/ulib.h>
-#include "sem.h"
+//#include "sem.h"
 
-void gomp_sem_init (gomp_sem_t *sem, int value)
+void gomp_sem_init (struct nanvix_semaphore *sem, int value)
 {
   int ret;
 
@@ -55,7 +55,7 @@ void gomp_sem_init (gomp_sem_t *sem, int value)
   sem->value = value;
 }
 
-void gomp_sem_wait (gomp_sem_t *sem)
+void gomp_sem_wait (struct nanvix_semaphore *sem)
 {
   int ret;
 
@@ -85,7 +85,7 @@ void gomp_sem_wait (gomp_sem_t *sem)
   return;
 }
 
-void gomp_sem_post (gomp_sem_t *sem)
+void gomp_sem_post (struct nanvix_semaphore *sem)
 {
   int ret;
 
@@ -104,7 +104,7 @@ void gomp_sem_post (gomp_sem_t *sem)
   return;
 }
 
-void gomp_sem_destroy (gomp_sem_t *sem)
+void gomp_sem_destroy (struct nanvix_semaphore *sem)
 {
   int ret;
 
@@ -118,7 +118,7 @@ void gomp_sem_destroy (gomp_sem_t *sem)
 }
 #else /* HAVE_BROKEN_POSIX_SEMAPHORES  */
 void
-gomp_sem_wait (gomp_sem_t *sem)
+gomp_sem_wait (struct nanvix_semaphore *sem)
 {
   /* With POSIX, the wait can be canceled by signals.  We don't want that.
      It is expected that the return value here is -1 and errno is EINTR.  */

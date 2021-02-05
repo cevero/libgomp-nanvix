@@ -31,7 +31,7 @@
 #ifndef LIBGOMP_G_H 
 #define LIBGOMP_G_H 1
 
-#include <stdbool.h>
+#include <posix/stdbool.h>
 
 /* barrier.c */
 
