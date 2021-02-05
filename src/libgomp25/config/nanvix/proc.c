@@ -48,11 +48,9 @@
 void
 gomp_init_num_threads (void)
 {
-//#ifdef _SC_NPROCESSORS_ONLN
-//  gomp_nthreads_var = sysconf (_SC_NPROCESSORS_ONLN);
-//#endif
-    gomp_nthreads_var = THREAD_MAX;
-    qnt_threads = THREAD_MAX;
+#ifdef _SC_NPROCESSORS_ONLN
+  gomp_nthreads_var = sysconf (_SC_NPROCESSORS_ONLN);
+#endif
 }
 
 /* When OMP_DYNAMIC is set, at thread launch determine the number of
@@ -67,25 +65,25 @@ gomp_dynamic_max_threads (void)
 {
   unsigned n_onln, loadavg;
 
-//#ifdef _SC_NPROCESSORS_ONLN
-//  n_onln = sysconf (_SC_NPROCESSORS_ONLN);
-//  if (n_onln > gomp_nthreads_var)
-//    n_onln = gomp_nthreads_var;
-//#else
+#ifdef _SC_NPROCESSORS_ONLN
+  n_onln = sysconf (_SC_NPROCESSORS_ONLN);
+  if (n_onln > gomp_nthreads_var)
+    n_onln = gomp_nthreads_var;
+#else
   n_onln = gomp_nthreads_var;
-//#endif
+#endif
 
   loadavg = 0;
-//#ifdef HAVE_GETLOADAVG
-//  {
-//    double dloadavg[3];
-//    if (getloadavg (dloadavg, 3) == 3)
-//      {
-//	/* Add 0.1 to get a kind of biased rounding.  */
-//	loadavg = dloadavg[2] + 0.1;
-//      }
-//  }
-//#endif
+#ifdef HAVE_GETLOADAVG
+  {
+    double dloadavg[3];
+    if (getloadavg (dloadavg, 3) == 3)
+      {
+	/* Add 0.1 to get a kind of biased rounding.  */
+	loadavg = dloadavg[2] + 0.1;
+      }
+  }
+#endif
 
   if (loadavg >= n_onln)
     return 1;
@@ -96,11 +94,11 @@ gomp_dynamic_max_threads (void)
 int
 omp_get_num_procs (void)
 {
-//#ifdef _SC_NPROCESSORS_ONLN
-//  return sysconf (_SC_NPROCESSORS_ONLN);
-//#else
+#ifdef _SC_NPROCESSORS_ONLN
+  return sysconf (_SC_NPROCESSORS_ONLN);
+#else
   return gomp_nthreads_var;
-//#endif
+#endif
 }
 
 ialias (omp_get_num_procs)

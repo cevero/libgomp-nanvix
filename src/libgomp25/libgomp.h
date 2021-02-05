@@ -40,7 +40,7 @@
 #include "config.h"
 #include "gstdint.h"
 
-int qnt_threads;
+//int qnt_threads;
 //#include <pthread.h>
 
 #include <nanvix/ulib.h>

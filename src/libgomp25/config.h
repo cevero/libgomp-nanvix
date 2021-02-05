@@ -2,52 +2,52 @@
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* Define to 1 if you have the `aligned_alloc' function. */
-#define HAVE_ALIGNED_ALLOC 0
-
-/* Define to 1 if the target assembler supports .symver directive. */
-#define HAVE_AS_SYMVER_DIRECTIVE 0
-
-/* Define to 1 if the target supports __attribute__((alias(...))). */
-#define HAVE_ATTRIBUTE_ALIAS 0
-
-/* Define to 1 if the target supports __attribute__((dllexport)). */
-/* #undef HAVE_ATTRIBUTE_DLLEXPORT */
-
-/* Define to 1 if the target supports __attribute__((visibility(...))). */
-#define HAVE_ATTRIBUTE_VISIBILITY 0
-
-/* Define if the POSIX Semaphores do not work on your system. */
-/* #undef HAVE_BROKEN_POSIX_SEMAPHORES */
-
-/* Define to 1 if the target assembler supports thread-local storage. */
-/* #undef HAVE_CC_TLS */
-
-/* Define to 1 if you have the `clock_gettime' function. */
-#define HAVE_CLOCK_GETTIME 1
-
-/* Define to 1 if you have the <dlfcn.h> header file. */
-#define HAVE_DLFCN_H 1
-
-/* Define to 1 if you have the `getegid' function. */
-#define HAVE_GETEGID 1
-
-/* Define to 1 if you have the `geteuid' function. */
-#define HAVE_GETEUID 1
-
-/* Define to 1 if you have the `getgid' function. */
-#define HAVE_GETGID 1
-
-/* Define if gethostname is supported. */
-#define HAVE_GETHOSTNAME 0
-
-/* Define to 1 if you have the `getloadavg' function. */
-#define HAVE_GETLOADAVG 0
-
-/* Define if getpid is supported. */
-#define HAVE_GETPID 0
-
-/* Define to 1 if you have the `getuid' function. */
-#define HAVE_GETUID 0
+//#define HAVE_ALIGNED_ALLOC 0
+//
+///* Define to 1 if the target assembler supports .symver directive. */
+//#define HAVE_AS_SYMVER_DIRECTIVE 0
+//
+///* Define to 1 if the target supports __attribute__((alias(...))). */
+//#define HAVE_ATTRIBUTE_ALIAS 0
+//
+///* Define to 1 if the target supports __attribute__((dllexport)). */
+///* #undef HAVE_ATTRIBUTE_DLLEXPORT */
+//
+///* Define to 1 if the target supports __attribute__((visibility(...))). */
+//#define HAVE_ATTRIBUTE_VISIBILITY 0
+//
+///* Define if the POSIX Semaphores do not work on your system. */
+///* #undef HAVE_BROKEN_POSIX_SEMAPHORES */
+//
+///* Define to 1 if the target assembler supports thread-local storage. */
+///* #undef HAVE_CC_TLS */
+//
+///* Define to 1 if you have the `clock_gettime' function. */
+//#define HAVE_CLOCK_GETTIME 1
+//
+///* Define to 1 if you have the <dlfcn.h> header file. */
+//#define HAVE_DLFCN_H 1
+//
+///* Define to 1 if you have the `getegid' function. */
+//#define HAVE_GETEGID 1
+//
+///* Define to 1 if you have the `geteuid' function. */
+//#define HAVE_GETEUID 1
+//
+///* Define to 1 if you have the `getgid' function. */
+//#define HAVE_GETGID 1
+//
+///* Define if gethostname is supported. */
+//#define HAVE_GETHOSTNAME 0
+//
+///* Define to 1 if you have the `getloadavg' function. */
+//#define HAVE_GETLOADAVG 0
+//
+///* Define if getpid is supported. */
+//#define HAVE_GETPID 0
+//
+///* Define to 1 if you have the `getuid' function. */
+//#define HAVE_GETUID 0
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1

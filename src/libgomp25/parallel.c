@@ -54,14 +54,13 @@ gomp_resolve_num_threads (unsigned specified)
 
   /* If dynamic threads are enabled, bound the number of threads
      that we launch.  */
-//  if (gomp_dyn_var)
-//    {
-//      unsigned dyn = gomp_dynamic_max_threads ();
-//      if (dyn < specified)
-//    return dyn;
-//    }
-//
-    uprintf("%d specified \n",qnt_threads);
+  if (gomp_dyn_var)
+    {
+      unsigned dyn = gomp_dynamic_max_threads ();
+      if (dyn < specified)
+    return dyn;
+    }
+
   return specified;
 }
 
@@ -76,8 +75,8 @@ GOMP_parallel_start (void (*fn) (void *), void *data, unsigned num_threads)
 void
 GOMP_parallel_end (void)
 {
-    uprintf("%s \n",__func__);
   gomp_team_end ();
+    uprintf("%s \n",__func__);
 }
 
 void
@@ -110,7 +109,7 @@ int
 omp_get_max_threads (void)
 {
     uprintf("%s \n",__func__);
-  return gomp_resolve_num_threads (0);
+  return gomp_resolve_num_threads (THREAD_MAX);
 }
 
 int

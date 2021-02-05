@@ -228,7 +228,6 @@ void
 omp_set_num_threads (int n)
 {
   gomp_nthreads_var = (n > 0 ? n : 1);
- qnt_threads  = (n > 0 ? n : 1);
 }
 
 void
