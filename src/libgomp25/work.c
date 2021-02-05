@@ -118,7 +118,7 @@ gomp_work_share_start (bool ordered)
 	 lookup of the existing elements.  Fix that by unwrapping the
 	 data from the front to the end.  */
       if (team->oldest_live_gen > 0)
-	memcpy (team->work_shares + team->num_live_gen,
+	umemcpy (team->work_shares + team->num_live_gen,
 		team->work_shares,
 		(team->oldest_live_gen & team->generation_mask)
 		* sizeof (*team->work_shares));

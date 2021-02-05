@@ -36,7 +36,7 @@
 
 typedef struct
 {
-  gomp_mutex_t mutex;
+  nanvix_mutex mutex;
   unsigned total;
   unsigned arrived;
   int generation;

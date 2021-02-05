@@ -30,7 +30,7 @@
    being able to adjust the barrier count while threads are blocked, so the
    POSIX pthread_barrier_t won't work.  */
 
-#include "libgomp.h"
+#include "../../libgomp.h"
 
 
 void

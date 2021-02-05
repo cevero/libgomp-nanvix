@@ -31,9 +31,10 @@
 
    The following implementation uses a mix of POSIX and BSD routines.  */
 
-#include "libgomp.h"
-#include <unistd.h>
-#include <stdlib.h>
+#include "../../libgomp.h"
+//#include <unistd.h>
+//#include <stdlib.h>
+#include <nanvix/ulib.h>
 #ifdef HAVE_GETLOADAVG
 # ifdef HAVE_SYS_LOADAVG_H
 #  include <sys/loadavg.h>
@@ -73,16 +74,16 @@ gomp_dynamic_max_threads (void)
 #endif
 
   loadavg = 0;
-#ifdef HAVE_GETLOADAVG
-  {
-    double dloadavg[3];
-    if (getloadavg (dloadavg, 3) == 3)
-      {
-	/* Add 0.1 to get a kind of biased rounding.  */
-	loadavg = dloadavg[2] + 0.1;
-      }
-  }
-#endif
+//#ifdef HAVE_GETLOADAVG
+//  {
+//    double dloadavg[3];
+//    if (getloadavg (dloadavg, 3) == 3)
+//      {
+//	/* Add 0.1 to get a kind of biased rounding.  */
+//	loadavg = dloadavg[2] + 0.1;
+//      }
+//  }
+//#endif
 
   if (loadavg >= n_onln)
     return 1;

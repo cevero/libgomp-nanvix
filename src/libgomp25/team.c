@@ -288,7 +288,7 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
       err = kthread_create (&pt,
 			    gomp_thread_start, start_data);
       if (err != 0)
-	gomp_fatal ("Thread creation failed: %s", strerror (err));
+	gomp_fatal ("Thread creation failed: %s", ustrerror (err));
     }
 
  do_release:
