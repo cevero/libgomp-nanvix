@@ -50,6 +50,8 @@ gomp_init_num_threads (void)
 {
 #ifdef _SC_NPROCESSORS_ONLN
   gomp_nthreads_var = sysconf (_SC_NPROCESSORS_ONLN);
+#else
+    gomp_nthreads_var = gomp_nthreads_var;
 #endif
 }
 

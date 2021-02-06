@@ -79,11 +79,11 @@ gomp_thread_start (void *xdata)
 
 #ifdef HAVE_TLS
   thr = &gomp_tls_data;
-    uprintf("thread = %d\n",omp_get_thread_num());
 #else
   struct gomp_thread local_thr;
   thr = &local_thr;
   pthread_setspecific (gomp_tls_key, thr);
+    uprintf("thread = %d\n",omp_get_thread_num());
 #endif
   gomp_sem_init (&thr->release, 0);
 
@@ -292,7 +292,7 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
       start_data->nested = nested;
 
       err = kthread_create (&pt,
-			    gomp_thread_start, start_data);
+			    gomp_thread_start, (void*) (intptr_t)start_data);
       if (err != 0)
 	gomp_fatal ("Thread creation failed: %s", ustrerror (err));
     }

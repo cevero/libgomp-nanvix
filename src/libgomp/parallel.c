@@ -109,7 +109,7 @@ int
 omp_get_max_threads (void)
 {
     uprintf("%s \n",__func__);
-  return gomp_resolve_num_threads (THREAD_MAX);
+  return gomp_resolve_num_threads (0);
 }
 
 int

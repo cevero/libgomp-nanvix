@@ -39,6 +39,6 @@ GOMP_barrier (void)
   /* It is legal to have orphaned barriers.  */
   if (team == NULL)
     return;
-
+    uprintf("%s \n",__func__);
   gomp_barrier_wait (&team->barrier);
 }

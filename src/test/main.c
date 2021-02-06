@@ -24,7 +24,7 @@
 
 #include <nanvix/ulib.h>
 #include <nanvix/sys/thread.h>
-#include "../libgomp25/omp.h"
+#include "../libgomp/omp.h"
 
 #define NTHREADS_MAX  (THREAD_MAX - 1)
 /**
@@ -69,7 +69,7 @@ int __main2(int argc, const char *argv[])
         omp_set_num_threads(4);
         uprintf("Hello world from thread %d of %d procs= %d\n",omp_get_thread_num(),omp_get_num_threads(),omp_get_num_procs());
 //	#pragma omp for
-//    for(int i=0;i<4;i++)
+//    for(int i=0;i<50;i++)
 //        uprintf("Hello world form thread %d it = %d\n",omp_get_thread_num(),i);
         
     }

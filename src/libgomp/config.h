@@ -71,8 +71,8 @@
 #define HAVE_PTHREAD_H 1
 
 /* Define to 1 if you have the `secure_getenv' function. */
-#define HAVE_SECURE_GETENV 1
-#undef HAVE_SECURE_GETENV
+//#define HAVE_SECURE_GETENV 1
+//#undef HAVE_SECURE_GETENV
 
 /* Define to 1 if you have the <semaphore.h> header file. */
 #define HAVE_SEMAPHORE_H 1
@@ -118,8 +118,8 @@
 #define HAVE_SYS_TYPES_H 1
 
 /* Define to 1 if the target supports thread-local storage. */
-#define HAVE_TLS 1
-//#undef HAVE_TLS 
+#define HAVE_TLS 0
+#undef HAVE_TLS 
 
 /* Define if uname is supported and struct utsname has nodename field. */
 /* #undef HAVE_UNAME */
