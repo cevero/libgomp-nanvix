@@ -37,6 +37,8 @@
 bool
 GOMP_single_start (void)
 {
+  
+    uprintf("function= %s file = %s\n",__func__,__FILE__);
   bool ret = gomp_work_share_start (false);
   gomp_mutex_unlock (&gomp_thread ()->ts.work_share->lock);
   gomp_work_share_end_nowait ();

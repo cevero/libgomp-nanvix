@@ -33,12 +33,12 @@
 void
 GOMP_barrier (void)
 {
+    uprintf("FUNCTION= %s FILE= %s\n",__func__,__FILE__);
   struct gomp_thread *thr = gomp_thread ();
   struct gomp_team *team = thr->ts.team;
 
   /* It is legal to have orphaned barriers.  */
   if (team == NULL)
     return;
-    uprintf("%s \n",__func__);
   gomp_barrier_wait (&team->barrier);
 }
