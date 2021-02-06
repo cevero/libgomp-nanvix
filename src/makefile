@@ -23,26 +23,26 @@
 #
 
 # Builds Everything
-all: all-libgomp all-libgomp25  all-test
+all: all-libgomp all-45libgomp  all-test
 
 # Cleans Build Objects
-clean: clean-libgomp clean-libgomp25  clean-test
+clean: clean-libgomp clean-45libgomp  clean-test
 
 # Cleans Everything
-distclean: distclean-libgomp distclean-libgomp25  distclean-test
+distclean: distclean-libgomp distclean-45libgomp  distclean-test
 
 #===============================================================================
 # LibGOMP 2.5
 #===============================================================================
 
-all-libgomp25:
-	$(MAKE) -C libgomp25 all
+all-45libgomp:
+	$(MAKE) -C 45libgomp all
 
-clean-libgomp25:
-	$(MAKE) -C libgomp25 clean
+clean-45libgomp:
+	$(MAKE) -C 45libgomp clean
 
-distclean-libgomp25:
-	$(MAKE) -C libgomp25 distclean
+distclean-45libgomp:
+	$(MAKE) -C 45libgomp distclean
 
 #===============================================================================
 # LibGOMP

@@ -1,4 +1,4 @@
-#include "config/nanvix/workaround.h"
+#include "config/workaround.h"
 #include <nanvix/sys/mutex.h>
 
 

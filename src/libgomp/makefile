@@ -1,3 +1,4 @@
+
 #
 # MIT License
 #
@@ -27,13 +28,14 @@
 #===============================================================================
 
 # Binary
-ARCHIVE = $(LIBGOMP)
+ARCHIVE = $(LIBGOMP25)
 
 # C Source Files
-#SRC = $(wildcard *.c)
-SRC = workaround.c config/mutex.c config/bar.c config/lock.c config/sem.c \
-	  config/bar.c config/ptrlock.c config/proc.c error.c  alloc.c \
-	  priority_queue.c icv.c task.c libgomp.c work.c affinity.c team.c parallel.c \
+SRC = $(wildcard *.c) config/nanvix/sem.c config/nanvix/mutex.c \
+	  config/nanvix/bar.c  config/nanvix/proc.c
+#SRC = workaround.c config/nanvix/sem.c config/nanvix/mutex.c error.c team.c parallel.c
+	  
+	  
 #	  barrier.c
 #workaround.c error.c alloc.c libgomp.c config/proc.c config/sem.c config/mutex.c config/lock.c \
 	   config/bar.c splay-tree.c task.c priority_queue.c work.c team.c parallel.c\
