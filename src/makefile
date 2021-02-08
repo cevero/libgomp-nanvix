@@ -23,13 +23,13 @@
 #
 
 # Builds Everything
-all: all-libgomp all-45libgomp  all-test
+all: all-libgomp   all-test #all-45libgomp
 
 # Cleans Build Objects
-clean: clean-libgomp clean-45libgomp  clean-test
+clean: clean-libgomp clean-test #clean-45libgomp 
 
 # Cleans Everything
-distclean: distclean-libgomp distclean-45libgomp  distclean-test
+distclean: distclean-libgomp  distclean-test #distclean-45libgomp
 
 #===============================================================================
 # LibGOMP 2.5
