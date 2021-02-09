@@ -56,9 +56,10 @@ gomp_resolve_num_threads (unsigned specified)
      that we launch.  */
   if (gomp_dyn_var)
     {
-      unsigned dyn = gomp_dynamic_max_threads ();
-      if (dyn < specified)
-    return dyn;
+        uprintf("not dynamic threads by now\n");
+//      unsigned dyn = gomp_dynamic_max_threads ();
+//      if (dyn < specified)
+//    return dyn;
     }
 
   return specified;

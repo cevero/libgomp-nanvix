@@ -101,6 +101,7 @@
 
 /* Define to 1 if the target supports __sync_*_compare_and_swap */
 #define HAVE_SYNC_BUILTINS 1
+#undef HAVE_SYNC_BUILTINS
 
 /* Define to 1 if you have the <sys/loadavg.h> header file. */
 /* #undef HAVE_SYS_LOADAVG_H */

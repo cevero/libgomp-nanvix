@@ -68,7 +68,7 @@ int __main2(int argc, const char *argv[])
     {
 
         omp_set_num_threads(2);
-        uprintf("Hello world from thread %d of %d procs= %d\n",omp_get_thread_num(),omp_get_num_threads(),omp_get_num_procs());
+        uprintf("Hello world from thread %d of %d \n",omp_get_thread_num(),omp_get_num_threads());
 //	#pragma omp for
 //    for(int i=0;i<50;i++)
 //        uprintf("Hello world form thread %d it = %d\n",omp_get_thread_num(),i);
