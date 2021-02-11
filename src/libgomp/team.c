@@ -50,7 +50,8 @@ static gomp_barrier_t gomp_threads_dock;
 #ifdef HAVE_TLS
 __thread struct gomp_thread gomp_tls_data;
 #else
-pthread_key_t gomp_tls_key;
+//pthread_key_t gomp_tls_key;
+kthread_t gomp_tls_key;
 #endif
 
 

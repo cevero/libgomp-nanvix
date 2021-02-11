@@ -40,7 +40,8 @@
 void*
 Hello(void * index){
     int pid;
-    pid = (int)((intptr_t)index);
+    //pid = (int)((intptr_t)index);
+    pid = kthread_self();
 uprintf("Hello from thread%d\n",pid);
 
 }
@@ -49,19 +50,19 @@ int __main2(int argc, const char *argv[])
 	((void) argc);
 	((void) argv);
 
-//	kthread_t tid[NTHREADS_MAX];
-//
-//    for (int i = 0; i < NTHREADS_MAX; i++)
-//        kthread_create(&tid[i],Hello,((void*) (void*)i));
-//
-//    for (int i = 0; i < NTHREADS_MAX; i++)
-//        kthread_join(tid[i],NULL);
-//
-//    int * a = umalloc(9*sizeof(int));
-//    for(int i=0;i<9;i++)
-//        a[i]=i;
-//
-//
+	kthread_t tid[NTHREADS_MAX];
+
+    for (int i = 0; i < NTHREADS_MAX; i++)
+        kthread_create(&tid[i],Hello,((void*) (void*)i));
+
+    for (int i = 0; i < NTHREADS_MAX; i++)
+        kthread_join(tid[i],NULL);
+
+    int * a = umalloc(9*sizeof(int));
+    for(int i=0;i<9;i++)
+        a[i]=i;
+
+
 
 //        uprintf("Hello world from thread %d of %d \n",omp_get_thread_num(),omp_get_num_threads());
 	#pragma omp parallel // num_threads(NTHREADS_MAX)// default(none)//  
@@ -69,9 +70,9 @@ int __main2(int argc, const char *argv[])
 
         omp_set_num_threads(2);
         uprintf("Hello world from thread %d of %d \n",omp_get_thread_num(),omp_get_num_threads());
-//	#pragma omp for
-//    for(int i=0;i<50;i++)
-//        uprintf("Hello world form thread %d it = %d\n",omp_get_thread_num(),i);
+	#pragma omp for
+    for(int i=0;i<5;i++)
+        uprintf("Hello world form thread %d it = %d\n",omp_get_thread_num(),i);
 
 
 //#pragma omp single

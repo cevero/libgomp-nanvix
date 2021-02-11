@@ -235,7 +235,8 @@ static inline struct gomp_thread *gomp_thread (void)
   return &gomp_tls_data;
 }
 #else
-extern pthread_key_t gomp_tls_key;
+extern kthread_t gomp_tls_key;
+//extern pthread_key_t gomp_tls_key;
 static inline struct gomp_thread *gomp_thread (void)
 {
   return pthread_getspecific (gomp_tls_key);

@@ -87,8 +87,8 @@ GOMP_parallel (void (*fn) (void *), void *data, unsigned num_threads,
   num_threads = gomp_resolve_num_threads (num_threads);
   gomp_team_start (fn, data, num_threads, NULL);
   fn (data);
-  //GOMP_parallel_end ();
-  gomp_team_end();
+  GOMP_parallel_end ();
+  //gomp_team_end();
 }
 
 
@@ -117,7 +117,8 @@ int
 omp_get_thread_num (void)
 {
     uprintf("function= %s file = %s\n",__func__,__FILE__);
-  return gomp_thread ()->ts.team_id;
+    return kthread_self();
+  //return gomp_thread ()->ts.team_id;
 }
 
 /* ??? This isn't right.  The definition of this function is false if any
