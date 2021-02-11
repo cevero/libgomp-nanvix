@@ -46,13 +46,13 @@ pthread_attr_t gomp_thread_attr;
 /* This barrier holds and releases threads waiting in gomp_threads.  */
 static gomp_barrier_t gomp_threads_dock;
 
-/* This is the libgomp per-thread data structure.  */
-#ifdef HAVE_TLS
-__thread struct gomp_thread gomp_tls_data;
-#else
-//pthread_key_t gomp_tls_key;
-kthread_t gomp_tls_key;
-#endif
+///* This is the libgomp per-thread data structure.  */
+//#ifdef HAVE_TLS
+//__thread struct gomp_thread gomp_tls_data;
+//#else
+////pthread_key_t gomp_tls_key;
+//kthread_t gomp_tls_key;
+//#endif
 
 
 /* This structure is used to communicate across pthread_create.  */
@@ -78,13 +78,13 @@ gomp_thread_start (void *xdata)
   void (*local_fn) (void *);
   void *local_data;
 
-#ifdef HAVE_TLS
-  thr = &gomp_tls_data;
-#else
-  struct gomp_thread local_thr;
-  thr = &local_thr;
-  pthread_setspecific (gomp_tls_key, thr);
-#endif
+//#ifdef HAVE_TLS
+//  thr = &gomp_tls_data;
+//#else
+//  struct gomp_thread local_thr;
+//  thr = &local_thr;
+//  pthread_setspecific (gomp_tls_key, thr);
+//#endif
   gomp_sem_init (&thr->release, 0);
 
   /* Extract what we need from data.  */
@@ -335,18 +335,18 @@ initialize_team (void)
     uprintf("function= %s file = %s\n",__func__,__FILE__);
   struct gomp_thread *thr;
 
-#ifndef HAVE_TLS
-  static struct gomp_thread initial_thread_tls_data;
-
-  uprintf("oi");
-  pthread_key_create (&gomp_tls_key, NULL);
-  pthread_setspecific (gomp_tls_key, &initial_thread_tls_data);
-#endif
-
-#ifdef HAVE_TLS
-  thr = &gomp_tls_data;
-#else
-  thr = &initial_thread_tls_data;
-#endif
+//#ifndef HAVE_TLS
+//  static struct gomp_thread initial_thread_tls_data;
+//
+//  uprintf("oi");
+//  pthread_key_create (&gomp_tls_key, NULL);
+//  pthread_setspecific (gomp_tls_key, &initial_thread_tls_data);
+//#endif
+//
+//#ifdef HAVE_TLS
+//  thr = &gomp_tls_data;
+//#else
+//  thr = &initial_thread_tls_data;
+//#endif
   gomp_sem_init (&thr->release, 0);
 }
