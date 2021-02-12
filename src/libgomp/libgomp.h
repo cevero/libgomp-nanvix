@@ -236,11 +236,20 @@ struct gomp_thread
 //}
 //#else
 //extern kthread_t gomp_tls_key;
-////extern pthread_key_t gomp_tls_key;
+//extern pthread_key_t gomp_tls_key;
+
+//struct parallel_data
+//{
+//  kthread_t key; 
+//  gomp_thread data;
+//}
+
 static inline struct gomp_thread *gomp_thread (void)
 {
 
-    return pthread_getspecific(kthread_self());
+//    return parallel_data[kthread_self()];
+  return pthread_getspecific(kthread_self());
+
   //return pthread_getspecific (gomp_tls_key);
 }
 //#endif
