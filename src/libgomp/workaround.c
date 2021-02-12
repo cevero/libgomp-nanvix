@@ -40,6 +40,11 @@ int pthread_attr_setstacksize (pthread_attr_t *__attr,size_t  stacksize)
     uprintf("%s \n",__func__);
     return 0;
 }
+int  pthread_key_create (pthread_key_t * key,void (*destructor)(void*))
+{
+    *key=kthread_self();
+    return 0;
+}
 extern int pthread_cond_init (pthread_cond_t *__restrict __cond,
 			      const pthread_condattr_t *__restrict __cond_attr)
 {

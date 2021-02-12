@@ -228,15 +228,15 @@ struct gomp_thread
 
 /* ... and here is that TLS data.  */
 
-//#ifdef HAVE_TLS
-//extern __thread struct gomp_thread gomp_tls_data;
-//static inline struct gomp_thread *gomp_thread (void)
-//{
-//  return &gomp_tls_data;
-//}
-//#else
+#ifdef HAVE_TLS
+extern __thread struct gomp_thread gomp_tls_data;
+static inline struct gomp_thread *gomp_thread (void)
+{
+  return &gomp_tls_data;
+}
+#else
 //extern kthread_t gomp_tls_key;
-//extern pthread_key_t gomp_tls_key;
+extern pthread_key_t gomp_tls_key;
 
 //struct parallel_data
 //{
@@ -248,11 +248,11 @@ static inline struct gomp_thread *gomp_thread (void)
 {
 
 //    return parallel_data[kthread_self()];
-  return pthread_getspecific(kthread_self());
+  //return pthread_getspecific(kthread_self());
 
-  //return pthread_getspecific (gomp_tls_key);
+  return pthread_getspecific (gomp_tls_key);
 }
-//#endif
+#endif
 
 /* These are the OpenMP 2.5 internal control variables described in
    section 2.3.  At least those that correspond to environment variables.  */

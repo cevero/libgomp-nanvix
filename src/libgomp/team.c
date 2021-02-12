@@ -71,7 +71,7 @@ struct gomp_thread_start_data
 static void *
 gomp_thread_start (void *xdata)
 {
-    uprintf("function= %s file = %s\n",__func__,__FILE__);
+    //uprintf("function= %s file = %s\n",__func__,__FILE__);
   struct gomp_thread_start_data *data = (struct gomp_thread_start_data*) xdata;
   struct gomp_thread *thr;
   void (*local_fn) (void *);
@@ -130,7 +130,7 @@ gomp_thread_start (void *xdata)
       while (local_fn);
     }
 
-    uprintf("function= %s file = %s\n",__func__,__FILE__);
+    //uprintf("function= %s file = %s\n",__func__,__FILE__);
   return NULL;
 }
 
@@ -140,7 +140,7 @@ gomp_thread_start (void *xdata)
 static struct gomp_team *
 new_team (unsigned nthreads, struct gomp_work_share *work_share)
 {
-    uprintf("function= %s file = %s\n",__func__,__FILE__);
+    //uprintf("function= %s file = %s\n",__func__,__FILE__);
   struct gomp_team *team;
   size_t size;
 
@@ -169,7 +169,7 @@ new_team (unsigned nthreads, struct gomp_work_share *work_share)
 static void
 free_team (struct gomp_team *team)
 {
-    uprintf("function= %s file = %s\n",__func__,__FILE__);
+    //uprintf("function= %s file = %s\n",__func__,__FILE__);
   ufree (team->work_shares);
   gomp_mutex_destroy (&team->work_share_lock);
   gomp_barrier_destroy (&team->barrier);
@@ -184,7 +184,7 @@ void
 gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
 		 struct gomp_work_share *work_share)
 {
-    uprintf("function= %s file = %s\n",__func__,__FILE__);
+    //uprintf("function= %s file = %s\n",__func__,__FILE__);
   struct gomp_thread_start_data *start_data;
   struct gomp_thread *thr, *nthr;
   struct gomp_team *team;
@@ -314,7 +314,7 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
 void
 gomp_team_end (void)
 {
-    uprintf("function= %s file = %s\n",__func__,__FILE__);
+    //uprintf("function= %s file = %s\n",__func__,__FILE__);
   struct gomp_thread *thr = gomp_thread ();
   struct gomp_team *team = thr->ts.team;
 
@@ -331,7 +331,7 @@ gomp_team_end (void)
 static void __attribute__((constructor))
 initialize_team (void)
 {
-    uprintf("function= %s file = %s\n",__func__,__FILE__);
+    //uprintf("function= %s file = %s\n",__func__,__FILE__);
   struct gomp_thread *thr;
 
 #ifndef HAVE_TLS

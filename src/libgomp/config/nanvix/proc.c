@@ -48,10 +48,12 @@
 void
 gomp_init_num_threads (void)
 {
+    
+    uprintf("%s \n",__func__);
 #ifdef _SC_NPROCESSORS_ONLN
   gomp_nthreads_var = sysconf (_SC_NPROCESSORS_ONLN);
 #else
-    //gomp_nthreads_var = gomp_nthreads_var;
+    gomp_nthreads_var = THREAD_MAX;
 #endif
 }
 
@@ -65,6 +67,7 @@ gomp_init_num_threads (void)
 unsigned
 gomp_dynamic_max_threads (void)
 {
+    uprintf("%s \n",__func__);
   unsigned n_onln, loadavg;
 
 #ifdef _SC_NPROCESSORS_ONLN
@@ -96,6 +99,7 @@ gomp_dynamic_max_threads (void)
 int
 omp_get_num_procs (void)
 {
+    uprintf("%s \n",__func__);
 #ifdef _SC_NPROCESSORS_ONLN
   return sysconf (_SC_NPROCESSORS_ONLN);
 #else

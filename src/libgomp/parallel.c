@@ -116,9 +116,9 @@ omp_get_max_threads (void)
 int
 omp_get_thread_num (void)
 {
-    uprintf("function= %s file = %s\n",__func__,__FILE__);
-    return kthread_self();
-  //return gomp_thread ()->ts.team_id;
+   // uprintf("function= %s file = %s\n",__func__,__FILE__);
+  //  return kthread_self();
+  return gomp_thread ()->ts.team_id;
 }
 
 /* ??? This isn't right.  The definition of this function is false if any

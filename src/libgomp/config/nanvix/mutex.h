@@ -41,21 +41,25 @@ typedef nanvix_mutex_t gomp_mutex_t;
 
 static inline void gomp_mutex_init (gomp_mutex_t *mutex)
 {
+//    uprintf("function= %s file = %s\n",__func__,__FILE__);
   nanvix_mutex_init (mutex);
 }
 
 static inline void gomp_mutex_lock (gomp_mutex_t *mutex)
 {
+ //   uprintf("function= %s file = %s\n",__func__,__FILE__);
   nanvix_mutex_lock (mutex);
 }
 
 static inline void gomp_mutex_unlock (gomp_mutex_t *mutex)
 {
+  //  uprintf("function= %s file = %s\n",__func__,__FILE__);
    nanvix_mutex_unlock (mutex);
 }
 
 static inline void gomp_mutex_destroy (gomp_mutex_t *mutex)
 {
+   // uprintf("function= %s file = %s\n",__func__,__FILE__);
   nanvix_mutex_destroy (mutex);
 }
 
