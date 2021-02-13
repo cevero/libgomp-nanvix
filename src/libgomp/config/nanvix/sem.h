@@ -79,6 +79,7 @@ typedef sem_t gomp_sem_t;
 
 static inline void gomp_sem_init (struct nanvix_semaphore *sem, int value)
 {
+    uprintf("%s \n",__func__);
   nanvix_semaphore_init (sem,  value);
 }
 
@@ -87,12 +88,13 @@ extern void gomp_sem_wait (struct nanvix_semaphore *sem);
 static inline void gomp_sem_post (struct nanvix_semaphore *sem)
 {
     nanvix_semaphore_down (sem);
+    uprintf("%s \n",__func__);
 }
 
 static inline void gomp_sem_destroy (struct nanvix_semaphore *sem)
 {
   //sem_destroy (sem);
-    uprintf("%s %d\n",__func__);
+    uprintf("%s \n",__func__);
 }
 #endif /* doesn't HAVE_BROKEN_POSIX_SEMAPHORES  */
 #endif /* GOMP_SEM_H  */

@@ -8,16 +8,16 @@ void* tls[THREAD_MAX] = {NULL,};
 
 void* pthread_getspecific (pthread_key_t key)
 {
-    uprintf("%s %d\n",__func__,key);
+//    uprintf("%s %d\n",__func__,key);
     
     return tls[key];
 }
 
 void* pthread_setspecific (pthread_key_t key,const void *__pointer)
 {
-    uprintf("%s %d\n",__func__,key);
+ //   uprintf("%s %d\n",__func__,key);
     tls[key] = &__pointer;
-;
+
 }
 extern int pthread_attr_destroy (pthread_attr_t *__attr)
 {
@@ -95,6 +95,7 @@ int nanvix_cond_wait(pthread_cond_t *cond, nanvix_mutex_t *mutex)
 
 int nanvix_cond_signal(pthread_cond_t *__cond)
 {
+    
     (void) __cond;
     uprintf("%s \n",__func__);
     return 0;

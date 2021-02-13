@@ -75,7 +75,7 @@ gomp_barrier_reinit (gomp_barrier_t *bar, unsigned count)
 void
 gomp_barrier_wait_end (gomp_barrier_t *bar, bool last)
 {
-   // uprintf("function= %s file = %s\n",__func__,__FILE__);
+    uprintf("function= %s file = %s\n",__func__,__FILE__);
   unsigned int n;
 
   if (last)
@@ -98,13 +98,15 @@ gomp_barrier_wait_end (gomp_barrier_t *bar, bool last)
 #ifdef HAVE_SYNC_BUILTINS
       n = __sync_add_and_fetch (&bar->arrived, -1);
 #else
+      //uprintf("cheguei ate aqui\n");
       gomp_mutex_lock (&bar->mutex2);
       n = --bar->arrived;
       gomp_mutex_unlock (&bar->mutex2);
 #endif
 
+      uprintf("n= %d\n",n);
       if (n == 0)
-	gomp_sem_post (&bar->sem2);
+        gomp_sem_post (&bar->sem2);
     }
 }
 

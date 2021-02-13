@@ -42,7 +42,7 @@
 
 void gomp_sem_init (struct nanvix_semaphore *sem, int value)
 {
-//    uprintf("function= %s file = %s\n",__func__,__FILE__);
+    uprintf("function= %s file = %s\n",__func__,__FILE__);
   int ret;
 
   ret = nanvix_mutex_init (&sem->mutex, NULL);
@@ -58,7 +58,7 @@ void gomp_sem_init (struct nanvix_semaphore *sem, int value)
 
 void gomp_sem_wait (struct nanvix_semaphore *sem)
 {
-    //uprintf("function= %s file = %s\n",__func__,__FILE__);
+    uprintf("function= %s file = %s\n",__func__,__FILE__);
   int ret;
 
   ret = nanvix_mutex_lock (&sem->mutex);
@@ -89,6 +89,8 @@ void gomp_sem_wait (struct nanvix_semaphore *sem)
 
 void gomp_sem_post (struct nanvix_semaphore *sem)
 {
+      uprintf("REINALDO\n");
+
     //uprintf("function= %s file = %s\n",__func__,__FILE__);
   int ret;
 
@@ -109,7 +111,7 @@ void gomp_sem_post (struct nanvix_semaphore *sem)
 
 void gomp_sem_destroy (struct nanvix_semaphore *sem)
 {
-    //uprintf("function= %s file = %s\n",__func__,__FILE__);
+    uprintf("function= %s file = %s\n",__func__,__FILE__);
   int ret;
 
   ret = nanvix_mutex_destroy (&sem->mutex);
@@ -124,7 +126,7 @@ void gomp_sem_destroy (struct nanvix_semaphore *sem)
 void
 gomp_sem_wait (struct nanvix_semaphore *sem)
 {
-    //uprintf("function= %s file = %s\n",__func__,__FILE__);
+    uprintf("function= %s file = %s\n",__func__,__FILE__);
   /* With POSIX, the wait can be canceled by signals.  We don't want that.
      It is expected that the return value here is -1 and errno is EINTR.  */
 //  while (sem_wait (sem) != 0)

@@ -98,7 +98,7 @@ GOMP_parallel (void (*fn) (void *), void *data, unsigned num_threads,
 int
 omp_get_num_threads (void)
 {
-    uprintf("function= %s file = %s\n",__func__,__FILE__);
+    uprintf("function= %s ts.team: \n",__func__,gomp_thread ()->ts.team);
   struct gomp_team *team = gomp_thread ()->ts.team;
   return team ? team->nthreads : 1;
 }
