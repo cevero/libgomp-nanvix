@@ -38,7 +38,7 @@
 unsigned
 gomp_resolve_num_threads (unsigned specified)
 {
-    uprintf("function= %s file = %s\n",__func__,__FILE__);
+//    uprintf("function= %s file = %s\n",__func__,__FILE__);
   /* Early exit for false IF condition or degenerate NUM_THREADS.  */
   if (specified == 1)
     return 1;
@@ -56,7 +56,7 @@ gomp_resolve_num_threads (unsigned specified)
      that we launch.  */
   if (gomp_dyn_var)
     {
-        uprintf("not dynamic threads by now\n");
+        //uprintf("not dynamic threads by now\n");
 //      unsigned dyn = gomp_dynamic_max_threads ();
 //      if (dyn < specified)
 //    return dyn;
@@ -68,7 +68,7 @@ gomp_resolve_num_threads (unsigned specified)
 void
 GOMP_parallel_start (void (*fn) (void *), void *data, unsigned num_threads)
 {
-    uprintf("function= %s file = %s\n",__func__,__FILE__);
+    //uprintf("function= %s file = %s\n",__func__,__FILE__);
   num_threads = gomp_resolve_num_threads (num_threads);
   gomp_team_start (fn, data, num_threads, NULL);
 }
@@ -83,7 +83,7 @@ void
 GOMP_parallel (void (*fn) (void *), void *data, unsigned num_threads,
 	       unsigned int flags)
 {
-  uprintf("function= %s file = %s\n",__func__,__FILE__);
+  //uprintf("function= %s file = %s\n",__func__,__FILE__);
   num_threads = gomp_resolve_num_threads (num_threads);
   gomp_team_start (fn, data, num_threads, NULL);
   fn (data);
@@ -98,8 +98,9 @@ GOMP_parallel (void (*fn) (void *), void *data, unsigned num_threads,
 int
 omp_get_num_threads (void)
 {
-    uprintf("function= %s ts.team: \n",__func__,gomp_thread ()->ts.team);
+    //uprintf("function= %s ts.team: \n",__func__,gomp_thread ()->ts.team);
   struct gomp_team *team = gomp_thread ()->ts.team;
+    uprintf("function= %s ts.team: \n",__func__,gomp_thread ()->ts.team);
   return team ? team->nthreads : 1;
 }
 
@@ -109,7 +110,7 @@ omp_get_num_threads (void)
 int
 omp_get_max_threads (void)
 {
-    uprintf("function= %s file = %s\n",__func__,__FILE__);
+    //uprintf("function= %s file = %s\n",__func__,__FILE__);
   return gomp_resolve_num_threads (0);
 }
 
@@ -127,7 +128,7 @@ omp_get_thread_num (void)
 
 int omp_in_parallel (void)
 {
-    uprintf("function= %s file = %s\n",__func__,__FILE__);
+    //uprintf("function= %s file = %s\n",__func__,__FILE__);
   struct gomp_team *team = gomp_thread ()->ts.team;
 
   while (team)

@@ -202,11 +202,11 @@ struct gomp_team
   /* This semaphore should be used by the master thread instead of its
      "native" semaphore in the thread structure.  Required for nested
      parallels, as the master is a member of two teams.  */
-  struct nanvix_semaphore master_release;
+  gomp_sem_t master_release;
 
   /* This array contains pointers to the release semaphore of the threads
      in the team.  */
-  struct nanvix_semaphore *ordered_release[];
+  gomp_sem_t *ordered_release[];
 };
 
 /* This structure contains all data that is private to libgomp and is
@@ -223,7 +223,7 @@ struct gomp_thread
   struct gomp_team_state ts;
 
   /* This semaphore is used for ordered loops.  */
-  struct nanvix_semaphore release;
+  gomp_sem_t release;
 };
 
 /* ... and here is that TLS data.  */

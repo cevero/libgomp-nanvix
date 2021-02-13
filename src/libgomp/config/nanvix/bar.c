@@ -43,6 +43,7 @@ gomp_barrier_init (gomp_barrier_t *bar, unsigned count)
 #endif
   gomp_sem_init (&bar->sem1, 0);
   gomp_sem_init (&bar->sem2, 0);
+
   bar->total = count;
   bar->arrived = 0;
 }
@@ -75,7 +76,7 @@ gomp_barrier_reinit (gomp_barrier_t *bar, unsigned count)
 void
 gomp_barrier_wait_end (gomp_barrier_t *bar, bool last)
 {
-    uprintf("function= %s file = %s\n",__func__,__FILE__);
+    //uprintf("function= %s file = %s\n",__func__,__FILE__);
   unsigned int n;
 
   if (last)
@@ -104,7 +105,7 @@ gomp_barrier_wait_end (gomp_barrier_t *bar, bool last)
       gomp_mutex_unlock (&bar->mutex2);
 #endif
 
-      uprintf("n= %d\n",n);
+      //uprintf("n= %d\n",n);
       if (n == 0)
         gomp_sem_post (&bar->sem2);
     }

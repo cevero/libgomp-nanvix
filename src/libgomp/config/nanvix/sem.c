@@ -35,30 +35,30 @@
 
 #include "../../libgomp.h"
 
-#ifdef HAVE_BROKEN_POSIX_SEMAPHORES
+//#ifdef HAVE_BROKEN_POSIX_SEMAPHORES
 //#include <stdlib.h>
 #include <nanvix/ulib.h>
-//#include "sem.h"
+#include "sem.h"
 
-void gomp_sem_init (struct nanvix_semaphore *sem, int value)
+void gomp_sem_init (gomp_sem_t *sem, int value)
 {
-    uprintf("function= %s file = %s\n",__func__,__FILE__);
+    //uprintf("function= %s file = %s\n",__func__,__FILE__);
   int ret;
 
-  ret = nanvix_mutex_init (&sem->mutex, NULL);
+  ret = nanvix_mutex_init (&sem->mutex);
+    //uprintf("function= %s file = %s REINALDO\n",__func__,__FILE__);
   if (ret)
     return;
 
-  ret = nanvix_cond_init (&sem->cond, NULL);
+  ret = pthread_cond_init (&sem->cond, NULL);
   if (ret)
     return;
 
   sem->value = value;
 }
 
-void gomp_sem_wait (struct nanvix_semaphore *sem)
+void gomp_sem_wait (gomp_sem_t *sem)
 {
-    uprintf("function= %s file = %s\n",__func__,__FILE__);
   int ret;
 
   ret = nanvix_mutex_lock (&sem->mutex);
@@ -87,9 +87,9 @@ void gomp_sem_wait (struct nanvix_semaphore *sem)
   return;
 }
 
-void gomp_sem_post (struct nanvix_semaphore *sem)
+void gomp_sem_post (gomp_sem_t *sem)
 {
-      uprintf("REINALDO\n");
+      //uprintf("REINALDO\n");
 
     //uprintf("function= %s file = %s\n",__func__,__FILE__);
   int ret;
@@ -109,9 +109,9 @@ void gomp_sem_post (struct nanvix_semaphore *sem)
   return;
 }
 
-void gomp_sem_destroy (struct nanvix_semaphore *sem)
+void gomp_sem_destroy (gomp_sem_t *sem)
 {
-    uprintf("function= %s file = %s\n",__func__,__FILE__);
+    //uprintf("function= %s file = %s\n",__func__,__FILE__);
   int ret;
 
   ret = nanvix_mutex_destroy (&sem->mutex);
@@ -122,14 +122,14 @@ void gomp_sem_destroy (struct nanvix_semaphore *sem)
 
   return;
 }
-#else /* HAVE_BROKEN_POSIX_SEMAPHORES  */
-void
-gomp_sem_wait (struct nanvix_semaphore *sem)
-{
-    uprintf("function= %s file = %s\n",__func__,__FILE__);
-  /* With POSIX, the wait can be canceled by signals.  We don't want that.
-     It is expected that the return value here is -1 and errno is EINTR.  */
-//  while (sem_wait (sem) != 0)
-//    continue;
-}
-#endif
+//#else /* HAVE_BROKEN_POSIX_SEMAPHORES  */
+//void
+//gomp_sem_wait (gomp_sem_t *sem)
+//{
+//    uprintf("function= %s file = %s\n",__func__,__FILE__);
+//  /* With POSIX, the wait can be canceled by signals.  We don't want that.
+//     It is expected that the return value here is -1 and errno is EINTR.  */
+////  while (sem_wait (sem) != 0)
+////    continue;
+//}
+//#endif

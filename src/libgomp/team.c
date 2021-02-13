@@ -126,7 +126,7 @@ gomp_thread_start (void *xdata)
 
 	  local_fn = thr->fn;
 	  local_data = thr->data;
-      uprintf("completei uma rodada\n");
+      //uprintf("completei uma rodada\n");
 	}
       while (local_fn);
     }

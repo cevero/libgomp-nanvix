@@ -78,8 +78,8 @@ int __main2(int argc, const char *argv[])
 //#pragma omp single
         
     }
-    uprintf("sai da zona paralela\n");
 
+    uprintf("SAI DA ZONA PARALELA\n");
     
 
     //ufree(a);

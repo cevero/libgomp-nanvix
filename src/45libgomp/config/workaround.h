@@ -74,6 +74,7 @@ struct __pthread_cond_s
   unsigned int __wrefs;
   unsigned int __g_signals[2];
 };
+
 typedef union
 {
   struct __pthread_cond_s __data;

@@ -41,8 +41,8 @@ typedef struct
 #ifndef HAVE_SYNC_BUILTINS
   gomp_mutex_t mutex2;
 #endif
-  struct nanvix_semaphore sem1;
-  struct nanvix_semaphore sem2;
+  gomp_sem_t sem1;
+  gomp_sem_t sem2;
   unsigned total;
   unsigned arrived;
 } gomp_barrier_t;
