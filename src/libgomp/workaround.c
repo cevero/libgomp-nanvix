@@ -1,22 +1,22 @@
 #include "config/nanvix/workaround.h"
 #include <nanvix/sys/mutex.h>
-
+#include "libgomp.h"
 
 
 ///// pthread functions ///////
-void* tls[THREAD_MAX] = {NULL,};
 
 void* pthread_getspecific (pthread_key_t key)
 {
-//    uprintf("%s %d\n",__func__,key);
+//    uprintf("%s key is:  %d\n",__func__,tls[key]);
     
     return tls[key];
 }
 
-void* pthread_setspecific (pthread_key_t key,const void *__pointer)
+void* pthread_setspecific (pthread_key_t key, void *__pointer)
 {
  //   uprintf("%s %d\n",__func__,key);
-    tls[key] = &__pointer;
+    tls[key]->key = (int)key;
+//    tls[key]->data = (struct gomp_thread)__pointer;
 
 }
 extern int pthread_attr_destroy (pthread_attr_t *__attr)
@@ -42,7 +42,7 @@ int pthread_attr_setstacksize (pthread_attr_t *__attr,size_t  stacksize)
 }
 int  pthread_key_create (pthread_key_t * key,void (*destructor)(void*))
 {
-    *key=kthread_self();
+//    tls[key]->key=(int)key;
     return 0;
 }
 extern int pthread_cond_init (pthread_cond_t *__restrict __cond,

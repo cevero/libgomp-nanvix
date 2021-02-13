@@ -28,6 +28,15 @@ typedef unsigned int pthread_key_t;
 #endif
 #define MEMMODEL_SYNC (1<<15)
 
+
+//struct tls_data
+//{
+//    kthread_t key;
+//    gomp_thread data;
+//}
+//tls_data* tls[THREAD_MAX];
+
+
 /* Memory model types for the __atomic* builtins.
    This must match the order in libstdc++-v3/include/bits/atomic_base.h.  */
 enum memmodel
@@ -128,7 +137,7 @@ extern int pthread_cond_init (pthread_cond_t *__restrict __cond,
 
 extern void* pthread_getspecific (pthread_key_t key);
 
-extern void* pthread_setspecific (pthread_key_t key,const void *__pointer);
+extern void* pthread_setspecific (pthread_key_t key, void *__pointer);
 
 extern int pthread_key_create (pthread_key_t *__key,
 			       void (*__destr_function) (void *));

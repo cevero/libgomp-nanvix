@@ -102,7 +102,7 @@ gomp_thread_start (void *xdata)
   else
     {
       gomp_threads[thr->ts.team_id] = thr;
-
+//uprintf("id = %d\n",thr->ts.team_id);
       gomp_barrier_wait (&gomp_threads_dock);
       do
 	{
@@ -291,6 +291,7 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
       start_data->fn_data = data;
       start_data->nested = nested;
 
+      tls[i]->key= i;
       err = kthread_create (&pt,
 			    gomp_thread_start, (void*) (void*)start_data);
       if (err != 0)
@@ -315,10 +316,10 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
 void
 gomp_team_end (void)
 {
-    //uprintf("function= %s file = %s\n",__func__,__FILE__);
   struct gomp_thread *thr = gomp_thread ();
   struct gomp_team *team = thr->ts.team;
 
+    uprintf("function= %s file = %s\n",__func__,__FILE__);
   gomp_barrier_wait (&team->barrier);
 
   thr->ts = team->prev_ts;

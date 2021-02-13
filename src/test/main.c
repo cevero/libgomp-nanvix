@@ -69,7 +69,8 @@ int __main2(int argc, const char *argv[])
     {
 
  //       omp_set_num_threads(NTHREADS_MAX);
-        uprintf("Hello world from thread %d of %d \n",omp_get_thread_num(),omp_get_num_threads());
+        uprintf("Hello world from thread %d of %d \n",kthread_self(),omp_get_num_threads());
+        //uprintf("Hello world from thread %d of %d \n",omp_get_thread_num(),omp_get_num_threads());
 //	#pragma omp for
 //    for(int i=0;i<5;i++)
 //        uprintf("Hello world form thread %d it = %d\n",omp_get_thread_num(),i);
