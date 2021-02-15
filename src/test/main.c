@@ -26,7 +26,7 @@
 #include <nanvix/sys/thread.h>
 #include "../libgomp/omp.h"
 
-#define NTHREADS_MAX  (THREAD_MAX - 1)
+#define NTHREADS_MAX  THREAD_MAX 
 /**
  * @brief Test Server
  */
@@ -49,6 +49,7 @@ int __main2(int argc, const char *argv[])
 {
 	((void) argc);
 	((void) argv);
+    int a1=0,a2=0;
 
 //	kthread_t tid[NTHREADS_MAX];
 //
@@ -58,20 +59,23 @@ int __main2(int argc, const char *argv[])
 //    for (int i = 0; i < NTHREADS_MAX; i++)
 //        kthread_join(tid[i],NULL);
 //
-//    int * a = umalloc(9*sizeof(int));
-//    for(int i=0;i<9;i++)
-//        a[i]=i;
+    int * a = umalloc(9*sizeof(int));
+    for(int i=0;i<9;i++)
+        a[i]=i;
 //
 
 
 //        uprintf("Hello world from thread %d of %d \n",omp_get_thread_num(),omp_get_num_threads());
-	#pragma omp parallel  num_threads(NTHREADS_MAX)// default(none)//  
+	#pragma omp parallel  num_threads(NTHREADS_MAX) default(none) shared(a,a1) private(a2)
     {
+        a[omp_get_thread_num()] = 2*omp_get_thread_num();
+        a1 += 3;
+        a2=4;
 
- //       omp_set_num_threads(NTHREADS_MAX);
-        uprintf("Hello world from thread %d of %d \n",kthread_self(),omp_get_num_threads());
+//        omp_set_num_threads(2);
+        //uprintf("Hello world from thread %d of %d \n",kthread_self(),omp_get_num_threads());
 
-        //uprintf("Hello world from thread %d of %d \n",omp_get_thread_num(),omp_get_num_threads());
+        uprintf("Hello world from thread %d of %d \n",omp_get_thread_num(),omp_get_num_threads());
 //	#pragma omp for
 //    for(int i=0;i<9;i++)
 //        uprintf("Hello world form thread %d it = %d\n",kthread_self(),i);
