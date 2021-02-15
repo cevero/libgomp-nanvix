@@ -86,12 +86,12 @@ void
 GOMP_parallel (void (*fn) (void *), void *data, unsigned num_threads,
 	       unsigned int flags)
 {
-  //uprintf("function= %s file = %s\n",__func__,__FILE__);
   num_threads = gomp_resolve_num_threads (num_threads);
   ___max_threads_gomp = num_threads;
   gomp_team_start (fn, data, num_threads, NULL);
   fn (data);
   GOMP_parallel_end ();
+  uprintf("nthreads = %d",gomp_nthreads_var);
   //gomp_team_end();
 }
 

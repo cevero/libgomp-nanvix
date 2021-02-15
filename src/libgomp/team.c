@@ -71,7 +71,6 @@ struct gomp_thread_start_data
 static void *
 gomp_thread_start (void *xdata)
 {
-    //uprintf("function= %s file = %s\n",__func__,__FILE__);
   struct gomp_thread_start_data *data = (struct gomp_thread_start_data*) xdata;
   struct gomp_thread *thr;
   void (*local_fn) (void *);
@@ -185,6 +184,7 @@ void
 gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
 		 struct gomp_work_share *work_share)
 {
+    uprintf("function= %s file = %s\n",__func__,__FILE__);
     //uprintf("function= %s file = %s\n",__func__,__FILE__);
   struct gomp_thread_start_data *start_data;
   struct gomp_thread *thr, *nthr;
@@ -316,6 +316,7 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
 void
 gomp_team_end (void)
 {
+    uprintf("function= %s file = %s\n",__func__,__FILE__);
   struct gomp_thread *thr = gomp_thread ();
   struct gomp_team *team = thr->ts.team;
 

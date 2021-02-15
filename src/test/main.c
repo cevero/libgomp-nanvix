@@ -49,7 +49,7 @@ int __main2(int argc, const char *argv[])
 {
 	((void) argc);
 	((void) argv);
-    int a1=0,a2=0;
+    int a1=1,a2=0;
 
 //	kthread_t tid[NTHREADS_MAX];
 //
@@ -66,16 +66,18 @@ int __main2(int argc, const char *argv[])
 
 
 //        uprintf("Hello world from thread %d of %d \n",omp_get_thread_num(),omp_get_num_threads());
-	#pragma omp parallel  num_threads(NTHREADS_MAX) default(none) shared(a,a1) private(a2)
+	#pragma omp parallel  num_threads(NTHREADS_MAX) default(none) shared(a,a1) firstprivate(a2)
     {
-        a[omp_get_thread_num()] = 2*omp_get_thread_num();
-        a1 += 3;
-        a2=4;
+        if(omp_get_thread_num()%2)
+        {
+            a2+=omp_get_thread_num();
+        }
+//        uprintf("total = %d",gomp_nthreads_var);
 
 //        omp_set_num_threads(2);
         //uprintf("Hello world from thread %d of %d \n",kthread_self(),omp_get_num_threads());
 
-        uprintf("Hello world from thread %d of %d \n",omp_get_thread_num(),omp_get_num_threads());
+        uprintf("Hello world from thread %d of %d a2=%d \n",omp_get_thread_num(),omp_get_num_threads(),a2);
 //	#pragma omp for
 //    for(int i=0;i<9;i++)
 //        uprintf("Hello world form thread %d it = %d\n",kthread_self(),i);

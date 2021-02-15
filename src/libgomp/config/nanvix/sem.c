@@ -42,14 +42,15 @@
 
 void gomp_sem_init (gomp_sem_t *sem, int value)
 {
-    //uprintf("function= %s file = %s\n",__func__,__FILE__);
   int ret;
+
 
   ret = nanvix_mutex_init (&sem->mutex);
     //uprintf("function= %s file = %s REINALDO\n",__func__,__FILE__);
   if (ret)
     return;
 
+//    uprintf("function= %s file = %s value = %d thread= %d\n",__func__,__FILE__,value,kthread_self());
   ret = pthread_cond_init (&sem->cond, NULL);
   if (ret)
     return;
@@ -75,11 +76,10 @@ void gomp_sem_wait (gomp_sem_t *sem)
 
   while (sem->value <= 0)
     {
- //   uprintf("function= 2\n");
       ret = nanvix_cond_wait (&sem->cond, &sem->mutex);
       if (ret)
 	{
-    uprintf("function= 3\n");
+   // uprintf("function= 3\n");
 	  nanvix_mutex_unlock (&sem->mutex);
 	  return;
 	}
@@ -112,7 +112,7 @@ void gomp_sem_post (gomp_sem_t *sem)
 
 void gomp_sem_destroy (gomp_sem_t *sem)
 {
-    //uprintf("function= %s file = %s\n",__func__,__FILE__);
+    uprintf("function= %s file = %s\n",__func__,__FILE__);
   int ret;
 
   ret = nanvix_mutex_destroy (&sem->mutex);
