@@ -319,7 +319,7 @@ gomp_team_end (void)
   struct gomp_thread *thr = gomp_thread ();
   struct gomp_team *team = thr->ts.team;
 
-    uprintf("function= %s file = %s\n",__func__,__FILE__);
+  //  uprintf("Oi meu chapa\n");
   gomp_barrier_wait (&team->barrier);
 
   thr->ts = team->prev_ts;

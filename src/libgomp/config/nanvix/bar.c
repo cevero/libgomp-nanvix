@@ -99,7 +99,6 @@ gomp_barrier_wait_end (gomp_barrier_t *bar, bool last)
 #ifdef HAVE_SYNC_BUILTINS
       n = __sync_add_and_fetch (&bar->arrived, -1);
 #else
-      //uprintf("cheguei ate aqui\n");
       gomp_mutex_lock (&bar->mutex2);
       n = --bar->arrived;
       gomp_mutex_unlock (&bar->mutex2);

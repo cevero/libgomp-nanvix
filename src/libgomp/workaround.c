@@ -83,13 +83,17 @@ int pthread_key_delete (pthread_key_t __key)// __THROW;
 ////NANVIX DEFINITIONS//////
 
 
-inline int nanvix_mutex_destroy(nanvix_mutex_t *lock) {return 0;}
+inline int nanvix_mutex_destroy(nanvix_mutex_t *lock) {
+    return nanvix_mutex_unlock(lock);
+}
 
 int nanvix_cond_wait(pthread_cond_t *cond, nanvix_mutex_t *mutex)
 {
 
     (void) cond;
     (void) mutex;
+    if (!nanvix_mutex_unlock(mutex))
+        return 1;
     //uprintf("%s \n",__func__);
 }
 

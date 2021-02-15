@@ -100,7 +100,7 @@ omp_get_num_threads (void)
 {
     //uprintf("function= %s ts.team: \n",__func__,gomp_thread ()->ts.team);
   struct gomp_team *team = gomp_thread ()->ts.team;
-    uprintf("function= %s ts.team: \n",__func__,gomp_thread ()->ts.team);
+    //uprintf("function= %s ts.team: \n",__func__,gomp_thread ()->ts.team);
   return team ? team->nthreads : 1;
 }
 

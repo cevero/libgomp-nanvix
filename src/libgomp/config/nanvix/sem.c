@@ -67,6 +67,7 @@ void gomp_sem_wait (gomp_sem_t *sem)
 
   if (sem->value > 0)
     {
+//    uprintf("function= 1\n");
       sem->value--;
       ret = nanvix_mutex_unlock (&sem->mutex);
       return;
@@ -74,9 +75,11 @@ void gomp_sem_wait (gomp_sem_t *sem)
 
   while (sem->value <= 0)
     {
+ //   uprintf("function= 2\n");
       ret = nanvix_cond_wait (&sem->cond, &sem->mutex);
       if (ret)
 	{
+    uprintf("function= 3\n");
 	  nanvix_mutex_unlock (&sem->mutex);
 	  return;
 	}
@@ -89,9 +92,7 @@ void gomp_sem_wait (gomp_sem_t *sem)
 
 void gomp_sem_post (gomp_sem_t *sem)
 {
-      //uprintf("REINALDO\n");
 
-    //uprintf("function= %s file = %s\n",__func__,__FILE__);
   int ret;
 
   ret = nanvix_mutex_lock (&sem->mutex);
