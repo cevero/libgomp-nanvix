@@ -37,6 +37,7 @@
 
 //#ifdef HAVE_BROKEN_POSIX_SEMAPHORES
 //#include <stdlib.h>
+
 #include <nanvix/ulib.h>
 #include "sem.h"
 
@@ -49,7 +50,7 @@ void gomp_sem_init (gomp_sem_t *sem, int value)
   if (ret)
     return;
 
-  ret = pthread_cond_init (&sem->cond, NULL);
+  ret = nanvix_cond_init (&sem->cond);
   if (ret)
     return;
 
@@ -114,7 +115,7 @@ void gomp_sem_destroy (gomp_sem_t *sem)
   if (ret)
     return;
 
-  ret = nanvix_cond_destroy (&sem->cond);
+  ret = nanvix_condvar_destroy (&sem->cond);
 
   return;
 }

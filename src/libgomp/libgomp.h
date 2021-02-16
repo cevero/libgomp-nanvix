@@ -43,6 +43,7 @@
 //#include <pthread.h>
 
 #include <nanvix/ulib.h>
+#include <nanvix/sys/condvar.h>
 #include <posix/stdbool.h>
 
 #ifdef HAVE_ATTRIBUTE_VISIBILITY

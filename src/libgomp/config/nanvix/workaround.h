@@ -126,8 +126,6 @@ extern int pthread_attr_destroy (pthread_attr_t *__attr);
 extern int pthread_attr_getstacksize (pthread_attr_t *__attr,int * stacksize);
 extern int pthread_attr_setstacksize (pthread_attr_t *__attr,size_t  stacksize);
 
-extern int pthread_cond_init (pthread_cond_t *__restrict __cond,
-        const pthread_condattr_t *__restrict __cond_attr);
 
 extern void* pthread_getspecific (pthread_key_t key);
 
@@ -146,9 +144,6 @@ extern int pthread_detach (kthread_t __th);
 extern void fputs(char* str, void*);
 extern void fputc(char str, void*);
 extern int nanvix_mutex_destroy( nanvix_mutex_t *lock);
-extern int nanvix_cond_wait(pthread_cond_t *cond, nanvix_mutex_t *mutex);
-extern int nanvix_cond_signal(pthread_cond_t *__cond);
-extern int nanvix_cond_destroy(pthread_cond_t *__cond);
 extern int nanvix_mutex_trylock (nanvix_mutex_t *__mutex);
 extern int nanvix_mutexattr_init (pthread_mutexattr_t *__attr);
 extern int nanvix_mutexattr_destroy (pthread_mutexattr_t *__attr);

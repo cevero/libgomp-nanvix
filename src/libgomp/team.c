@@ -283,6 +283,8 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
       start_data->fn = fn;
       start_data->fn_data = data;
       start_data->nested = nested;
+      //this setspecific is a test by reinaldo
+      pthread_setspecific(pt,start_data);
 
       err = kthread_create (&pt,
 			    gomp_thread_start, (void*) (void*)start_data);

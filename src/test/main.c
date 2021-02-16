@@ -24,24 +24,19 @@
 
 #include <nanvix/ulib.h>
 #include <nanvix/sys/thread.h>
+#include <nanvix/sys/condvar.h>
 #include "../libgomp/omp.h"
 
-#define NTHREADS_MAX  THREAD_MAX 
+#define NTHREADS_MAX  (THREAD_MAX-1)
 /**
  * @brief Test Server
  */
-//void GOMP_parallel()
-//{
-//    
-//	uprintf("parallel region \n");
-//}
 
 
 void*
 Hello(void * index){
     int pid;
-    //pid = (int)((intptr_t)index);
-    pid = kthread_self();
+    pid = (int)((intptr_t)index);
 uprintf("Hello from thread%d\n",pid);
 
 }
@@ -51,48 +46,26 @@ int __main2(int argc, const char *argv[])
 	((void) argv);
     int a1=1,a2=0;
 
-//	kthread_t tid[NTHREADS_MAX];
-//
-//    for (int i = 0; i < NTHREADS_MAX; i++)
-//        kthread_create(&tid[i],Hello,((void*) (void*)i));
-//
-//    for (int i = 0; i < NTHREADS_MAX; i++)
-//        kthread_join(tid[i],NULL);
-//
+	struct nanvix_cond_var cond;
+    a1 = nanvix_cond_init(&cond);
+
     int * a = umalloc(9*sizeof(int));
     for(int i=0;i<9;i++)
         a[i]=i;
-//
 
 
-//        uprintf("Hello world from thread %d of %d \n",omp_get_thread_num(),omp_get_num_threads());
 	#pragma omp parallel  num_threads(NTHREADS_MAX) default(none) shared(a,a1) firstprivate(a2)
     {
-        if(omp_get_thread_num()%2)
-        {
-            a2+=omp_get_thread_num();
-        }
-//        uprintf("total = %d",gomp_nthreads_var);
-
-//        omp_set_num_threads(2);
-        //uprintf("Hello world from thread %d of %d \n",kthread_self(),omp_get_num_threads());
+        uprintf("Hello world from thread %d of %d \n",kthread_self(),omp_get_num_threads());
 
         uprintf("Hello world from thread %d of %d a2=%d \n",omp_get_thread_num(),omp_get_num_threads(),a2);
-//	#pragma omp for
-//    for(int i=0;i<9;i++)
-//        uprintf("Hello world form thread %d it = %d\n",kthread_self(),i);
-//
-
-//#pragma omp single
-//        uprintf("Somente a thread %d roda aqui \n",kthread_self());
-
         
     }
 
     uprintf("SAI DA ZONA PARALELA\n");
     
 
-    //ufree(a);
+    ufree(a);
 
     return (0);
 }

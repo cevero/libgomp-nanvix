@@ -51,6 +51,7 @@
 //#ifdef HAVE_BROKEN_POSIX_SEMAPHORES
 //#include <pthread.h>
 #include <nanvix/sys/mutex.h>
+#include <nanvix/sys/condvar.h>
 
 /////////// dumb declarations //////////////
 typedef struct nanvix_mutex pthread_mutex_t;
@@ -59,7 +60,7 @@ typedef struct nanvix_mutex pthread_mutex_t;
 struct gomp_sem
 {
   pthread_mutex_t	mutex;
-  pthread_cond_t	cond;
+  struct nanvix_cond_var cond;
   int			value;
 };
 

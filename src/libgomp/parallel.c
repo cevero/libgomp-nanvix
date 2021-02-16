@@ -99,7 +99,7 @@ int
 omp_get_num_threads (void)
 {
   struct gomp_team *team = gomp_thread ()->ts.team;
-    //uprintf("function= %s ts.team: \n",__func__,gomp_thread ()->ts.team);
+    uprintf("function= %s nthreads: \n",__func__,team->nthreads);
   return team ? team->nthreads : 1;
   //return ___max_threads_gomp;
 }

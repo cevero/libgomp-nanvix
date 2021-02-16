@@ -6,6 +6,7 @@
 ///// pthread functions ///////
 void* pthread_getspecific (pthread_key_t key)
 {
+    uprintf("%s numero_thread = %d \n",__func__,tls_omp[key]->data->ts.team_id);
     return tls_omp[key]->data;
 }
 
@@ -42,13 +43,6 @@ int  pthread_key_create (pthread_key_t * key,void (*destructor)(void*))
 
     return 0;
 }
-extern int pthread_cond_init (pthread_cond_t *__restrict __cond,
-			      const pthread_condattr_t *__restrict __cond_attr)
-{
-    (void) __cond;
-    (void) __cond_attr;
-    return 0;
-}
 extern int pthread_detach (kthread_t __th)
 {
     (void) __th;
@@ -83,29 +77,7 @@ inline int nanvix_mutex_destroy(nanvix_mutex_t *lock) {
     return nanvix_mutex_unlock(lock);
 }
 
-int nanvix_cond_wait(pthread_cond_t *cond, nanvix_mutex_t *mutex)
-{
 
-    (void) cond;
-    (void) mutex;
-    if (!nanvix_mutex_unlock(mutex))
-        return 1;
-}
-
-int nanvix_cond_signal(pthread_cond_t *__cond)
-{
-    
-    (void) __cond;
-    return 0;
-}
-
-int nanvix_cond_destroy(pthread_cond_t *__cond)
-
-{
-    (void) __cond;
-    uprintf("%s \n",__func__);
-    return 0;
-}
 
 int nanvix_mutex_trylock(nanvix_mutex_t *__mutex)
 {
