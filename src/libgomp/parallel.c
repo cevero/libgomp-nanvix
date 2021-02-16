@@ -29,10 +29,8 @@
 
 #include "libgomp.h"
 
-#ifndef __MAX_THREADS__GOMP
-#define __MAX_THREADS__GOMP
 int ___max_threads_gomp;
-#endif
+
 /* Determine the number of threads to be launched for a PARALLEL construct.
    This algorithm is explicitly described in OpenMP 2.5 section 2.4.1.
    SPECIFIED is a combination of the NUM_THREADS clause and the IF clause.
@@ -91,7 +89,6 @@ GOMP_parallel (void (*fn) (void *), void *data, unsigned num_threads,
   gomp_team_start (fn, data, num_threads, NULL);
   fn (data);
   GOMP_parallel_end ();
-  uprintf("nthreads = %d",gomp_nthreads_var);
   //gomp_team_end();
 }
 
@@ -102,11 +99,10 @@ GOMP_parallel (void (*fn) (void *), void *data, unsigned num_threads,
 int
 omp_get_num_threads (void)
 {
-    //uprintf("function= %s ts.team: \n",__func__,gomp_thread ()->ts.team);
   struct gomp_team *team = gomp_thread ()->ts.team;
     //uprintf("function= %s ts.team: \n",__func__,gomp_thread ()->ts.team);
-  //return team ? team->nthreads : 1;
-  return ___max_threads_gomp;
+  return team ? team->nthreads : 1;
+  //return ___max_threads_gomp;
 }
 
 /* ??? Does this function need to disregard dyn_var?  I don't see
@@ -115,16 +111,14 @@ omp_get_num_threads (void)
 int
 omp_get_max_threads (void)
 {
-    //uprintf("function= %s file = %s\n",__func__,__FILE__);
   return gomp_resolve_num_threads (0);
 }
 
 int
 omp_get_thread_num (void)
 {
-   // uprintf("function= %s file = %s\n",__func__,__FILE__);
-    return kthread_self()-1;
-  //return gomp_thread ()->ts.team_id;
+    //return kthread_self()-1;
+  return gomp_thread ()->ts.team_id;
 }
 
 /* ??? This isn't right.  The definition of this function is false if any

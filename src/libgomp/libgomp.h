@@ -235,27 +235,18 @@ static inline struct gomp_thread *gomp_thread (void)
   return &gomp_tls_data;
 }
 #else
-//extern kthread_t gomp_tls_key;
 extern pthread_key_t gomp_tls_key;
 struct tls_data
 {
     kthread_t key;
     struct gomp_thread data;
 };
-struct tls_data* tls[THREAD_MAX];
+struct tls_data* tls_omp[THREAD_MAX];
 
-//struct parallel_data
-//{
-//  kthread_t key; 
-//  gomp_thread data;
-//}
 
 static inline struct gomp_thread *gomp_thread (void)
 {
 
-//    return parallel_data[kthread_self()];
-  //return pthread_getspecific(kthread_self());
-//uprintf("key = %d\n",gomp_tls_key);
   return pthread_getspecific (gomp_tls_key);
 }
 #endif

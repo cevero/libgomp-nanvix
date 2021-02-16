@@ -1,11 +1,9 @@
-//#include "semaphore.h"
 #include <nanvix/ulib.h>
 #include "mutex.h"
-//#include "../omp.h.in"
 #include <nanvix/sys/mutex.h>
 
 #ifndef WORKAROUND_H
-#define WORKAROUND_H
+#define WORKAROUND_H 1
 typedef struct nanvix_mutex nanvix_mutex_t;
 typedef unsigned int pthread_key_t;
 
@@ -120,12 +118,8 @@ typedef union pthread_attr_t
 
 /////end pthread types
 
-//extern int pthread_attr_init (pthread_attr_t *__attr) __THROW __nonnull ((1));
 extern int pthread_attr_init (pthread_attr_t *__attr);
 
-/* Destroy thread attribute *ATTR.  */
-//extern int pthread_attr_destroy (pthread_attr_t *__attr)
-//     __THROW __nonnull ((1));
 
 extern int pthread_attr_destroy (pthread_attr_t *__attr);
 
@@ -146,22 +140,6 @@ extern int pthread_key_create (pthread_key_t *__key,
 /* Destroy KEY.  */
 extern int pthread_key_delete (pthread_key_t __key);// __THROW;
 
-//gomp_malloc function
-
-//void *
-//gomp_malloc (size_t size)
-//{
-//  void *ret = umalloc (size);
-//  if (ret == NULL)
-//    uprintf("Out of memory allocating %lu bytes", (unsigned long) size);
-//  return ret;
-//}
-
-//const int omp_proc_bind_false =0;
-
-//meaning?
-
-//extern int pthread_detach (kthread_t __th) __THROW;
 extern int pthread_detach (kthread_t __th);
 
 

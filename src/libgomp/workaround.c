@@ -1,23 +1,17 @@
-#include "config/nanvix/workaround.h"
+//#include "config/nanvix/workaround.h"
 #include <nanvix/sys/mutex.h>
 #include "libgomp.h"
 
 
 ///// pthread functions ///////
-
 void* pthread_getspecific (pthread_key_t key)
 {
-//    uprintf("%s key is:  %d\n",__func__,tls[key]);
-    
-    return tls[key];
+    return tls_omp[key];
 }
 
 void* pthread_setspecific (pthread_key_t key, void *__pointer)
 {
- //   uprintf("%s %d\n",__func__,key);
-    tls[key]->key = (int)key;
-//    tls[key]->data = (struct gomp_thread)__pointer;
-
+    tls_omp[key]->key = key;
 }
 extern int pthread_attr_destroy (pthread_attr_t *__attr)
 {
@@ -42,7 +36,9 @@ int pthread_attr_setstacksize (pthread_attr_t *__attr,size_t  stacksize)
 }
 int  pthread_key_create (pthread_key_t * key,void (*destructor)(void*))
 {
-//    tls[key]->key=(int)key;
+    
+    tls_omp[(int)key]->key=*key;
+
     return 0;
 }
 extern int pthread_cond_init (pthread_cond_t *__restrict __cond,
@@ -50,7 +46,6 @@ extern int pthread_cond_init (pthread_cond_t *__restrict __cond,
 {
     (void) __cond;
     (void) __cond_attr;
-    //uprintf("%s \n",__func__);
     return 0;
 }
 extern int pthread_detach (kthread_t __th)
@@ -94,7 +89,6 @@ int nanvix_cond_wait(pthread_cond_t *cond, nanvix_mutex_t *mutex)
     (void) mutex;
     if (!nanvix_mutex_unlock(mutex))
         return 1;
-    //uprintf("%s \n",__func__);
 }
 
 int nanvix_cond_signal(pthread_cond_t *__cond)
