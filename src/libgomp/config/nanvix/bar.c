@@ -36,7 +36,6 @@
 void
 gomp_barrier_init (gomp_barrier_t *bar, unsigned count)
 {
-//    uprintf("function= %s file = %s\n",__func__,__FILE__);
   gomp_mutex_init (&bar->mutex1);
 #ifndef HAVE_SYNC_BUILTINS
   gomp_mutex_init (&bar->mutex2);
@@ -51,7 +50,6 @@ gomp_barrier_init (gomp_barrier_t *bar, unsigned count)
 void
 gomp_barrier_destroy (gomp_barrier_t *bar)
 {
- //   uprintf("function= %s file = %s\n",__func__,__FILE__);
   /* Before destroying, make sure all threads have left the barrier.  */
   gomp_mutex_lock (&bar->mutex1);
   gomp_mutex_unlock (&bar->mutex1);
@@ -67,7 +65,6 @@ gomp_barrier_destroy (gomp_barrier_t *bar)
 void
 gomp_barrier_reinit (gomp_barrier_t *bar, unsigned count)
 {
-  //  uprintf("function= %s file = %s\n",__func__,__FILE__);
   gomp_mutex_lock (&bar->mutex1);
   bar->total = count;
   gomp_mutex_unlock (&bar->mutex1);
@@ -76,7 +73,6 @@ gomp_barrier_reinit (gomp_barrier_t *bar, unsigned count)
 void
 gomp_barrier_wait_end (gomp_barrier_t *bar, bool last)
 {
-    //uprintf("function= %s file = %s\n",__func__,__FILE__);
   unsigned int n;
 
   if (last)
@@ -104,7 +100,6 @@ gomp_barrier_wait_end (gomp_barrier_t *bar, bool last)
       gomp_mutex_unlock (&bar->mutex2);
 #endif
 
-      //uprintf("n= %d\n",n);
       if (n == 0)
         gomp_sem_post (&bar->sem2);
     }
@@ -113,6 +108,5 @@ gomp_barrier_wait_end (gomp_barrier_t *bar, bool last)
 void
 gomp_barrier_wait (gomp_barrier_t *barrier)
 {
-    //uprintf("function= %s file = %s\n",__func__,__FILE__);
   gomp_barrier_wait_end (barrier, gomp_barrier_wait_start (barrier));
 }

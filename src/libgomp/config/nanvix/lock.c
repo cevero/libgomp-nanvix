@@ -46,6 +46,7 @@
 void
 omp_init_lock (omp_lock_t *lock)
 {
+    uprintf("%s of %s",__func__,__FILE__);
   pthread_mutex_init (lock, NULL);
 }
 

@@ -34,7 +34,7 @@ ARCHIVE = $(LIBGOMP25)
 #SRC = $(wildcard *.c) config/nanvix/sem.c config/nanvix/mutex.c \
 	  config/nanvix/bar.c # config/nanvix/proc.c
 SRC = workaround.c config/nanvix/mutex.c config/nanvix/sem.c config/nanvix/bar.c\
-	  alloc.c error.c env.c barrier.c team.c parallel.c
+	  config/nanvix/proc.c alloc.c error.c env.c barrier.c team.c parallel.c
 	  
 	  
 #	  barrier.c
