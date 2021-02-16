@@ -131,7 +131,7 @@ extern int pthread_cond_init (pthread_cond_t *__restrict __cond,
 
 extern void* pthread_getspecific (pthread_key_t key);
 
-extern void* pthread_setspecific (pthread_key_t key, void *__pointer);
+extern void pthread_setspecific (pthread_key_t key, void *__pointer);
 
 extern int pthread_key_create (pthread_key_t *__key,
 			       void (*__destr_function) (void *));

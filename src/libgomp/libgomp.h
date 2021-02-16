@@ -40,7 +40,6 @@
 #include "config.h"
 #include "gstdint.h"
 
-//int qnt_threads;
 //#include <pthread.h>
 
 #include <nanvix/ulib.h>
@@ -238,8 +237,8 @@ static inline struct gomp_thread *gomp_thread (void)
 extern pthread_key_t gomp_tls_key;
 struct tls_data
 {
-    kthread_t key;
-    struct gomp_thread data;
+    kthread_t *key;
+    struct gomp_thread *data;
 };
 struct tls_data* tls_omp[THREAD_MAX];
 
