@@ -50,7 +50,7 @@ static gomp_barrier_t gomp_threads_dock;
 #ifdef HAVE_TLS
 __thread struct gomp_thread gomp_tls_data;
 #else
-pthread_key_t gomp_tls_key;
+kthread_t gomp_tls_key;
 #endif
 
 
@@ -81,7 +81,8 @@ gomp_thread_start (void *xdata)
 #else
   struct gomp_thread local_thr;
   thr = &local_thr;
-  pthread_setspecific (gomp_tls_key, thr);
+  //pthread_setspecific (gomp_tls_key, thr);
+  tls_omp[gomp_tls_key] = thr;
 #endif
   gomp_sem_init (&thr->release, 0);
 
@@ -187,6 +188,7 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
 
   thr = gomp_thread ();
   nested = thr->ts.team != NULL;
+  
 
   team = new_team (nthreads, work_share);
 
@@ -283,8 +285,6 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
       start_data->fn = fn;
       start_data->fn_data = data;
       start_data->nested = nested;
-      //this setspecific is a test by reinaldo
-      pthread_setspecific(pt,start_data);
 
       err = kthread_create (&pt,
 			    gomp_thread_start, (void*) (void*)start_data);
@@ -331,8 +331,10 @@ initialize_team (void)
 #ifndef HAVE_TLS
   static struct gomp_thread initial_thread_tls_data;
 
-  pthread_key_create (&gomp_tls_key, NULL);
-  pthread_setspecific (gomp_tls_key, &initial_thread_tls_data);
+  //pthread_key_create (&gomp_tls_key, NULL);
+  gomp_tls_key = kthread_self();
+  //pthread_setspecific (gomp_tls_key, &initial_thread_tls_data);
+  tls_omp[gomp_tls_key] = &initial_thread_tls_data;
 #endif
 
 #ifdef HAVE_TLS

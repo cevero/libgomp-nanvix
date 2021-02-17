@@ -14,6 +14,7 @@
    more details.
 
    You should have received a copy of the GNU Lesser General Public License 
+
    along with libgomp; see the file COPYING.LIB.  If not, write to the
    Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
    MA 02110-1301, USA.  */
@@ -235,19 +236,19 @@ static inline struct gomp_thread *gomp_thread (void)
   return &gomp_tls_data;
 }
 #else
-extern pthread_key_t gomp_tls_key;
-struct tls_data
-{
-    kthread_t *key;
-    struct gomp_thread *data;
-};
-struct tls_data* tls_omp[THREAD_MAX];
+extern kthread_t gomp_tls_key;
+//struct tls_data
+//{
+//    kthread_t *key;
+//    struct gomp_thread *data;
+//};
+struct gomp_thread *tls_omp[THREAD_MAX];
 
 
 static inline struct gomp_thread *gomp_thread (void)
 {
-
-  return pthread_getspecific (gomp_tls_key);
+    return tls_omp[gomp_tls_key];
+  //return pthread_getspecific (gomp_tls_key);
 }
 #endif
 

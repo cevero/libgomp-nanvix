@@ -4,17 +4,17 @@
 
 
 ///// pthread functions ///////
-void* pthread_getspecific (pthread_key_t key)
-{
-    uprintf("%s numero_thread = %d \n",__func__,tls_omp[key]->data->ts.team_id);
-    return tls_omp[key]->data;
-}
+//void* pthread_getspecific (pthread_key_t key)
+//{
+//    //uprintf("%s numero_thread = %d \n",__func__,tls_omp[key]->data->ts.team_id);
+//    return tls_omp[key]->data;
+//}
 
-void pthread_setspecific (pthread_key_t  key, void *__pointer)
-{
-    *tls_omp[key]->key = key;
-    tls_omp[key]->data = __pointer;
-}
+//void pthread_setspecific (pthread_key_t  key, void *__pointer)
+//{
+//    //*tls_omp[key]->key = key;
+//    tls_omp[key]->data = __pointer;
+//}
 extern int pthread_attr_destroy (pthread_attr_t *__attr)
 {
     (void) __attr;
@@ -36,13 +36,13 @@ int pthread_attr_setstacksize (pthread_attr_t *__attr,size_t  stacksize)
     uprintf("%s \n",__func__);
     return 0;
 }
-int  pthread_key_create (pthread_key_t * key,void (*destructor)(void*))
-{
-    
-    *tls_omp[(int)*key]->key=kthread_self();
-
-    return 0;
-}
+//int  pthread_key_create (pthread_key_t * key,void (*destructor)(void*))
+//{
+//    
+//    *tls_omp[(int)*key]->key=kthread_self();
+//
+//    return 0;
+//}
 extern int pthread_detach (kthread_t __th)
 {
     (void) __th;

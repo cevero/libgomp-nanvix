@@ -29,7 +29,6 @@
 
 #include "libgomp.h"
 
-int ___max_threads_gomp;
 
 /* Determine the number of threads to be launched for a PARALLEL construct.
    This algorithm is explicitly described in OpenMP 2.5 section 2.4.1.
@@ -84,7 +83,6 @@ GOMP_parallel (void (*fn) (void *), void *data, unsigned num_threads,
 	       unsigned int flags)
 {
   num_threads = gomp_resolve_num_threads (num_threads);
-  ___max_threads_gomp = num_threads;
   gomp_team_start (fn, data, num_threads, NULL);
   fn (data);
   GOMP_parallel_end ();
@@ -99,9 +97,7 @@ int
 omp_get_num_threads (void)
 {
   struct gomp_team *team = gomp_thread ()->ts.team;
-    uprintf("function= %s nthreads: \n",__func__,team->nthreads);
   return team ? team->nthreads : 1;
-  //return ___max_threads_gomp;
 }
 
 /* ??? Does this function need to disregard dyn_var?  I don't see

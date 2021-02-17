@@ -33,7 +33,6 @@
 void
 GOMP_barrier (void)
 {
-    //uprintf("FUNCTION= %s FILE= %s\n",__func__,__FILE__);
   struct gomp_thread *thr = gomp_thread ();
   struct gomp_team *team = thr->ts.team;
 

@@ -108,7 +108,7 @@ void gomp_sem_post (gomp_sem_t *sem)
 
 void gomp_sem_destroy (gomp_sem_t *sem)
 {
-    uprintf("function= %s file = %s\n",__func__,__FILE__);
+//    uprintf("function= %s file = %s\n",__func__,__FILE__);
   int ret;
 
   ret = nanvix_mutex_destroy (&sem->mutex);
