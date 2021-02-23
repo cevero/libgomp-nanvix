@@ -74,7 +74,11 @@ int pthread_key_delete (pthread_key_t __key)// __THROW;
 
 
 inline int nanvix_mutex_destroy(nanvix_mutex_t *lock) {
-    return nanvix_mutex_unlock(lock);
+
+    int destroy =  nanvix_mutex_unlock(lock);
+    ufree(lock);
+    return destroy;
+
 }
 
 

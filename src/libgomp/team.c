@@ -280,6 +280,7 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
       start_data->ts.team = team;
       start_data->ts.work_share = work_share;
       start_data->ts.team_id = i;
+      uprintf("%d is my id\n",start_data->ts.team_id);
       start_data->ts.work_share_generation = 0;
       start_data->ts.static_trip = 0;
       start_data->fn = fn;
@@ -313,6 +314,8 @@ gomp_team_end (void)
   struct gomp_thread *thr = gomp_thread ();
   struct gomp_team *team = thr->ts.team;
 
+  uprintf("getting out of here\n");
+  ufree(tls_omp);
   gomp_barrier_wait (&team->barrier);
 
   thr->ts = team->prev_ts;

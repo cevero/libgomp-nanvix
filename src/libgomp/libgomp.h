@@ -242,7 +242,7 @@ extern kthread_t gomp_tls_key;
 //    kthread_t *key;
 //    struct gomp_thread *data;
 //};
-struct gomp_thread *tls_omp[THREAD_MAX];
+struct gomp_thread **tls_omp;
 
 
 static inline struct gomp_thread *gomp_thread (void)
