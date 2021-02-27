@@ -54,10 +54,11 @@ int __main2(int argc, const char *argv[])
         a[i]=i;
 
 
-	#pragma omp parallel  num_threads(NTHREADS_MAX)// default(none) shared(a,a1) firstprivate(a2)
+	#pragma omp parallel num_threads(NTHREADS_MAX)// default(none) shared(a,a1) firstprivate(a2)
     {
+#   pragma omp critical
+        Hello((void*)kthread_self());
 
-        uprintf("Hello world from thread %d of %d\n",omp_get_thread_num(),omp_get_num_threads());
         
     }
 

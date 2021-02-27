@@ -32,7 +32,9 @@ ARCHIVE = $(LIBGOMP25)
 
 # C Source Files
 SRC = workaround.c config/nanvix/mutex.c config/nanvix/sem.c config/nanvix/bar.c\
-	  config/nanvix/proc.c alloc.c error.c env.c barrier.c team.c parallel.c
+	  config/nanvix/proc.c alloc.c work.c error.c env.c barrier.c team.c parallel.c\
+	  critical.c single.c loop.c
+	
 	  
 	  
 #	  barrier.c

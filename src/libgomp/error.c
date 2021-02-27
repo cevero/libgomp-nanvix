@@ -40,14 +40,16 @@
 static void
 gomp_verror (const char *fmt, va_list list)
 {
-  fputs ("\nlibgomp: ", stderr);
+    uprintf("%s \n",__func__);
+ // fputs ("\nlibgomp: ", stderr);
   uprintf (stderr, fmt, list);
-  fputc ('\n', stderr);
+ // fputc ('\n', stderr);
 }
 
 void
 gomp_error (const char *fmt, ...)
 {
+    uprintf("%s \n",__func__);
   va_list list;
 
   va_start (list, fmt);
@@ -58,6 +60,7 @@ gomp_error (const char *fmt, ...)
 void
 gomp_fatal (const char *fmt, ...)
 {
+    uprintf("%s \n",__func__);
   va_list list;
 
   va_start (list, fmt);

@@ -51,7 +51,12 @@ static inline void gomp_mutex_lock (gomp_mutex_t *mutex)
 
 static inline void gomp_mutex_unlock (gomp_mutex_t *mutex)
 {
-   nanvix_mutex_unlock (mutex);
+   int unlock = nanvix_mutex_unlock (mutex);
+   //if(unlock>=0)
+   //     uprintf("liberado thread %d\n",kthread_self());
+   //else
+   //     uprintf("nao liberado thread %d\n",kthread_self());
+
 }
 
 static inline void gomp_mutex_destroy (gomp_mutex_t *mutex)

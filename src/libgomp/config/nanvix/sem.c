@@ -90,7 +90,6 @@ void gomp_sem_wait (gomp_sem_t *sem)
 void gomp_sem_post (gomp_sem_t *sem)
 {
   int ret;
-    //uprintf("unlock-me\n");
   ret = nanvix_mutex_lock (&sem->mutex);
   if (ret)
     return;
@@ -108,8 +107,6 @@ void gomp_sem_post (gomp_sem_t *sem)
 
 void gomp_sem_destroy (gomp_sem_t *sem)
 {
-//    uprintf("function= %s file = %s\n",__func__,__FILE__);
-    uprintf("destroy-me\n");
   int ret;
 
   ret = nanvix_mutex_destroy (&sem->mutex);

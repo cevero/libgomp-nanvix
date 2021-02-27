@@ -57,6 +57,8 @@ GOMP_critical_name_start (void **pptr)
 
   /* If a mutex fits within the space for a pointer, and is zero initialized,
      then use the pointer space directly.  */
+  int i=0;
+  uprintf("%d %s",++i, __func__);
   if (GOMP_MUTEX_INIT_0
       && sizeof (gomp_mutex_t) <= sizeof (void *)
       && __alignof (gomp_mutex_t) <= sizeof (void *))
@@ -65,6 +67,7 @@ GOMP_critical_name_start (void **pptr)
   /* Otherwise we have to be prepared to malloc storage.  */
   else
     {
+  uprintf("%d %s",++i, __func__);
       plock = *pptr;
 
       if (plock == NULL)
@@ -76,6 +79,7 @@ GOMP_critical_name_start (void **pptr)
 	  plock = __sync_val_compare_and_swap (pptr, NULL, nlock);
 	  if (plock != NULL)
 	    {
+  uprintf("%d %s",++i, __func__);
 	      gomp_mutex_destroy (nlock);
 	      ufree (nlock);
 	    }
@@ -86,6 +90,7 @@ GOMP_critical_name_start (void **pptr)
 	  plock = *pptr;
 	  if (plock == NULL)
 	    {
+  uprintf("%d %s",++i, __func__);
 	      plock = gomp_malloc (sizeof (gomp_mutex_t));
 	      gomp_mutex_init (plock);
 	      __sync_synchronize ();
