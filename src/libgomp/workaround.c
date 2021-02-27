@@ -75,19 +75,20 @@ int pthread_key_delete (pthread_key_t __key)// __THROW;
 
 inline int nanvix_mutex_destroy(nanvix_mutex_t *lock) {
 
+        uprintf("destruido mutex %d\n",kthread_self());
     int destroy =  nanvix_mutex_unlock(lock);
     
-    if (destroy>=0)
-    {
-        uprintf("liberado thread %d\n",kthread_self());
-    ufree(lock);
-    return destroy;
-    }
-    else 
-    {
-        uprintf("nao liberado thread %d\n",kthread_self());
-        return destroy;
-    }
+//    if (destroy>=0)
+//    {
+//        uprintf("liberado thread %d\n",kthread_self());
+//    ufree(lock);
+//    return destroy;
+//    }
+//    else 
+//    {
+//        uprintf("nao liberado thread %d\n",kthread_self());
+//        return destroy;
+//    }
 
 }
 

@@ -67,6 +67,7 @@ void gomp_sem_wait (gomp_sem_t *sem)
 
   if (sem->value > 0)
     {
+        uprintf("destruido mutex in bar %d\n",kthread_self());
       sem->value--;
       ret = nanvix_mutex_unlock (&sem->mutex);
       return;

@@ -37,7 +37,7 @@ void*
 Hello(void * index){
     int pid;
     pid = (int)((intptr_t)index);
-uprintf("Hello from thread%d\n",pid);
+uprintf("Hello from thread %d\n",pid);
 
 }
 int __main2(int argc, const char *argv[])
@@ -56,7 +56,7 @@ int __main2(int argc, const char *argv[])
 
 	#pragma omp parallel num_threads(NTHREADS_MAX)// default(none) shared(a,a1) firstprivate(a2)
     {
-#   pragma omp critical
+//#   pragma omp critical
         Hello((void*)kthread_self());
 
         
