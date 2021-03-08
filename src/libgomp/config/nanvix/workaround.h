@@ -127,9 +127,9 @@ extern int pthread_attr_getstacksize (pthread_attr_t *__attr,int * stacksize);
 extern int pthread_attr_setstacksize (pthread_attr_t *__attr,size_t  stacksize);
 
 
-extern void* pthread_getspecific (pthread_key_t key);
+extern struct gomp_thread* pthread_getspecific (pthread_key_t key);
 
-extern void pthread_setspecific (pthread_key_t key, void *__pointer);
+extern void *pthread_setspecific (pthread_key_t key, struct gomp_thread *__pointer);
 
 extern int pthread_key_create (pthread_key_t *__key,
 			       void (*__destr_function) (void *));

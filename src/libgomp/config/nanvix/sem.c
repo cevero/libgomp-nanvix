@@ -43,6 +43,7 @@
 
 void gomp_sem_init (gomp_sem_t *sem, int value)
 {
+//  uprintf("%s in thread %d",__func__,kthread_self());
   int ret;
 
 
@@ -59,6 +60,7 @@ void gomp_sem_init (gomp_sem_t *sem, int value)
 
 void gomp_sem_wait (gomp_sem_t *sem)
 {
+ // uprintf("%s in thread %d",__func__,kthread_self());
   int ret;
 
   ret = nanvix_mutex_lock (&sem->mutex);
@@ -67,7 +69,6 @@ void gomp_sem_wait (gomp_sem_t *sem)
 
   if (sem->value > 0)
     {
-        uprintf("destruido mutex in bar %d\n",kthread_self());
       sem->value--;
       ret = nanvix_mutex_unlock (&sem->mutex);
       return;
@@ -90,6 +91,7 @@ void gomp_sem_wait (gomp_sem_t *sem)
 
 void gomp_sem_post (gomp_sem_t *sem)
 {
+  //uprintf("%s in thread %d",__func__,kthread_self());
   int ret;
   ret = nanvix_mutex_lock (&sem->mutex);
   if (ret)

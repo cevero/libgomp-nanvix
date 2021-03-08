@@ -46,16 +46,16 @@ static inline void gomp_mutex_init (gomp_mutex_t *mutex)
 
 static inline void gomp_mutex_lock (gomp_mutex_t *mutex)
 {
+  uprintf("%s BEFORE in thread %d",__func__,kthread_self());
   nanvix_mutex_lock (mutex);
+  uprintf("\n%s AFTER in thread %d",__func__,kthread_self());
 }
 
 static inline void gomp_mutex_unlock (gomp_mutex_t *mutex)
 {
+  uprintf("%s BEFORE in thread %d",__func__,kthread_self());
    int unlock = nanvix_mutex_unlock (mutex);
-   //if(unlock>=0)
-   //     uprintf("liberado thread %d\n",kthread_self());
-   //else
-   //     uprintf("nao liberado thread %d\n",kthread_self());
+  uprintf("\n%s AFTER in thread %d",__func__,kthread_self());
 
 }
 

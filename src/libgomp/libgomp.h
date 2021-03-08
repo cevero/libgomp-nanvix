@@ -237,18 +237,19 @@ static inline struct gomp_thread *gomp_thread (void)
 }
 #else
 extern kthread_t gomp_tls_key;
-//struct tls_data
-//{
-//    kthread_t *key;
-//    struct gomp_thread *data;
-//};
-struct gomp_thread *tls_omp[10];
+
+struct tls_data
+{
+ kthread_t key;
+ struct gomp_thread *data;
+ struct tls_data* next;
+
+};
 
 
 static inline struct gomp_thread *gomp_thread (void)
 {
-    return tls_omp[gomp_tls_key];
-  //return pthread_getspecific (gomp_tls_key);
+  return pthread_getspecific (gomp_tls_key);
 }
 #endif
 

@@ -2,19 +2,41 @@
 #include <nanvix/sys/mutex.h>
 #include "libgomp.h"
 
+struct tls_data * head=NULL;
+//struct tls_data * current=NULL;
 
 ///// pthread functions ///////
-//void* pthread_getspecific (pthread_key_t key)
-//{
-//    //uprintf("%s numero_thread = %d \n",__func__,tls_omp[key]->data->ts.team_id);
-//    return tls_omp[key]->data;
-//}
 
-//void pthread_setspecific (pthread_key_t  key, void *__pointer)
-//{
-//    //*tls_omp[key]->key = key;
-//    tls_omp[key]->data = __pointer;
-//}
+
+struct gomp_thread* pthread_getspecific (pthread_key_t key)
+{
+    struct tls_data * prov = head;
+    while( prov!= NULL) 
+    {
+            if(prov->key == key)
+                return prov->data;
+            prov = prov->next;
+    }
+    return NULL;
+}
+
+void * pthread_setspecific (pthread_key_t  key, struct gomp_thread *__pointer)
+{
+   if(head == NULL)
+       return NULL;
+   
+   struct tls_data * current = head;
+
+   while (current->key != key)
+   {
+        if(current->next == NULL)
+            return NULL;
+        else
+            current = current->next;
+   }
+
+   current->data = __pointer->data;
+}
 extern int pthread_attr_destroy (pthread_attr_t *__attr)
 {
     (void) __attr;
@@ -36,13 +58,18 @@ int pthread_attr_setstacksize (pthread_attr_t *__attr,size_t  stacksize)
     uprintf("%s \n",__func__);
     return 0;
 }
-//int  pthread_key_create (pthread_key_t * key,void (*destructor)(void*))
-//{
-//    
-//    *tls_omp[(int)*key]->key=kthread_self();
-//
-//    return 0;
-//}
+int  pthread_key_create (pthread_key_t * key,void (*destructor)(void*))
+{
+    
+   struct tls_data * link = (struct tls_data*) umalloc(sizeof(struct tls_data));
+
+   link->key = *key;
+   link->next = head;
+
+   head = link;
+
+   return 0;
+}
 extern int pthread_detach (kthread_t __th)
 {
     (void) __th;
@@ -65,9 +92,40 @@ extern void fputc(char str, void* c)
 
 int pthread_key_delete (pthread_key_t __key)// __THROW;
 {
-    (void) __key;
-    uprintf("%s \n",__func__);
-    return 0;
+
+
+ //      struct tls_data* current = head;
+ //      struct tls_data* previous = NULL;
+ //           
+ //       //if list is empty
+ //       if(head == NULL) {
+ //           return NULL;
+ //       }
+
+ //       //navigate through list
+ //       while(current->key != __key) {
+
+ //           //if it is last node
+ //           if(current->next == NULL) {
+ //               return NULL;
+ //           } else {
+ //           //store reference to current link
+ //               previous = current;
+ //           //move to next link
+ //           current = current->next;
+ //           }
+ //       }
+
+ //       //found a match, update the link
+ //       if(current == head) {
+ //       //change first to point to next link
+ //       head = head->next;
+ //       } 
+ //       else {
+ //       //bypass the current link
+ //       previous->next = current->next;
+ //       }    
+        return 0;
 }
 
 ////NANVIX DEFINITIONS//////
@@ -75,7 +133,7 @@ int pthread_key_delete (pthread_key_t __key)// __THROW;
 
 inline int nanvix_mutex_destroy(nanvix_mutex_t *lock) {
 
-        uprintf("destruido mutex %d\n",kthread_self());
+        //uprintf("destruido mutex %d\n",kthread_self());
     int destroy =  nanvix_mutex_unlock(lock);
     
 //    if (destroy>=0)

@@ -25,47 +25,67 @@
 #include <nanvix/ulib.h>
 #include <nanvix/sys/thread.h>
 #include <nanvix/sys/condvar.h>
+#include <nanvix/sys/mutex.h>
 #include "../libgomp/omp.h"
 
-#define NTHREADS_MAX  (THREAD_MAX-1)
+#define NTHREADS  (THREAD_MAX-1)
 /**
  * @brief Test Server
  */
 
 
-void*
-Hello(void * index){
-    int pid;
-    pid = (int)((intptr_t)index);
-uprintf("Hello from thread %d\n",pid);
+#define NTRIALS 10
+static struct nanvix_mutex mutex;
+static volatile int var;
 
+void*
+Hello_omp(void * index){
+    int nt;
+    nt = (int)((intptr_t)index);
+#   pragma omp parallel num_threads(nt)
+//uprintf("Hello from thread %d\n",omp_get_thread_num());
+uprintf("Hello from thread %d\n",kthread_self());
 }
+
+static void *task3(void *arg)
+{
+	((void) arg);
+
+	/* Increment a variable many times. */
+	for (int i = 0; i < NTRIALS; i++)
+	{
+		nanvix_mutex_lock(&mutex);
+
+uprintf("LOCK from thread %d %d\n",kthread_self());
+			var++;
+		nanvix_mutex_unlock(&mutex);
+uprintf("UNLOCK from thread %d %d\n",kthread_self());
+	}
+
+	return (NULL);
+}
+
+
 int __main2(int argc, const char *argv[])
 {
 	((void) argc);
 	((void) argv);
-    int a1=1,a2=0;
 
-	struct nanvix_cond_var cond;
-    a1 = nanvix_cond_init(&cond);
+    Hello_omp((void*)3);
 
-    int * a = umalloc(9*sizeof(int));
-    for(int i=0;i<9;i++)
-        a[i]=i;
+//	kthread_t tids[NTHREADS];
+//	nanvix_mutex_init(&mutex);
+//
+//	for (int i = 0; i < NTHREADS; i++)
+//		kthread_create(&tids[i], task3, NULL) == 0;
+//
+//	/* Wait for threads. */
+//	for (int i = 0; i < NTHREADS; i++)
+//		kthread_join(tids[i], NULL) == 0;
+//
 
-
-	#pragma omp parallel num_threads(NTHREADS_MAX)// default(none) shared(a,a1) firstprivate(a2)
-    {
-//#   pragma omp critical
-        Hello((void*)kthread_self());
-
-        
-    }
-
-    uprintf("SAI DA ZONA PARALELA\n");
     
 
-    ufree(a);
 
     return (0);
 }
