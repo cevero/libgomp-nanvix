@@ -43,8 +43,8 @@ Hello_omp(void * index){
     int nt;
     nt = (int)((intptr_t)index);
 #   pragma omp parallel num_threads(nt)
-//uprintf("Hello from thread %d\n",omp_get_thread_num());
-uprintf("Hello from thread %d\n",kthread_self());
+uprintf("Hello from thread %d\n",omp_get_thread_num());
+uprintf("SAI DA ZONA PARALELA\n");
 }
 
 static void *task3(void *arg)
@@ -56,10 +56,10 @@ static void *task3(void *arg)
 	{
 		nanvix_mutex_lock(&mutex);
 
-uprintf("LOCK from thread %d %d\n",kthread_self());
+        uprintf("LOCK from thread %d \n",kthread_self());
 			var++;
 		nanvix_mutex_unlock(&mutex);
-uprintf("UNLOCK from thread %d %d\n",kthread_self());
+        uprintf("UNLOCK from thread %d \n",kthread_self());
 	}
 
 	return (NULL);
@@ -82,7 +82,7 @@ int __main2(int argc, const char *argv[])
 //	/* Wait for threads. */
 //	for (int i = 0; i < NTHREADS; i++)
 //		kthread_join(tids[i], NULL) == 0;
-//
+
 
     
 
