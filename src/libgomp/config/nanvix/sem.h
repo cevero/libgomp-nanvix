@@ -8,8 +8,7 @@
    the Free Software Foundation; either version 2.1 of the License, or
    (at your option) any later version.
 
-   Libgomp is distributed in the hope that it will be useful, but WITHOUT ANY
-   WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+   Libgomp is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
    FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for
    more details.
 
@@ -48,7 +47,7 @@
 # pragma GCC visibility pop
 #endif
 
-//#ifdef HAVE_BROKEN_POSIX_SEMAPHORES
+#ifdef HAVE_BROKEN_POSIX_SEMAPHORES
 //#include <pthread.h>
 #include <nanvix/sys/mutex.h>
 #include <nanvix/sys/condvar.h>
@@ -74,28 +73,35 @@ extern void gomp_sem_post (gomp_sem_t *sem);
 
 extern void gomp_sem_destroy (gomp_sem_t *sem);
 
-//#else /* HAVE_BROKEN_POSIX_SEMAPHORES  */
-//
-////typedef sem_t gomp_sem_t;
-//
-//static inline void gomp_sem_init (struct nanvix_semaphore *sem, int value)
-//{
-//    uprintf("%s \n",__func__);
-//  nanvix_semaphore_init (sem,  value);
-//}
-//
-//extern void gomp_sem_wait (struct nanvix_semaphore *sem);
-//
-//static inline void gomp_sem_post (struct nanvix_semaphore *sem)
-//{
-//    nanvix_semaphore_down (sem);
-//    uprintf("%s \n",__func__);
-//}
-//
-//static inline void gomp_sem_destroy (struct nanvix_semaphore *sem)
-//{
-//  //sem_destroy (sem);
-//    uprintf("%s \n",__func__);
-//}
-//#endif /* doesn't HAVE_BROKEN_POSIX_SEMAPHORES  */
+
+
+
+
+
+
+#else /* HAVE_BROKEN_POSIX_SEMAPHORES  */
+
+
+
+typedef struct nanvix_semaphore gomp_sem_t;
+
+static inline void gomp_sem_init (gomp_sem_t *sem, int value)
+{
+  nanvix_semaphore_init (sem,  value);
+}
+
+extern void gomp_sem_wait (gomp_sem_t *sem);
+
+static inline void gomp_sem_post (gomp_sem_t *sem)
+{
+    nanvix_semaphore_up (sem);
+    uprintf("function= %s thread %d addr %x\n",__func__,kthread_self(),sem);
+}
+
+static inline void gomp_sem_destroy (gomp_sem_t  *sem)
+{
+  //sem_destroy (sem);
+    uprintf("%s \n",__func__);
+}
+#endif /* doesn't HAVE_BROKEN_POSIX_SEMAPHORES  */
 #endif /* GOMP_SEM_H  */

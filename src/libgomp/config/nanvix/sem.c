@@ -34,12 +34,12 @@
    bad for a default.  */
 
 #include "../../libgomp.h"
-
-//#ifdef HAVE_BROKEN_POSIX_SEMAPHORES
-//#include <stdlib.h>
-
 #include <nanvix/ulib.h>
 #include "sem.h"
+
+#ifdef HAVE_BROKEN_POSIX_SEMAPHORES
+//#include <stdlib.h>
+
 
 void gomp_sem_init (gomp_sem_t *sem, int value)
 {
@@ -120,14 +120,13 @@ void gomp_sem_destroy (gomp_sem_t *sem)
 
   return;
 }
-//#else /* HAVE_BROKEN_POSIX_SEMAPHORES  */
-//void
-//gomp_sem_wait (gomp_sem_t *sem)
-//{
-//    uprintf("function= %s file = %s\n",__func__,__FILE__);
-//  /* With POSIX, the wait can be canceled by signals.  We don't want that.
-//     It is expected that the return value here is -1 and errno is EINTR.  */
-////  while (sem_wait (sem) != 0)
-////    continue;
-//}
-//#endif
+#else /* HAVE_BROKEN_POSIX_SEMAPHORES  */
+void
+gomp_sem_wait (gomp_sem_t *sem)
+{
+  /* With POSIX, the wait can be canceled by signals.  We don't want that.
+     It is expected that the return value here is -1 and errno is EINTR.  */
+  while (nanvix_semaphore_down (sem) != 0)
+    uprintf("function= %s thread %d addr %x\n",__func__,kthread_self(),sem);
+}
+#endif

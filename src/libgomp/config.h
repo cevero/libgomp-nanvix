@@ -19,6 +19,7 @@
 ///* Define if the POSIX Semaphores do not work on your system. */
 ///* #undef HAVE_BROKEN_POSIX_SEMAPHORES */
 #define HAVE_BROKEN_POSIX_SEMAPHORES 1
+#undef HAVE_BROKEN_POSIX_SEMAPHORES
 //
 ///* Define to 1 if the target assembler supports thread-local storage. */
 ///* #undef HAVE_CC_TLS */

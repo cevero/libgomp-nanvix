@@ -90,41 +90,45 @@ extern void fputc(char str, void* c)
     uprintf("%s \n",__func__);
 }
 
-int pthread_key_delete (pthread_key_t __key)// __THROW;
+int pthread_key_delete (pthread_key_t __key)
 {
 
 
- //      struct tls_data* current = head;
- //      struct tls_data* previous = NULL;
- //           
- //       //if list is empty
- //       if(head == NULL) {
- //           return NULL;
- //       }
+       struct tls_data* current = head;
+       struct tls_data* previous = NULL;
+            
+        if(head == NULL) 
+        {
+            return 0;
+        }
 
- //       //navigate through list
- //       while(current->key != __key) {
+        while(current->key != __key) 
+        {
 
- //           //if it is last node
- //           if(current->next == NULL) {
- //               return NULL;
- //           } else {
- //           //store reference to current link
- //               previous = current;
- //           //move to next link
- //           current = current->next;
- //           }
- //       }
+            if(current->next == NULL)
 
- //       //found a match, update the link
- //       if(current == head) {
- //       //change first to point to next link
- //       head = head->next;
- //       } 
- //       else {
- //       //bypass the current link
- //       previous->next = current->next;
- //       }    
+            {
+                return 0;
+            }
+
+            else 
+
+            {
+                previous = current;
+                current = current->next;
+            }
+        }
+
+        if(current == head)
+
+        {
+            head = head->next;
+        } 
+        else
+        {
+        //bypass the current link
+            previous->next = current->next;
+        }    
         return 0;
 }
 

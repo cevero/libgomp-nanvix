@@ -43,8 +43,10 @@ Hello_omp(void * index){
     int nt;
     nt = (int)((intptr_t)index);
 #   pragma omp parallel num_threads(nt)
-uprintf("Hello from thread %d\n",omp_get_thread_num());
-uprintf("SAI DA ZONA PARALELA\n");
+    {
+        uprintf("Hello from thread %d\n",omp_get_thread_num());
+    }
+    uprintf("SAI DA ZONA PARALELA\n");
 }
 
 static void *task3(void *arg)
@@ -65,23 +67,32 @@ static void *task3(void *arg)
 	return (NULL);
 }
 
+void test_mutex()
+{
+	kthread_t tids[NTHREADS];
+	nanvix_mutex_init(&mutex);
+
+	for (int i = 0; i < NTHREADS; i++)
+		kthread_create(&tids[i], task3, NULL) == 0;
+
+	/* Wait for threads. */
+	for (int i = 0; i < NTHREADS; i++)
+		kthread_join(tids[i], NULL) == 0;
+
+}
 
 int __main2(int argc, const char *argv[])
 {
 	((void) argc);
 	((void) argv);
 
-    Hello_omp((void*)3);
+//    Hello_omp((void*)3);
 
-//	kthread_t tids[NTHREADS];
-//	nanvix_mutex_init(&mutex);
-//
-//	for (int i = 0; i < NTHREADS; i++)
-//		kthread_create(&tids[i], task3, NULL) == 0;
-//
-//	/* Wait for threads. */
-//	for (int i = 0; i < NTHREADS; i++)
-//		kthread_join(tids[i], NULL) == 0;
+#   pragma omp parallel num_threads(3)
+    {
+        uprintf("Hello from thread %d\n",omp_get_thread_num());
+    }
+    uprintf("SAI DA ZONA PARALELA\n");
 
 
     

@@ -317,8 +317,8 @@ gomp_team_end (void)
   struct gomp_thread *thr = gomp_thread ();
   struct gomp_team *team = thr->ts.team;
 
-  //ufree(tls_omp);
   gomp_barrier_wait (&team->barrier);
+
 
   thr->ts = team->prev_ts;
 
