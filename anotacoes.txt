@@ -3,3 +3,7 @@ determinismo do numero de threads, consertadas as definições em gomp_sem_t em
 sem.h e sem.c adicionadas definições simples de pthread_getspecific e 
 pthread_setspecific para substituir o tls utilizando um array observavel por 
 todas as threads
+
+
+ultimo commit estável da libnanvix do condvar
+7ece543105d0555a2e2bcecdbb87e820a5846e02

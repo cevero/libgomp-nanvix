@@ -41,7 +41,8 @@ static unsigned gomp_threads_size;
 static unsigned gomp_threads_used;
 
 /* This attribute contains PTHREAD_CREATE_DETACHED.  */
-pthread_attr_t gomp_thread_attr;
+//TEMPORARIAMENTE COMENTADO
+//pthread_attr_t gomp_thread_attr;
 
 /* This barrier holds and releases threads waiting in gomp_threads.  */
 static gomp_barrier_t gomp_threads_dock;
@@ -340,6 +341,7 @@ initialize_team (void)
   //gomp_tls_key = kthread_self();
   pthread_setspecific (gomp_tls_key, &initial_thread_tls_data);
   //tls_omp[gomp_tls_key] = &initial_thread_tls_data;
+  //  tls_omp[kthread_self()] = &initial_thread_tls_data;
 #endif
 
 #ifdef HAVE_TLS

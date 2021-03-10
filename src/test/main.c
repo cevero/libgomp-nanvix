@@ -26,6 +26,7 @@
 #include <nanvix/sys/thread.h>
 #include <nanvix/sys/condvar.h>
 #include <nanvix/sys/mutex.h>
+#include <nanvix/sys/semaphore.h>
 #include "../libgomp/omp.h"
 
 #define NTHREADS  (THREAD_MAX-1)
@@ -36,6 +37,7 @@
 
 #define NTRIALS 10
 static struct nanvix_mutex mutex;
+static struct nanvix_semaphore semaphore;
 static volatile int var;
 
 void*
@@ -67,10 +69,28 @@ static void *task3(void *arg)
 	return (NULL);
 }
 
+static void *task4(void *arg)
+{
+	((void) arg);
+
+		nanvix_semaphore_init(&semaphore,2);
+	/* Increment a variable many times. */
+	for (int i = 0; i < NTRIALS; i++)
+	{
+
+        uprintf("LOCK from thread %d \n",kthread_self());
+			var++;
+		nanvix_mutex_unlock(&mutex);
+        uprintf("UNLOCK from thread %d \n",kthread_self());
+	}
+
+	return (NULL);
+}
+
 void test_mutex()
 {
 	kthread_t tids[NTHREADS];
-	nanvix_mutex_init(&mutex);
+	nanvix_mutex_init(&mutex,NULL);
 
 	for (int i = 0; i < NTHREADS; i++)
 		kthread_create(&tids[i], task3, NULL) == 0;
@@ -78,6 +98,20 @@ void test_mutex()
 	/* Wait for threads. */
 	for (int i = 0; i < NTHREADS; i++)
 		kthread_join(tids[i], NULL) == 0;
+
+}
+void test_semaphore()
+{
+	kthread_t tids[NTHREADS];
+
+	for (int i = 0; i < NTHREADS; i++)
+		kthread_create(&tids[i], task4, NULL) == 0;
+
+	/* Wait for threads. */
+	for (int i = 0; i < NTHREADS; i++)
+    {
+		kthread_join(tids[i], NULL) == 0;
+    }
 
 }
 
@@ -88,7 +122,7 @@ int __main2(int argc, const char *argv[])
 
 //    Hello_omp((void*)3);
 
-#   pragma omp parallel num_threads(3)
+#   pragma omp parallel num_threads(NTHREADS)
     {
         uprintf("Hello from thread %d\n",omp_get_thread_num());
     }

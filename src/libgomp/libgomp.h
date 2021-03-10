@@ -245,10 +245,11 @@ struct tls_data
  struct tls_data* next;
 
 };
-
+struct gomp_thread * tls_omp[100]; 
 
 static inline struct gomp_thread *gomp_thread (void)
 {
+  //  return tls_omp[kthread_self()];
   return pthread_getspecific (gomp_tls_key);
 }
 #endif
@@ -263,7 +264,7 @@ extern enum gomp_schedule_type gomp_run_sched_var;
 extern unsigned long gomp_run_sched_chunk;
 
 /* The attributes to be used during thread creation.  */
-extern pthread_attr_t gomp_thread_attr;
+//extern pthread_attr_t gomp_thread_attr;
 
 /* Function prototypes.  */
 

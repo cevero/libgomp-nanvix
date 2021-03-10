@@ -121,12 +121,20 @@ void gomp_sem_destroy (gomp_sem_t *sem)
   return;
 }
 #else /* HAVE_BROKEN_POSIX_SEMAPHORES  */
+
+
+
+
+
 void
 gomp_sem_wait (gomp_sem_t *sem)
 {
   /* With POSIX, the wait can be canceled by signals.  We don't want that.
      It is expected that the return value here is -1 and errno is EINTR.  */
-  while (nanvix_semaphore_down (sem) != 0)
-    uprintf("function= %s thread %d addr %x\n",__func__,kthread_self(),sem);
+  nanvix_semaphore_down (sem); 
+
+  //while (sem_wait (sem) != 0)
+  //    continue;
+  //  uprintf("function= %s thread %d addr %x\n",__func__,kthread_self(),sem);
 }
 #endif

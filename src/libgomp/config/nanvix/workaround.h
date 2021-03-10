@@ -63,69 +63,14 @@ typedef union
   long int __align;
 } sem_t;
 
-typedef union
-{
-  char __size[__SIZEOF_PTHREAD_MUTEXATTR_T];
-  int __align;
-} pthread_mutexattr_t;
-
-struct __pthread_cond_s
-{
-  __extension__ union
-  {
-    __extension__ unsigned long long int __wseq;
-    struct
-    {
-      unsigned int __low;
-      unsigned int __high;
-    } __wseq32;
-  };
-  __extension__ union
-  {
-    __extension__ unsigned long long int __g1_start;
-    struct
-    {
-      unsigned int __low;
-      unsigned int __high;
-    } __g1_start32;
-  };
-  unsigned int __g_refs[2];
-  unsigned int __g_size[2];
-  unsigned int __g1_orig_size;
-  unsigned int __wrefs;
-  unsigned int __g_signals[2];
-};
-typedef union
-{
-  struct __pthread_cond_s __data;
-  char __size[10];
- // char __size[__SIZEOF_PTHREAD_COND_T];
-  __extension__ long long int __align;
-} pthread_cond_t;
-typedef union
-{
-  //char __size[__SIZEOF_PTHREAD_CONDATTR_T];
-  char __size[10];
-  int __align;
-} pthread_condattr_t;
-typedef union pthread_attr_t
-{
-  //char __size[__SIZEOF_PTHREAD_ATTR_T];
-  char __size[10];
-  long int __align;
-} pthread_attr_t;
 
 
 /////end pthread types
 
-extern int pthread_attr_init (pthread_attr_t *__attr);
 
-
-extern int pthread_attr_destroy (pthread_attr_t *__attr);
-
-extern int pthread_attr_getstacksize (pthread_attr_t *__attr,int * stacksize);
-extern int pthread_attr_setstacksize (pthread_attr_t *__attr,size_t  stacksize);
-
+//extern int pthread_attr_getstacksize (pthread_attr_t *__attr,int * stacksize);
+//extern int pthread_attr_setstacksize (pthread_attr_t *__attr,size_t  stacksize);
+//
 
 extern struct gomp_thread* pthread_getspecific (pthread_key_t key);
 
@@ -143,11 +88,8 @@ extern int pthread_detach (kthread_t __th);
 
 extern void fputs(char* str, void*);
 extern void fputc(char str, void*);
-extern int nanvix_mutex_destroy( nanvix_mutex_t *lock);
-extern int nanvix_mutex_trylock (nanvix_mutex_t *__mutex);
-extern int nanvix_mutexattr_init (pthread_mutexattr_t *__attr);
-extern int nanvix_mutexattr_destroy (pthread_mutexattr_t *__attr);
-extern int nanvix_mutexattr_settype (pthread_mutexattr_t *__attr, int __kind);
+//extern int nanvix_mutex_trylock (nanvix_mutex_t *__mutex);
+//extern int nanvix_mutexattr_settype (pthread_mutexattr_t *__attr, int __kind);
 
 
 #endif

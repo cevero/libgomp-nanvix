@@ -95,13 +95,11 @@ extern void gomp_sem_wait (gomp_sem_t *sem);
 static inline void gomp_sem_post (gomp_sem_t *sem)
 {
     nanvix_semaphore_up (sem);
-    uprintf("function= %s thread %d addr %x\n",__func__,kthread_self(),sem);
 }
 
 static inline void gomp_sem_destroy (gomp_sem_t  *sem)
 {
-  //sem_destroy (sem);
-    uprintf("%s \n",__func__);
+  nanvix_semaphore_destroy (sem);
 }
 #endif /* doesn't HAVE_BROKEN_POSIX_SEMAPHORES  */
 #endif /* GOMP_SEM_H  */
