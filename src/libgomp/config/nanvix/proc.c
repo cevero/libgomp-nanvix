@@ -52,7 +52,6 @@ gomp_init_num_threads (void)
 #ifdef _SC_NPROCESSORS_ONLN
   gomp_nthreads_var = sysconf (_SC_NPROCESSORS_ONLN);
 #endif
-  gomp_nthreads_var = THREAD_MAX;
 }
 
 /* When OMP_DYNAMIC is set, at thread launch determine the number of

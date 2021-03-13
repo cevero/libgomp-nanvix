@@ -21,7 +21,9 @@ struct gomp_thread* pthread_getspecific (pthread_key_t key)
 void * pthread_setspecific (pthread_key_t  key, struct gomp_thread *__pointer)
 {
 
-            uprintf("id = %u",__pointer->ts.team_id);
+          //  uprintf("id = %u",__pointer->ts.team_id);
+
+
    for (int i=0;i<gomp_nthreads_var;i++)
    {
        if(tls_omp[i].key == key)

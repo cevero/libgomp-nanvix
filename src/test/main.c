@@ -47,7 +47,7 @@ Hello_omp(void * index){
 #   pragma omp parallel  num_threads(nt)
     {
 //#   pragma omp single
-            uprintf("Hello from thread %d %d\n",omp_get_thread_num(),omp_get_num_threads);
+            uprintf("Hello from thread %d %d\n",omp_get_thread_num(),omp_get_num_threads());
     }
     uprintf("SAI DA ZONA PARALELA\n");
 }
