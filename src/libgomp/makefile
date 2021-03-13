@@ -31,14 +31,16 @@
 ARCHIVE = $(LIBGOMP25)
 
 # C Source Files
-SRC =  config/nanvix/mutex.c config/nanvix/sem.c config/nanvix/bar.c\
-	  config/nanvix/proc.c workaround.c alloc.c error.c env.c barrier.c team.c parallel.c\
-	
+SRC = config/nanvix/sem.c config/nanvix/bar.c\
+	  config/nanvix/proc.c alloc.c workaround.c work.c sections.c loop.c single.c\
+	  error.c env.c critical.c\
+	  barrier.c team.c parallel.c\
+#SRC = config/nanvix/$(wildcard *.c) $(wildcard *.c) 
 	  
 	  
 #	  barrier.c
 #workaround.c error.c alloc.c libgomp.c config/proc.c config/sem.c config/mutex.c config/lock.c \
-	   config/bar.c splay-tree.c task.c priority_queue.c work.c team.c parallel.c\
+#	   config/bar.c splay-tree.c task.c priority_queue.c work.c team.c parallel.c\
 #	   icv.c# #  env.c 
 
 OBJ = $(SRC:.c=.$(OBJ_SUFFIX).o)

@@ -33,6 +33,7 @@
 #ifndef GOMP_BARRIER_H
 #define GOMP_BARRIER_H 1
 
+#include <nanvix/runtime/barrier.h>
 //#include <pthread.h>
 
 typedef struct
@@ -46,6 +47,8 @@ typedef struct
   unsigned total;
   unsigned arrived;
 } gomp_barrier_t;
+
+//typedef struct barrier_t gomp_barrier_t;
 
 extern void gomp_barrier_init (gomp_barrier_t *, unsigned);
 extern void gomp_barrier_reinit (gomp_barrier_t *, unsigned);

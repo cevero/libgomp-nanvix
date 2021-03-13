@@ -44,9 +44,10 @@ void*
 Hello_omp(void * index){
     int nt;
     nt = (int)((intptr_t)index);
-#   pragma omp parallel num_threads(nt)
+#   pragma omp parallel  num_threads(nt)
     {
-        uprintf("Hello from thread %d\n",omp_get_thread_num());
+//#   pragma omp single
+            uprintf("Hello from thread %d %d\n",omp_get_thread_num(),omp_get_num_threads);
     }
     uprintf("SAI DA ZONA PARALELA\n");
 }
@@ -100,6 +101,7 @@ void test_mutex()
 		kthread_join(tids[i], NULL) == 0;
 
 }
+
 void test_semaphore()
 {
 	kthread_t tids[NTHREADS];
@@ -120,13 +122,8 @@ int __main2(int argc, const char *argv[])
 	((void) argc);
 	((void) argv);
 
-//    Hello_omp((void*)3);
+    Hello_omp((void*)3);
 
-#   pragma omp parallel num_threads(NTHREADS)
-    {
-        uprintf("Hello from thread %d\n",omp_get_thread_num());
-    }
-    uprintf("SAI DA ZONA PARALELA\n");
 
 
     

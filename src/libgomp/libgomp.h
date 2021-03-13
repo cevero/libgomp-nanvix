@@ -241,16 +241,20 @@ extern kthread_t gomp_tls_key;
 struct tls_data
 {
  kthread_t key;
- struct gomp_thread *data;
+ struct gomp_thread * data;
  struct tls_data* next;
 
 };
-struct gomp_thread * tls_omp[100]; 
+struct tls_data tls_omp[100]; 
 
-static inline struct gomp_thread *gomp_thread (void)
+static inline struct gomp_thread * gomp_thread (void)
 {
-  //  return tls_omp[kthread_self()];
-  return pthread_getspecific (gomp_tls_key);
+  for(int i=0;i<100;i++)
+      if(tls_omp[i].key==gomp_tls_key)
+        return tls_omp[i].data;
+
+
+  //return pthread_getspecific (gomp_tls_key);
 }
 #endif
 

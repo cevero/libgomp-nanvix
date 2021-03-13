@@ -83,9 +83,9 @@ gomp_barrier_wait_end (gomp_barrier_t *bar, bool last)
 	  do
 	    gomp_sem_post (&bar->sem1);
 	  while (--n != 0);
-	  gomp_sem_wait (&bar->sem2);
+  	    gomp_sem_wait (&bar->sem2);
 	}
-      gomp_mutex_unlock (&bar->mutex1);
+        gomp_mutex_unlock (&bar->mutex1);
     }
   else
     {

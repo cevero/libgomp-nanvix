@@ -83,6 +83,7 @@ gomp_thread_start (void *xdata)
   struct gomp_thread local_thr;
   thr = &local_thr;
   pthread_setspecific (gomp_tls_key, thr);
+
   //tls_omp[gomp_tls_key] = thr;
 #endif
   gomp_sem_init (&thr->release, 0);
@@ -338,7 +339,6 @@ initialize_team (void)
   static struct gomp_thread initial_thread_tls_data;
 
   pthread_key_create (&gomp_tls_key, NULL);
-  //gomp_tls_key = kthread_self();
   pthread_setspecific (gomp_tls_key, &initial_thread_tls_data);
   //tls_omp[gomp_tls_key] = &initial_thread_tls_data;
   //  tls_omp[kthread_self()] = &initial_thread_tls_data;

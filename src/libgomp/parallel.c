@@ -82,6 +82,11 @@ void
 GOMP_parallel (void (*fn) (void *), void *data, unsigned num_threads,
 	       unsigned int flags)
 {
+for (int i_tls=0;i_tls<100;i_tls++)
+{
+    tls_omp[i_tls].data = NULL; 
+
+}
   num_threads = gomp_resolve_num_threads (num_threads);
   //tls_omp = umalloc(sizeof(struct gomp_thread*)*num_threads);
   gomp_team_start (fn, data, num_threads, NULL);
