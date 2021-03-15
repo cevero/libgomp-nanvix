@@ -72,6 +72,7 @@ typedef union
 //extern int pthread_attr_setstacksize (pthread_attr_t *__attr,size_t  stacksize);
 //
 
+extern void initialize_team (void);
 extern struct gomp_thread* pthread_getspecific (pthread_key_t key);
 
 extern void *pthread_setspecific (pthread_key_t key, struct gomp_thread *__pointer);

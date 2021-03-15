@@ -31,10 +31,10 @@
 ARCHIVE = $(LIBGOMP25)
 
 # C Source Files
-SRC = config/nanvix/sem.c config/nanvix/bar.c\
-	  config/nanvix/proc.c alloc.c workaround.c work.c sections.c loop.c single.c\
-	  error.c env.c critical.c\
-	  barrier.c team.c parallel.c\
+SRC = config/nanvix/sem.c config/nanvix/proc.c config/nanvix/bar.c\
+	   alloc.c workaround.c critical.c barrier.c work.c single.c\
+	   error.c env.c team.c parallel.c #main.c\
+
 #SRC = config/nanvix/$(wildcard *.c) $(wildcard *.c) 
 	  
 	  

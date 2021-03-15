@@ -46,7 +46,8 @@ Hello_omp(void * index){
     nt = (int)((intptr_t)index);
 #   pragma omp parallel  num_threads(nt)
     {
-//#   pragma omp single
+//#   pragma omp critical
+
             uprintf("Hello from thread %d %d\n",omp_get_thread_num(),omp_get_num_threads());
     }
     uprintf("SAI DA ZONA PARALELA\n");
@@ -70,23 +71,6 @@ static void *task3(void *arg)
 	return (NULL);
 }
 
-static void *task4(void *arg)
-{
-	((void) arg);
-
-		nanvix_semaphore_init(&semaphore,2);
-	/* Increment a variable many times. */
-	for (int i = 0; i < NTRIALS; i++)
-	{
-
-        uprintf("LOCK from thread %d \n",kthread_self());
-			var++;
-		nanvix_mutex_unlock(&mutex);
-        uprintf("UNLOCK from thread %d \n",kthread_self());
-	}
-
-	return (NULL);
-}
 
 void test_mutex()
 {
@@ -102,20 +86,6 @@ void test_mutex()
 
 }
 
-void test_semaphore()
-{
-	kthread_t tids[NTHREADS];
-
-	for (int i = 0; i < NTHREADS; i++)
-		kthread_create(&tids[i], task4, NULL) == 0;
-
-	/* Wait for threads. */
-	for (int i = 0; i < NTHREADS; i++)
-    {
-		kthread_join(tids[i], NULL) == 0;
-    }
-
-}
 
 int __main2(int argc, const char *argv[])
 {
@@ -123,10 +93,6 @@ int __main2(int argc, const char *argv[])
 	((void) argv);
 
     Hello_omp((void*)3);
-
-
-
-    
 
 
     return (0);

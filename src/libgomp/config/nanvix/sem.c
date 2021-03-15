@@ -136,6 +136,6 @@ gomp_sem_wait (gomp_sem_t *sem)
       continue;
   //while (sem_wait (sem) != 0)
   //    continue;
-    uprintf("function= %s thread %d addr %x\n",__func__,kthread_self(),sem);
+    //uprintf("function= %s thread %d addr %x\n",__func__,kthread_self(),sem);
 }
 #endif

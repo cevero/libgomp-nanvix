@@ -51,7 +51,7 @@ static gomp_barrier_t gomp_threads_dock;
 #ifdef HAVE_TLS
 __thread struct gomp_thread gomp_tls_data;
 #else
-kthread_t gomp_tls_key;
+kthread_t gomp_tls_key = 0;
 #endif
 
 
@@ -82,9 +82,8 @@ gomp_thread_start (void *xdata)
 #else
   struct gomp_thread local_thr;
   thr = &local_thr;
-  pthread_setspecific (gomp_tls_key, thr);
+  pthread_setspecific (/*gomp_tls_key*/kthread_self(), thr);
 
-  //tls_omp[gomp_tls_key] = thr;
 #endif
   gomp_sem_init (&thr->release, 0);
 
@@ -188,6 +187,18 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
   bool nested;
   unsigned i, n, old_threads_used = 0;
 
+  /*initializing tls structures*/
+
+  //struct nanvix_mutex tls_init_mutex;
+  //nanvix_mutex_init(&tls_init_mutex,NULL);
+  //nanvix_mutex_lock(&tls_init_mutex);
+  //uprintf("entrei\n");
+  initialize_team();
+  //uprintf("saindo\n");
+  //nanvix_mutex_unlock(&tls_init_mutex);
+
+  /*end tls_init_vars*/
+
   thr = gomp_thread ();
   nested = thr->ts.team != NULL;
   
@@ -290,7 +301,6 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
       start_data->fn = fn;
       start_data->fn_data = data;
       start_data->nested = nested;
-      //uprintf("%d is nested?\n",start_data->nested);
 
       err = kthread_create (&pt,
 			    gomp_thread_start, (void*) (void*)start_data);
@@ -330,7 +340,7 @@ gomp_team_end (void)
 
 /* Constructors for this file.  */
 
-static void __attribute__((constructor))
+/*static*/ void //__attribute__((constructor))
 initialize_team (void)
 {
   struct gomp_thread *thr;
@@ -338,10 +348,9 @@ initialize_team (void)
 #ifndef HAVE_TLS
   static struct gomp_thread initial_thread_tls_data;
 
+  gomp_tls_key = kthread_self();
   pthread_key_create (&gomp_tls_key, NULL);
   pthread_setspecific (gomp_tls_key, &initial_thread_tls_data);
-  //tls_omp[gomp_tls_key] = &initial_thread_tls_data;
-  //  tls_omp[kthread_self()] = &initial_thread_tls_data;
 #endif
 
 #ifdef HAVE_TLS

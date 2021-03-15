@@ -38,7 +38,6 @@
 unsigned
 gomp_resolve_num_threads (unsigned specified)
 {
-//    uprintf("function= %s file = %s\n",__func__,__FILE__);
   /* Early exit for false IF condition or degenerate NUM_THREADS.  */
   if (specified == 1)
     return 1;
@@ -67,7 +66,6 @@ gomp_resolve_num_threads (unsigned specified)
 void
 GOMP_parallel_start (void (*fn) (void *), void *data, unsigned num_threads)
 {
-    //uprintf("function= %s file = %s\n",__func__,__FILE__);
   num_threads = gomp_resolve_num_threads (num_threads);
   gomp_team_start (fn, data, num_threads, NULL);
 }
@@ -82,17 +80,16 @@ void
 GOMP_parallel (void (*fn) (void *), void *data, unsigned num_threads,
 	       unsigned int flags)
 {
+
 for (int i_tls=0;i_tls<100;i_tls++)
 {
     tls_omp[i_tls].data = NULL; 
 
 }
   num_threads = gomp_resolve_num_threads (num_threads);
-  //tls_omp = umalloc(sizeof(struct gomp_thread*)*num_threads);
   gomp_team_start (fn, data, num_threads, NULL);
   fn (data);
   GOMP_parallel_end ();
-  //gomp_team_end();
 }
 
 

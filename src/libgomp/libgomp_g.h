@@ -91,6 +91,7 @@ extern void GOMP_ordered_end (void);
 /* parallel.c */
 
 extern void GOMP_parallel_start (void (*) (void *), void *, unsigned);
+extern void GOMP_parallel (void (*) (void *), void *, unsigned,unsigned);
 extern void GOMP_parallel_end (void);
 
 /* sections.c */

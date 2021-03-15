@@ -95,7 +95,6 @@ gomp_dynamic_max_threads (void)
 int
 omp_get_num_procs (void)
 {
-    uprintf("%s \n",__func__);
 #ifdef _SC_NPROCESSORS_ONLN
   return sysconf (_SC_NPROCESSORS_ONLN);
 #else

@@ -1,4 +1,5 @@
 /* Copyright (C) 2005 Free Software Foundation, Inc.
+
    Contributed by Richard Henderson <rth@redhat.com>.
 
    This file is part of the GNU OpenMP Library (libgomp).
@@ -242,18 +243,17 @@ struct tls_data
 {
  kthread_t key;
  struct gomp_thread * data;
- struct tls_data* next;
-
 };
 struct tls_data tls_omp[100]; 
 
 static inline struct gomp_thread * gomp_thread (void)
 {
   for(int i=0;i<100;i++)
-      if(tls_omp[i].key==gomp_tls_key)
+      if(tls_omp[i].key==kthread_self())
         return tls_omp[i].data;
 
 
+//  return pthread_getspecific (kthread_self());
   //return pthread_getspecific (gomp_tls_key);
 }
 #endif
