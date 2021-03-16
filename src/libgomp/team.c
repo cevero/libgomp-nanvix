@@ -189,13 +189,7 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
 
   /*initializing tls structures*/
 
-  //struct nanvix_mutex tls_init_mutex;
-  //nanvix_mutex_init(&tls_init_mutex,NULL);
-  //nanvix_mutex_lock(&tls_init_mutex);
-  //uprintf("entrei\n");
   initialize_team();
-  //uprintf("saindo\n");
-  //nanvix_mutex_unlock(&tls_init_mutex);
 
   /*end tls_init_vars*/
 

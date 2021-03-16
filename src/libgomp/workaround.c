@@ -8,57 +8,23 @@
 
 struct gomp_thread* pthread_getspecific (pthread_key_t key)
 {
-    for(int i=0;i<100;i++) 
-    {
-            if(tls_omp[i].key == key)
-            {
-                return tls_omp[i].data;
-            }
-    }
-    return NULL;
+    return tls_omp[kthread_self()].data;
 }
 
 void * pthread_setspecific (pthread_key_t  key, struct gomp_thread *__pointer)
 {
 
-          //  uprintf("id = %u",__pointer->ts.team_id);
 
+   tls_omp[key].data = __pointer;
+//   for (int i=0;i<gomp_nthreads_var;i++)
+//   {
+//       if(tls_omp[i].key == key)
+//       {
+//           tls_omp[i].data = umalloc(sizeof(struct gomp_thread));
+//           tls_omp[i].data = __pointer;
+//       }
+//   }
 
-   for (int i=0;i<gomp_nthreads_var;i++)
-   {
-       if(tls_omp[i].key == key)
-       {
-           tls_omp[i].data = __pointer;
-       }
-   }
-
-   //if(head == NULL)
-   //{
-   //    head = ucalloc(1,sizeof(struct tls_data));
-   //    head->data = __pointer;
-   //    head->key = key;
-   //}
-   //else
-   //{
-
-   //    current = ucalloc(1,sizeof(struct tls_data));
-   //    current->data = __pointer;
-   //    current->key = key;
-
-   //while (current->key != key)
-   //{
-   //     if(current->next == NULL)
-   //     {
-   //         uprintf("cant set without that key");
-   //         return NULL;
-   //     }
-   //     else
-   //         current = current->next;
-   //}
-
-   //    current->data = __pointer->data;
-   //}
-   //    return NULL;
 }
 
 
@@ -88,19 +54,10 @@ int  pthread_key_create (pthread_key_t * key,void (*destructor)(void*))
 {
    for(int i=0;i<100;i++)
    {
-       if(tls_omp[i].data == NULL)
-        tls_omp[i].key = (kthread_t) *key;
-       return 0;
+        tls_omp[i].key = (kthread_t) i;
+        tls_omp[i].data = umalloc(sizeof(struct gomp_thread*));
    }
-   return -1;
-   //struct tls_data * link = (struct tls_data*) umalloc(sizeof(struct tls_data));
-
-   //link->key = *key;
-   //link->next = head;
-
-   //head = link;
-
-   //return 0;
+   return 0;
 }
 extern int pthread_detach (kthread_t __th)
 {
@@ -122,44 +79,6 @@ extern void fputc(char str, void* c)
     uprintf("%s \n",__func__);
 }
 
-//int pthread_key_delete (pthread_key_t __key)
-//{
-//       //struct tls_data* current = head;
-//       //struct tls_data* previous = NULL;
-//       //     
-//       // if(head == NULL) 
-//       // {
-//       //     return 0;
-//       // }
-//
-//       // while(current->key != __key) 
-//       // {
-//
-//       //     if(current->next == NULL)
-//       //     {
-//       //         return 0;
-//       //     }
-//
-//       //     else 
-//
-//       //     {
-//       //         previous = current;
-//       //         current = current->next;
-//       //     }
-//       // }
-//
-//       // if(current == head)
-//
-//       // {
-//       //     head = head->next;
-//       // } 
-//       // else
-//       // {
-//       // //bypass the current link
-//       //     previous->next = current->next;
-//       // }    
-//       // return 0;
-//}
 
 ////NANVIX DEFINITIONS//////
 
