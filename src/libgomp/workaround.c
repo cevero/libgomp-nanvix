@@ -6,24 +6,18 @@
 
 ///// pthread functions ///////
 
+/* Return data of a Specific thread called by kthread_self() */
 struct gomp_thread* pthread_getspecific (pthread_key_t key)
 {
     return tls_omp[kthread_self()].data;
 }
 
+/* Set a gomp thread pointer on team to use Thread Local Storage */
 void * pthread_setspecific (pthread_key_t  key, struct gomp_thread *__pointer)
 {
 
 
    tls_omp[key].data = __pointer;
-//   for (int i=0;i<gomp_nthreads_var;i++)
-//   {
-//       if(tls_omp[i].key == key)
-//       {
-//           tls_omp[i].data = umalloc(sizeof(struct gomp_thread));
-//           tls_omp[i].data = __pointer;
-//       }
-//   }
 
 }
 
@@ -50,6 +44,7 @@ void * pthread_setspecific (pthread_key_t  key, struct gomp_thread *__pointer)
 //    return 0;
 //}
 
+/* create desired thread key values on the team*/
 int  pthread_key_create (pthread_key_t * key,void (*destructor)(void*))
 {
    for(int i=0;i<100;i++)

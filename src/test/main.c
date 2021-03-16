@@ -30,14 +30,14 @@
 #include "../libgomp/omp.h"
 
 #define NTHREADS  (THREAD_MAX-1)
+#define NTRIALS 10
+
 /**
- * @brief Test Server
+ * @brief Test Openmp
  */
 
 
-#define NTRIALS 10
 static struct nanvix_mutex mutex;
-static struct nanvix_semaphore semaphore;
 static volatile int var;
 
 void*
@@ -46,11 +46,9 @@ Hello_omp(void * index){
     nt = (int)((intptr_t)index);
 #   pragma omp parallel  num_threads(nt)
     {
-//#   pragma omp critical
-
             uprintf("Hello from thread %d of %d\n",omp_get_thread_num(),omp_get_num_threads());
     }
-    uprintf("SAI DA ZONA PARALELA\n");
+    uprintf("OUT OF PARALLEL ZONE\n");
 }
 
 static void *task3(void *arg)
@@ -92,7 +90,7 @@ int __main2(int argc, const char *argv[])
 	((void) argc);
 	((void) argv);
 
-    Hello_omp((void*)3);
+    Hello_omp((void*)4);
 
 
     return (0);
