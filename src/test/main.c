@@ -53,6 +53,19 @@ Hello_omp(void * index){
     uprintf("OUT OF PARALLEL ZONE\n");
 }
 
+void*
+ompForTest(void * index){
+    int nt;
+    nt = (int)((intptr_t)index);
+#   pragma omp parallel  num_threads(nt)
+    {
+#pragma omp for
+            for(int i = 0; i<9;i++)
+            uprintf("iteraction %d on thread %d \n",i,omp_get_thread_num());
+    }
+    uprintf("OUT OF PARALLEL ZONE\n");
+}
+
 static void *task3(void *arg)
 {
 	((void) arg);
@@ -92,7 +105,8 @@ int __main2(int argc, const char *argv[])
 	((void) argc);
 	((void) argv);
 
-    Hello_omp((void*)3);
+   // Hello_omp((void*)3);
+    ompForTest((void *) 3);
 
 
     return (0);
