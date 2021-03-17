@@ -8,6 +8,12 @@ todas as threads
 ultimo commit estável da libnanvix do condvar
 7ece543105d0555a2e2bcecdbb87e820a5846e02
 
+15/03 
 chamei o construtor initialize_team para antes da primeira atribuição de 
 gomp_team_start e isso fez os ponteiros não serem mais apontados para lixo
+
+16/03 
+
+concluída a primeira versão funcional da mecânica de thread local storage, com um array de structs
+identificados pelo kthread_self()
 

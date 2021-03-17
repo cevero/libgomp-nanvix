@@ -47,6 +47,8 @@ Hello_omp(void * index){
 #   pragma omp parallel  num_threads(nt)
     {
             uprintf("Hello from thread %d of %d\n",omp_get_thread_num(),omp_get_num_threads());
+#   pragma omp single
+            uprintf("Only thread %d print this\n",omp_get_thread_num());
     }
     uprintf("OUT OF PARALLEL ZONE\n");
 }
@@ -90,7 +92,7 @@ int __main2(int argc, const char *argv[])
 	((void) argc);
 	((void) argv);
 
-    Hello_omp((void*)4);
+    Hello_omp((void*)3);
 
 
     return (0);
