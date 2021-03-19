@@ -23,16 +23,30 @@
 #
 
 # Builds Everything
-all: all-libgomp   all-test #all-45libgomp
+all: all-libgomp   all-test all-omp_mat_vect#all-45libgomp
 
 # Cleans Build Objects
-clean: clean-libgomp clean-test #clean-45libgomp 
+clean: clean-libgomp clean-test clean-omp_mat_vect#clean-45libgomp 
 
 # Cleans Everything
-distclean: distclean-libgomp  distclean-test #distclean-45libgomp
+distclean: distclean-libgomp  distclean-test distclean-omp_mat_vect#distclean-45libgomp
+
 
 #===============================================================================
-# LibGOMP 2.5
+# Omp-mat-vect
+#===============================================================================
+
+all-omp_mat_vect:
+	$(MAKE) -C omp_mat_vect all
+
+clean-omp_mat_vect:
+	$(MAKE) -C omp_mat_vect clean
+
+distclean-omp_mat_vect:
+	$(MAKE) -C omp_mat_vect distclean
+
+#===============================================================================
+# LibGOMP 4.5
 #===============================================================================
 
 all-45libgomp:

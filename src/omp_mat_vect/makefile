@@ -1,4 +1,3 @@
-
 #
 # MIT License
 #
@@ -23,28 +22,26 @@
 # SOFTWARE.
 #
 
+include $(BUILDDIR)/makefile.config
+
 #===============================================================================
 # Binaries Sources and Objects
 #===============================================================================
 
 # Binary
-ARCHIVE = $(LIBGOMP25)
+EXEC = omp_mat_vect.$(OBJ_SUFFIX)
 
 # C Source Files
-SRC = config/nanvix/sem.c config/nanvix/proc.c config/nanvix/bar.c\
-	   alloc.c workaround.c barrier.c critical.c work.c ordered.c loop.c single.c\
-	   error.c env.c team.c parallel.c #main.c\
+SRC = $(wildcard *.c)
 
-#SRC = config/nanvix/$(wildcard *.c) $(wildcard *.c) 
-	  
-	  
-#	  barrier.c
-#workaround.c error.c alloc.c libgomp.c config/proc.c config/sem.c config/mutex.c config/lock.c \
-#	   config/bar.c splay-tree.c task.c priority_queue.c work.c team.c parallel.c\
-#	   icv.c# #  env.c 
-
+# Object Files
 OBJ = $(SRC:.c=.$(OBJ_SUFFIX).o)
+
+# Library
+LIB2 := $(LIBDIR)/libgomp25-$(TARGET).a
+LIB2 +=  $(LIBS)
+LIBS := $(LIB2)
 
 #===============================================================================
 
-include $(BUILDDIR)/makefile.archive
+include $(BUILDDIR)/makefile.executable

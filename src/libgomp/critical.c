@@ -30,13 +30,16 @@
 #include "libgomp.h"
 //#include <stdlib.h>
 #include <nanvix/ulib.h>
+#include <nanvix/runtime/barrier.h>
 
 
 static gomp_mutex_t default_lock;
+static barrier_t criticalBarrier;
 
 void
 GOMP_critical_start (void)
 {
+  gomp_mutex_init (&default_lock);
   gomp_mutex_lock (&default_lock);
 }
 
@@ -60,7 +63,7 @@ GOMP_critical_name_start (void **pptr)
   int i=0;
   if (GOMP_MUTEX_INIT_0
       && sizeof (gomp_mutex_t) <= sizeof (void *)
-      && __alignof (gomp_mutex_t) <= sizeof (void *))
+      /*&& __alignof (gomp_mutex_t) <= sizeof (void *)*/)
     plock = (gomp_mutex_t *)pptr;
 
   /* Otherwise we have to be prepared to malloc storage.  */
@@ -89,7 +92,10 @@ GOMP_critical_name_start (void **pptr)
 	    {
 	      plock = gomp_malloc (sizeof (gomp_mutex_t));
 	      gomp_mutex_init (plock);
-	      __sync_synchronize ();
+	      //__sync_synchronize ();
+        barrier_create(&criticalBarrier,omp_get_num_threads());
+        barrier_wait(criticalBarrier);
+        barrier_destroy(criticalBarrier);
 	      *pptr = plock;
 	    }
 	  gomp_mutex_unlock (&create_lock_lock);
@@ -109,7 +115,7 @@ GOMP_critical_name_end (void **pptr)
      then use the pointer space directly.  */
   if (GOMP_MUTEX_INIT_0
       && sizeof (gomp_mutex_t) <= sizeof (void *)
-      && __alignof (gomp_mutex_t) <= sizeof (void *))
+      /*&& __alignof (gomp_mutex_t) <= sizeof (void *)*/)
     plock = (gomp_mutex_t *)pptr;
   else
     plock = *pptr;
@@ -129,6 +135,7 @@ static gomp_mutex_t atomic_lock;
 void
 GOMP_atomic_start (void)
 {
+  gomp_mutex_init (&atomic_lock);
   gomp_mutex_lock (&atomic_lock);
 }
 
@@ -139,7 +146,7 @@ GOMP_atomic_end (void)
 }
 
 #if !GOMP_MUTEX_INIT_0
-static void __attribute__((constructor))
+/*static*/ void //__attribute__((constructor))
 initialize_critical (void)
 {
   gomp_mutex_init (&default_lock);
