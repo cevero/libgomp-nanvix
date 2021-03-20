@@ -177,7 +177,6 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
   /*initializing tls structures*/
 
   initialize_team();
-
   /*end tls_init_vars*/
 
   thr = gomp_thread ();
