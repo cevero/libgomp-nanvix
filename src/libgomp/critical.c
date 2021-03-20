@@ -38,17 +38,21 @@ int single_first=0;
 void
 GOMP_critical_start (void)
 {
-  //uprintf("%s %d\n",__func__,GOMP_MUTEX_INIT_0);
   
+  gomp_barrier_wait (&protectCriticalBarrier);
   gomp_mutex_init (&single_lock);
   gomp_mutex_lock (&single_lock);
   if(single_first==0)
   {
-    single_first++;
     gomp_mutex_init (&default_lock);
+    single_first++;
   }
+  gomp_barrier_wait (&protectCriticalBarrier);
   gomp_mutex_unlock (&single_lock);
+  //gomp_barrier_destroy (&protectCriticalBarrier);
+
   gomp_mutex_lock (&default_lock);
+
 }
 
 void

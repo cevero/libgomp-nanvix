@@ -30,13 +30,13 @@
 
 void hello(void)
 {
-	#pragma omp parallel num_threads(THREAD_MAX)
+	#pragma omp parallel num_threads(THREAD_MAX-1)
 	uprintf("hello from thread %d", omp_get_thread_num());
 }
 
 void critical(void)
 {
-	#pragma omp parallel num_threads(THREAD_MAX)
+	#pragma omp parallel num_threads(THREAD_MAX-1)
   {
     #pragma omp critical //(reinaldo)
     {

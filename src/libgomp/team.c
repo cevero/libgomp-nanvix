@@ -178,6 +178,7 @@ gomp_team_start (void (*fn) (void *), void *data, unsigned nthreads,
 
   initialize_team();
   /*end tls_init_vars*/
+  //provisory place to init barrier from critical region [URGENTLY CHANGE]
 
   thr = gomp_thread ();
   nested = thr->ts.team != NULL;

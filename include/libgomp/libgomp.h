@@ -321,7 +321,8 @@ extern struct gomp_work_share * gomp_new_work_share (bool, unsigned);
 extern bool gomp_work_share_start (bool);
 extern void gomp_work_share_end (void);
 extern void gomp_work_share_end_nowait (void);
-
+// a barrier to protect the change of critical region [URGENTLY CHANGE]
+gomp_barrier_t protectCriticalBarrier;
 #ifdef HAVE_ATTRIBUTE_VISIBILITY
 # pragma GCC visibility pop
 #endif
